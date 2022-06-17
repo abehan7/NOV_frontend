@@ -5,6 +5,7 @@ import { ApolloProvider } from "../GraphQL/ApolloProvider";
 import GlobalStyle from "../styles/global-style";
 import { theme } from "../styles/theme";
 import "../styles/fonts.css";
+import Layout from "../components/layout";
 function MyApp({ Component, pageProps }: AppProps) {
   const [showChild, setShowChild] = useState(false);
 
@@ -24,7 +25,9 @@ function MyApp({ Component, pageProps }: AppProps) {
       <ApolloProvider>
         <ThemeProvider theme={theme}>
           <GlobalStyle />
-          <Component {...pageProps} />
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
         </ThemeProvider>
       </ApolloProvider>
     );

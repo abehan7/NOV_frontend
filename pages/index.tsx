@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 // import Image from "next/image";
 import styled from "styled-components";
 import AutoHeightImage from "../components/common/AutoHeightImage";
-import { Section, Wrapper } from "../components/common/styles/page";
+import { PageSection, Wrapper } from "../components/common/styles/page";
 import { useAccount } from "../hooks/useAccount";
 import { useCaver } from "../hooks/useCaver";
 import { theme } from "../styles/theme";
@@ -53,7 +53,7 @@ const Home: NextPage = () => {
 };
 
 export default Home;
-const SectionEl = styled(Section)`
+const SectionEl = styled(PageSection)`
   .item1 {
     .kor__font {
       font-weight: 700;
@@ -65,6 +65,14 @@ const SectionEl = styled(Section)`
     width: 25rem;
     position: relative;
   }
+  .item2 {
+    border: 4px solid ${theme.colors.black};
+    background: ${theme.colors.white};
+    /* width: 90%; */
+    /* height: 90%; */
+    padding: 2rem;
+    /* width: 100%; */
+  }
 `;
 
 const Container = styled.div`
@@ -74,9 +82,13 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
   text-transform: uppercase;
+  max-width: 50%;
 `;
 
-const Box = styled.div``;
+const Box = styled.div`
+  display: flex;
+  width: 100%;
+`;
 
 const Title = styled.h2<{ fontSize: string }>`
   font-size: ${(props) => props.fontSize};
@@ -90,6 +102,13 @@ const Button = styled.div`
   font-size: ${({ theme }) => theme.fontSizes.fontxl};
   font-weight: 800;
   color: ${({ theme }) => theme.colors.white};
+  background: ${theme.colors.black};
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  padding: 0.75rem;
+  border-radius: 4px;
 `;
 
 const HeroLogo = styled.div`
