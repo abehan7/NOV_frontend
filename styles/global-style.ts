@@ -17,10 +17,18 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   html {
-    color: #3E3E3E;
-    font-family: "Montserrat";
+    color: #000000;
+    font-family: "FugazOne";
     scroll-behavior: smooth;
     transition: scroll 0.3s cubic-bezier(0.0, 0.0, 0.58, 1.0);
+    background: ${theme.colors.primary};
+  }
+
+  .kor__font{
+    font-family: "IBMPlexSans";
+  }
+  .eng__font{
+    font-family: "FugazOne";
   }
 
   @media all and (min-width: 1025px){

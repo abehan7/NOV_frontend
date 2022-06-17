@@ -15,7 +15,7 @@ export const theme: DefaultTheme = {
 
     primary: "#F5D061",
 
-    black: "#3E3E3E",
+    black: "#000000",
     white: "#FFFFFF",
     highlight: "#AC53FB",
 
@@ -24,19 +24,21 @@ export const theme: DefaultTheme = {
   },
   fonts: {
     kor: "IBMPlexSans",
-    eng: "Fugaz",
+    eng: "FugazOne",
     header: "Archivo",
   },
   fontSizes: {
-    fontxs: "0.75em",
-    fontsm: "0.875em",
-    fontmd: "1em", // 1em = 16px
-    fontlg: "1.25em",
-    fontxl: "2em",
-    font2xl: "3em",
-    font3xl: "4em",
+    // 1em = 16px
+    //15 12 10
+    fontxs: "0.63rem", // 10px
+    fontsm: "0.75rem", // 12px
+    fontmd: "0.938rem", // 15px
+    fontlg: "1.25rem", // right number 20px
+    fontxl: "1.56rem", // right subtitle 25px
+    font2xl: "2.5rem", // right title 40px
+    font3xl: "3.5rem", // left title 56
   },
-  headerHeight: "130px",
+  headerHeight: "5.4rem", //86px
 };
 
 const customMediaQuery = (maxWidth: number): string =>

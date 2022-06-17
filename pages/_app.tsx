@@ -4,6 +4,7 @@ import { ThemeProvider } from "styled-components";
 import { ApolloProvider } from "../GraphQL/ApolloProvider";
 import GlobalStyle from "../styles/global-style";
 import { theme } from "../styles/theme";
+import "../styles/fonts.css";
 function MyApp({ Component, pageProps }: AppProps) {
   const [showChild, setShowChild] = useState(false);
 
