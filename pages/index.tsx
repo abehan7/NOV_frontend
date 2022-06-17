@@ -14,7 +14,12 @@ const Home: NextPage = () => {
     <SectionEl>
       <Wrapper>
         <Container className="item1">
-          <Title fontSize={theme.fontSizes.font3xl}>WELCOME! I’M NOV.</Title>
+          <TitleContainer>
+            <Title fontSize={theme.fontSizes.font3xl}>WELCOME! I’M NOV.</Title>
+            <div>
+              <span></span>Only For Subscribers
+            </div>
+          </TitleContainer>
           <div className="hero__img">
             <AutoHeightImage src="/images/hero_resized.png" />
             <HeroLogo>
@@ -92,11 +97,14 @@ const Box = styled.div`
 
 const Title = styled.h2<{ fontSize: string }>`
   font-size: ${(props) => props.fontSize};
+  font-weight: 400;
 `;
 const SubTitle = styled.div`
   font-size: ${({ theme }) => theme.fontSizes.fontxl};
-  font-weight: 800;
+  font-weight: 500;
 `;
+
+const TitleContainer = styled.div``;
 const Contents = styled.div``;
 const Button = styled.div`
   font-size: ${({ theme }) => theme.fontSizes.fontxl};
@@ -109,6 +117,7 @@ const Button = styled.div`
   align-items: center;
   padding: 0.75rem;
   border-radius: 4px;
+  cursor: pointer;
 `;
 
 const HeroLogo = styled.div`
