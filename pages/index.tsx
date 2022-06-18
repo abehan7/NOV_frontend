@@ -7,7 +7,7 @@ import { PageSection, Wrapper } from "../components/common/styles/page";
 import { useAccount } from "../contexts/AccountContext";
 import { useCaver } from "../hooks/useCaver";
 import useProgressBar from "../hooks/useProgressBar";
-import { theme } from "../styles/theme";
+import { media, theme } from "../styles/theme";
 
 interface CubeComponentProps {
   src: string;
@@ -43,31 +43,17 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (currentBlock >= 100) setPercent(100);
-      if (currentBlock < 100) setPercent(percent + 10);
+      if (percent >= 100) setPercent(100);
+      if (percent < 100) setPercent(percent + 10);
     }, 500);
     return () => {
       clearTimeout(timer);
     };
   }, []);
 
-  useEffect(() => {
-    // const timer = setInterval(() => {
-    //   setCurrentBlock(currentBlock + 1);
-    // }, 1000);
-    // if (currentBlock > 8000) clearInterval(timer);
-    // return () => {
-    //   clearInterval(timer);
-    // };
-  }, [currentBlock]);
-
-  // useEffect(() => {
-  //   console.log(currentBlock);
-  // }, [currentBlock]);
-
   return (
     <SectionEl>
-      <Wrapper>
+      <WrapperEl>
         {/* left */}
         <Container className="item1">
           <TitleContainer>
@@ -101,6 +87,7 @@ const Home: NextPage = () => {
                   transform: "translateY(6px)",
                   minHeight: "4.83rem",
                 }}
+                className="img__container"
               >
                 <AutoHeightImage src="/images/hero_resized.png" />
               </div>
@@ -111,13 +98,14 @@ const Home: NextPage = () => {
               <div>minting block number</div>
               {/* <Circle /> */}
             </SubTitle>
-            <Contents>
+            <Contents className="cube__content">
               <CubeComponent
                 src="/images/block_white.png"
                 title="minting block"
                 desc="#89090290"
                 highlight={true}
               />
+              {/* <CubeLine> </CubeLine> */}
               <CubeComponent
                 src="/images/block_black.png"
                 title="current block"
@@ -188,57 +176,17 @@ const Home: NextPage = () => {
           {/* BOTTOM */}
           <Sticker x="40%" y="2rem" t="100%" l="100%" />
           <Sticker x="40%" y="1.45rem" t="100%" l="100%" />
-          {/* <NumberText> */}
-          {/* <div></div> */}
-          {/* </NumberText> */}
         </Container>
-      </Wrapper>
+      </WrapperEl>
     </SectionEl>
   );
 };
 
 export default Home;
-const SectionEl = styled(PageSection)`
-  .item1 {
-    .kor__font {
-      font-weight: 700;
-    }
-  }
-  .hero__img {
-    /* width: 20rem; */
-    transform: translateY(-2.75rem);
-    width: 25rem;
-    min-height: 32.2rem;
-    position: relative;
-  }
-  .item2 {
-    border: 4px solid ${theme.colors.black};
-    background: ${theme.colors.white};
-    padding: 1.68rem;
-    position: relative;
-    /* padding: 2rem; */
-    //27px
-    max-width: 36rem;
-  }
-  .box1 {
-    border-bottom: 2px solid ${theme.colors.black};
-    padding-top: 1rem;
-    div:nth-child(2) {
-      display: flex;
-      justify-content: flex-end;
-      align-items: flex-end;
-      text-transform: capitalize;
-      color: ${theme.colors.primaryLight};
-      flex: 1;
-    }
-  }
-  .price {
-    padding: 0 0.3rem;
-    padding-top: 1rem;
-    font-size: ${theme.fontSizes.fontmd};
-    > span {
-      font-size: ${theme.fontSizes.fontsm};
-    }
+
+const WrapperEl = styled(Wrapper)`
+  ${media[1200]} {
+    flex-direction: column;
   }
 `;
 
@@ -250,11 +198,19 @@ const Container = styled.div`
   justify-content: center;
   text-transform: uppercase;
   max-width: 50%;
+  /* min-width: 30rem; */
+  ${media[1200]} {
+    max-width: 100%;
+  }
+  ${media[768]} {
+    /* min-width: 0; */
+    width: 100%;
+    max-width: 100%;
+  }
 `;
 
 const TitleContainer = styled.div``;
 const Contents = styled.div`
-  /* padding: 1rem 0; */
   display: flex;
 `;
 
@@ -278,6 +234,12 @@ const HeroLogo = styled.div`
   left: 50%;
   width: 13rem;
   transform: translate(-50%, -50%);
+  ${media[768]} {
+    width: 8rem;
+  }
+  ${media.mobile} {
+    width: 5rem;
+  }
 `;
 
 const Box = styled.div`
@@ -324,6 +286,9 @@ const SubTitle = styled.div`
   }
   div:nth-child(1) {
     z-index: 10;
+  }
+  ${media[768]} {
+    font-size: ${({ theme }) => theme.fontSizes.fontmd};
   }
 `;
 const CubeImg = styled.div`
@@ -408,6 +373,9 @@ const Sticker = styled.div<{ x: string; y: string; t: string; l: string }>`
     left: ${l};
     top: ${t};
   `}
+  ${media.mobile} {
+    display: none;
+  }
 `;
 const CurrentBlockWraapper = styled.div`
   @property --current--block--num {
@@ -460,18 +428,108 @@ const NumberText = styled.div`
   div::after {
     content: counter(num);
   }
+`;
 
-  /* @keyframes counter {
-    0% {
-      --num: 0;
+const CubeLine = styled.div`
+  height: 50px;
+  width: 2px;
+  background: ${({ theme }) => theme.colors.black};
+`;
+
+const SectionEl = styled(PageSection)`
+  .item1 {
+    .kor__font {
+      font-weight: 700;
+    }
+    ${Title} {
+      ${media[1200]} {
+        font-size: ${theme.fontSizes.font2xl};
+      }
+      ${media[768]} {
+        font-size: ${theme.fontSizes.fontxl};
+      }
+    }
+  }
+  .hero__img {
+    /* width: 20rem; */
+    transform: translateY(-2.75rem);
+    width: 25rem;
+    min-height: 32.2rem;
+    position: relative;
+    ${media[768]} {
+      min-height: 0;
+      width: 20rem;
+    }
+    ${media.mobile} {
+      width: 14rem;
+      transform: translateY(-1rem);
+    }
+  }
+  .item2 {
+    border: 4px solid ${theme.colors.black};
+    background: ${theme.colors.white};
+    padding: 1.68rem;
+    position: relative;
+    /* padding: 2rem; */
+    //27px
+    max-width: 36rem;
+    ${Title} {
+      ${media[1200]} {
+        font-size: ${theme.fontSizes.font2xl};
+      }
+      ${media[768]} {
+        font-size: ${theme.fontSizes.fontxl};
+      }
+    }
+  }
+  .box1 {
+    border-bottom: 2px solid ${theme.colors.black};
+    padding-top: 1rem;
+    div:nth-child(2) {
+      display: flex;
+      justify-content: flex-end;
+      align-items: flex-end;
+      text-transform: capitalize;
+      color: ${theme.colors.primaryLight};
+      flex: 1;
+      ${media[768]} {
+        /* background: red; */
+        display: none;
+      }
+    }
+  }
+  .price {
+    padding: 0 0.3rem;
+    padding-top: 1rem;
+    font-size: ${theme.fontSizes.fontmd};
+    > span {
+      font-size: ${theme.fontSizes.fontsm};
+    }
+  }
+  .cube__content {
+    align-items: center;
+    > div:nth-child(1) {
+      position: relative;
+      /* align-items: center; */
+      /* justify-content: center; */
+      ::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        right: 1rem;
+        width: 2px;
+        height: 60%;
+        background: ${theme.colors.black};
+        ${media[768]} {
+          width: 0;
+        }
+      }
     }
 
-    30% {
-      --num: 89090250;
+    ${media[768]} {
+      flex-direction: column;
+      align-items: flex-start;
     }
-
-    100% {
-      --num: 89090290;
-    }
-  } */
+  }
 `;

@@ -11,7 +11,7 @@ import { ConnectButton } from "../common/styles/button";
 import { AiOutlineTwitter } from "react-icons/ai";
 import Discord from "../../public/svg/discord.svg";
 import { useAccount } from "../../contexts/AccountContext";
-import { theme } from "../../styles/theme";
+import { media, theme } from "../../styles/theme";
 interface INaveButton {
   name: string;
   href: string;
@@ -86,16 +86,16 @@ const Header = () => {
 
         {/* <ConnectWalletBtn /> */}
         {!account ? (
-          <ConnectButton onClick={getAccount}>
+          <ConnectButtonEl onClick={getAccount}>
             <div style={{ width: "1.7rem" }}>
               <AutoHeightImage src="/images/kaikas.png" />
             </div>
             <span>connect wallet</span>
-          </ConnectButton>
+          </ConnectButtonEl>
         ) : (
-          <ConnectButton onClick={disconnect}>
+          <ConnectButtonEl onClick={disconnect}>
             {cutWallet(account)}
-          </ConnectButton>
+          </ConnectButtonEl>
         )}
       </Wrapper>
     </HeaderSection>
@@ -128,6 +128,10 @@ const Navitation = styled.nav`
   .icon__twitter {
     font-size: 1.7rem;
   }
+
+  ${media[1200]} {
+    display: none;
+  }
 `;
 
 const HeaderSection = styled(Section)<{ isScrollingDown: boolean }>`
@@ -158,4 +162,10 @@ const Icon = styled.div`
   justify-content: center;
   /* width: 2rem; */
   color: ${({ theme }) => theme.colors.black};
+`;
+
+const ConnectButtonEl = styled(ConnectButton)`
+  ${media[1200]} {
+    display: none;
+  }
 `;
