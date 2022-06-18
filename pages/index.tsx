@@ -2,6 +2,7 @@ import type { NextPage } from "next";
 import { useEffect, useRef, useState } from "react";
 import styled, { css, keyframes } from "styled-components";
 import AutoHeightImage from "../components/common/AutoHeightImage";
+import { mintingBlockCounter } from "../components/common/styles/keyframes";
 import { PageSection, Wrapper } from "../components/common/styles/page";
 import { useAccount } from "../contexts/AccountContext";
 import { useCaver } from "../hooks/useCaver";
@@ -22,7 +23,8 @@ const CubeComponent = (props: CubeComponentProps) => {
       </CubeImg>
       <CubeDesc highlight={props.highlight}>
         <div style={{ fontSize: theme.fontSizes.fontxs }}>{props.title}</div>
-        <div style={{ fontSize: theme.fontSizes.fontlg }}>{props.desc}</div>
+        {/* <div style={{ fontSize: theme.fontSizes.fontlg }}>{props.desc}</div> */}
+        <MintingBlockWrapper></MintingBlockWrapper>
       </CubeDesc>
     </CubeContainer>
   );
@@ -37,7 +39,8 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setPercent(percent + 10);
+      if (currentBlock >= 100) setPercent(100);
+      if (currentBlock < 100) setPercent(percent + 10);
     }, 500);
     return () => {
       clearTimeout(timer);
@@ -181,9 +184,9 @@ const Home: NextPage = () => {
           {/* BOTTOM */}
           <Sticker x="40%" y="2rem" t="100%" l="100%" />
           <Sticker x="40%" y="1.45rem" t="100%" l="100%" />
-          <NumberText>
-            <div></div>
-          </NumberText>
+          {/* <NumberText> */}
+          {/* <div></div> */}
+          {/* </NumberText> */}
         </Container>
       </Wrapper>
     </SectionEl>
@@ -401,6 +404,39 @@ const Sticker = styled.div<{ x: string; y: string; t: string; l: string }>`
     top: ${t};
   `}
 `;
+const CurrentBlockWraapper = styled.div`
+  @property --current--block--num {
+    syntax: "<integer>";
+    initial-value: 89090290;
+    inherits: false;
+  }
+
+  counter-reset: num var(--current--block--num);
+
+  ::after {
+    content: counter(num);
+  }
+`;
+
+const MintingBlockWrapper = styled.div`
+  @property --minting--block--num {
+    syntax: "<integer>";
+    initial-value: 89090290;
+    inherits: false;
+  }
+  @property --init--minting--block--num {
+    syntax: "<integer>";
+    initial-value: 89090290;
+    inherits: false;
+  }
+
+  animation: ${mintingBlockCounter} 3s alternate ease-out;
+  counter-reset: num var(--minting--block--num);
+
+  ::after {
+    content: counter(num);
+  }
+`;
 
 const NumberText = styled.div`
   @property --num {
@@ -419,7 +455,7 @@ const NumberText = styled.div`
     content: counter(num);
   }
 
-  @keyframes counter {
+  /* @keyframes counter {
     0% {
       --num: 0;
     }
@@ -431,5 +467,5 @@ const NumberText = styled.div`
     100% {
       --num: 89090290;
     }
-  }
+  } */
 `;

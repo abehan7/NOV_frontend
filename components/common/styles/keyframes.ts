@@ -22,14 +22,28 @@ export const flash_v2 = keyframes`
 
 export const mintingBlockCounter = keyframes`
     0% {
-      --minting--block--num: 0;
+      --minting--block--num: 80090250;
     }
 
-    30% {
-      --minting--block--num: 89090250;
+    20% {
+      --minting--block--num: 87090250;
     }
 
     100% {
-      --minting--block--num: 89090290;
+      --minting--block--num: var(--init--minting--block--num);
+    }
+`;
+
+export const currentBlockCounter = keyframes`
+    0% {
+      --minting--block--num: 80090250;
+    }
+
+    20% {
+      --minting--block--num: 87090250;
+    }
+
+    100% {
+      --minting--block--num: var(--current--block--num);
     }
 `;
