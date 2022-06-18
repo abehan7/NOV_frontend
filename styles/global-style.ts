@@ -18,7 +18,7 @@ export const GlobalStyle = createGlobalStyle`
 
   html {
     color: #000000;
-    font-family: "FugazOne";
+    /* font-family: "FugazOne"; */
     scroll-behavior: smooth;
     transition: scroll 0.3s cubic-bezier(0.0, 0.0, 0.58, 1.0);
     background: ${theme.colors.primary};

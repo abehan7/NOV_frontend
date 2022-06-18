@@ -326,6 +326,7 @@ const SubTitle = styled.div`
 `;
 const CubeImg = styled.div`
   width: 4rem;
+  height: 4rem;
 `;
 const CubeDesc = styled.div<{ highlight: boolean }>`
   display: flex;
