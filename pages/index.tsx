@@ -142,6 +142,15 @@ const Home: NextPage = () => {
           <Box>
             <Button>minting</Button>
           </Box>
+
+          {/* <Sticker /> */}
+          {/* <Sticker /> */}
+          {/* <Sticker /> */}
+          <Sticker x="50%" y="2rem" t="0" l="0" />
+          <Sticker x="50%" y="1.45rem" t="0" l="0" />
+          {/* borrom */}
+          <Sticker x="40%" y="2rem" t="100%" l="100%" />
+          <Sticker x="40%" y="1.45rem" t="100%" l="100%" />
         </Container>
       </Wrapper>
     </SectionEl>
@@ -166,6 +175,7 @@ const SectionEl = styled(PageSection)`
     border: 4px solid ${theme.colors.black};
     background: ${theme.colors.white};
     padding: 1.68rem;
+    position: relative;
     /* padding: 2rem; */
     //27px
     max-width: 36rem;
@@ -316,4 +326,22 @@ const Bar = styled.div`
   width: 100%;
   background-color: ${({ theme }) => theme.colors.grayProgressBar};
   border-radius: ${theme.borderRadius.progressBar};
+`;
+
+const Sticker = styled.div<{ x: string; y: string; t: string; l: string }>`
+  /* position: absolute; */
+  position: absolute;
+  width: 5.8125rem;
+  height: 5px;
+  /* left: 0; */
+  /* top: 0; */
+  /* transform: ; */
+
+  background: rgba(255, 255, 255, 0.8);
+
+  ${({ x, y, t, l }) => css`
+    transform: rotate(135.87deg) translate(${x}, ${y});
+    left: ${l};
+    top: ${t};
+  `}/* transform: rotate(135.87deg) translate(50%, 2rem); */
 `;
