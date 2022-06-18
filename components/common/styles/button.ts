@@ -22,3 +22,21 @@ export const ConnectButton = styled.div`
   order: 1;
   cursor: pointer;
 `;
+export const ConnectButton2 = styled.div`
+  cursor: pointer;
+  display: inline-block;
+  color: #fff;
+  padding: 1rem 1.75rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+  .isConnected {
+    cursor: default;
+  }
+
+  border: 2px solid;
+  background: transparent;
+  border-radius: 3rem;
+  padding: 0.75rem 1.5rem;
+`;

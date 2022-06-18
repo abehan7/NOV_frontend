@@ -1,9 +1,9 @@
 import { createGlobalStyle } from "styled-components";
 // import reset from "styled-reset";
 import { theme } from "../styles/theme";
-
+// import reset from "styled-reset";
 export const GlobalStyle = createGlobalStyle`
-
+  /* ${reset}; */
   :root {
     --font-size-description: 32px;
     --letter-spacing-description: 0.64px;

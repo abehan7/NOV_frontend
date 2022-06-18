@@ -1,5 +1,5 @@
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { Section, Wrapper } from "../common/styles/page";
 // import ConnectWalletBtn from "../common/ConnectWalletBtn";
@@ -12,6 +12,8 @@ import { AiOutlineTwitter } from "react-icons/ai";
 import Discord from "../../public/svg/discord.svg";
 import { useAccount } from "../../contexts/AccountContext";
 import { media, theme } from "../../styles/theme";
+import Hamburger from "../header/Hamburger";
+import NavMenu from "../header/NavMenu";
 interface INaveButton {
   name: string;
   href: string;
@@ -31,10 +33,19 @@ const links = {
   contact: "https://nov-letter.com/contact",
 };
 
+interface IHeaderContext {
+  isOpen: boolean;
+  toggle: () => void;
+}
+
+const HeaderContext = createContext<IHeaderContext | null>(null);
+export const useHeader = () => useContext(HeaderContext);
+
 const Header = () => {
   const getAccount = useAccount()?.getAccount;
   const account = useAccount()?.account;
   const disconnect = useAccount()?.disconnect;
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const onClickLogo = () => (document.location.href = "/");
   const isScrollingDown = useScrolling("down");
@@ -53,52 +64,57 @@ const Header = () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+  const onClickHamburger = () => setIsOpen(!isOpen);
 
   return (
-    <HeaderSection isScrollingDown={isScrollingDown}>
-      <Wrapper style={{ justifyContent: "space-between" }}>
-        <Box onClick={onClickLogo}>
-          <AutoHeightImage
-            src="/images/logo.png"
-            style={{ width: "400px", height: "400px" }}
-          />
-        </Box>
-        <Navitation>
-          <div
-            style={{ cursor: "pointer" }}
-            onClick={() => window.open(links.home)}
-          >
-            Home
-          </div>
-          <div
-            style={{ cursor: "pointer" }}
-            onClick={() => window.open(links.contact)}
-          >
-            Contact
-          </div>
-          <Icon onClick={() => window.open(links.twitter)}>
-            <AiOutlineTwitter className="icon__twitter" />
-          </Icon>
-          <Icon onClick={() => window.open(links.discord)}>
-            <Discord />
-          </Icon>
-        </Navitation>
-
-        {/* <ConnectWalletBtn /> */}
-        {!account ? (
-          <ConnectButtonEl onClick={getAccount}>
-            <div style={{ width: "1.7rem" }}>
-              <AutoHeightImage src="/images/kaikas.png" />
+    <HeaderContext.Provider value={{ isOpen, toggle: onClickHamburger }}>
+      <HeaderSection isScrollingDown={isScrollingDown}>
+        <Wrapper style={{ justifyContent: "space-between" }}>
+          <Box onClick={onClickLogo}>
+            <AutoHeightImage
+              src="/images/logo.png"
+              style={{ width: "400px", height: "400px" }}
+            />
+          </Box>
+          <Navitation>
+            <div
+              style={{ cursor: "pointer" }}
+              onClick={() => window.open(links.home)}
+            >
+              Home
             </div>
-            <span>connect wallet</span>
-          </ConnectButtonEl>
-        ) : (
-          <ConnectButtonEl onClick={disconnect}>
-            {cutWallet(account)}
-          </ConnectButtonEl>
-        )}
-      </Wrapper>
-    </HeaderSection>
+            <div
+              style={{ cursor: "pointer" }}
+              onClick={() => window.open(links.contact)}
+            >
+              Contact
+            </div>
+            <Icon onClick={() => window.open(links.twitter)}>
+              <AiOutlineTwitter className="icon__twitter" />
+            </Icon>
+            <Icon onClick={() => window.open(links.discord)}>
+              <Discord />
+            </Icon>
+          </Navitation>
+
+          {/* <ConnectWalletBtn /> */}
+          {!account ? (
+            <ConnectButtonEl onClick={getAccount}>
+              <div style={{ width: "1.7rem" }}>
+                <AutoHeightImage src="/images/kaikas.png" />
+              </div>
+              <span>connect wallet</span>
+            </ConnectButtonEl>
+          ) : (
+            <ConnectButtonEl onClick={disconnect}>
+              {cutWallet(account)}
+            </ConnectButtonEl>
+          )}
+          <Hamburger isOpen={isOpen} onClickHamburger={onClickHamburger} />
+          <NavMenu isOpen={isOpen} />
+        </Wrapper>
+      </HeaderSection>
+    </HeaderContext.Provider>
   );
 };
 
