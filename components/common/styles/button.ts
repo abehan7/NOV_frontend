@@ -25,7 +25,7 @@ export const ConnectButton = styled.div`
 export const ConnectButton2 = styled.div`
   cursor: pointer;
   display: inline-block;
-  color: #fff;
+  color: ${({ theme }) => theme.colors.gray500};
   padding: 1rem 1.75rem;
   border-radius: 0.5rem;
   font-weight: 500;

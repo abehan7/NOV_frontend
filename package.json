@@ -18,7 +18,8 @@
     "react-dom": "18.1.0",
     "react-hot-toast": "^2.2.0",
     "react-icons": "^4.4.0",
-    "styled-components": "^5.3.5"
+    "styled-components": "^5.3.5",
+    "styled-reset": "^4.4.1"
   },
   "devDependencies": {
     "@svgr/webpack": "^6.2.1",

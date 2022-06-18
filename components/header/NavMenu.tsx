@@ -19,13 +19,9 @@ const NavMenu: FC<NavMenuProps> = ({ isOpen }) => {
     <NavMenuEl className="nav__menu show-menu" id="nav-menu" isOpen={isOpen}>
       <ul className="nav__list">
         <NavBtn href="/">Home</NavBtn>
-        <NavBtn href="/#performance">Performance</NavBtn>
-        <NavBtn href="/#roadmap">Roadmap</NavBtn>
-        <NavBtn href="/#nft">GMS NFT</NavBtn>
-        <NavBtn href="/#crew">CREW</NavBtn>
-        <NavBtn href="/minting">Mint</NavBtn>
-        <NavBtn href="/my-collections">My Collections</NavBtn>
-        <NavBtn href="/stats">Stats</NavBtn>
+        <NavBtn href="/#performance">Contact</NavBtn>
+        <NavBtn href="/#roadmap">twitter</NavBtn>
+        <NavBtn href="/#nft">discord</NavBtn>
         {account ? (
           <ConnectButton2 style={{ cursor: "default" }}>
             {cutWallet(account)}
@@ -81,6 +77,7 @@ const NavMenuEl = styled.div<{ isOpen: boolean }>`
     align-items: center;
     grid-row-gap: 1.5rem;
     row-gap: 1.5rem;
+    justify-content: center;
   }
 
   li {

@@ -1,9 +1,6 @@
 import { createGlobalStyle } from "styled-components";
-// import reset from "styled-reset";
 import { theme } from "../styles/theme";
-// import reset from "styled-reset";
 export const GlobalStyle = createGlobalStyle`
-  /* ${reset}; */
   :root {
     --font-size-description: 32px;
     --letter-spacing-description: 0.64px;
@@ -38,6 +35,10 @@ export const GlobalStyle = createGlobalStyle`
   }
   .color__primary{
     color: ${theme.colors.primary};
+  }
+
+  ul{
+    list-style-type: none;
   }
 
   @media all and (min-width: 1025px){
