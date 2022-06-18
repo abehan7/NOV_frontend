@@ -1,5 +1,4 @@
 import type { NextPage } from "next";
-// import Image from "next/image";
 import styled, { css } from "styled-components";
 import AutoHeightImage from "../components/common/AutoHeightImage";
 import { PageSection, Wrapper } from "../components/common/styles/page";
@@ -98,7 +97,7 @@ const Home: NextPage = () => {
             </div>
           </ContentBox>
           <ContentBox>
-            <SubTitle>quantity and price</SubTitle>
+            <SubTitle>QUANTITY & PRICE</SubTitle>
             <Contents
               style={{
                 flexDirection: "column",
@@ -196,7 +195,7 @@ const SectionEl = styled(PageSection)`
     padding-top: 1rem;
     font-size: ${theme.fontSizes.fontmd};
     > span {
-      font-size: ${theme.fontSizes.fontxs};
+      font-size: ${theme.fontSizes.fontsm};
     }
   }
 `;
@@ -303,9 +302,7 @@ const CubeDesc = styled.div<{ highlight: boolean }>`
   }
 `;
 
-const QuantityWrapper = styled.div``;
 const BarContainer = styled.div`
-  /* padding-top: 2.25rem; */
   > div {
     display: flex;
   }
@@ -315,9 +312,10 @@ const BarContainer = styled.div`
     justify-content: space-between;
     font-size: ${({ theme }) => theme.fontSizes.fontsm};
     /* display: flex; */
+    padding: 0 0.3rem;
   }
   .bar__item2 {
-    padding: 1rem 0;
+    padding: 0.8rem 0;
   }
 `;
 
