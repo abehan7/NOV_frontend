@@ -4,6 +4,7 @@
   font-weight: 100;
   font-style: normal;
   src: url("/fonts/Archivo-Thin.ttf") format("truetype");
+  font-display: swap;
 }
 
 @font-face {
@@ -11,6 +12,7 @@
   font-weight: 200;
   font-style: normal;
   src: url("/fonts/Archivo-ExtraLight.ttf") format("truetype");
+  font-display: swap;
 }
 
 @font-face {
@@ -18,6 +20,7 @@
   font-weight: 300;
   font-style: normal;
   src: url("/fonts/Archivo-Light.ttf") format("truetype");
+  font-display: swap;
 }
 
 @font-face {
@@ -25,6 +28,7 @@
   font-weight: 400;
   font-style: normal;
   src: url("/fonts/Archivo-Regular.ttf") format("truetype");
+  font-display: swap;
 }
 
 @font-face {
@@ -32,12 +36,14 @@
   font-weight: 500;
   font-style: normal;
   src: url("/fonts/Archivo-Medium.ttf") format("truetype");
+  font-display: swap;
 }
 /* FugazOne */
 @font-face {
   font-family: "FugazOne";
   font-style: normal;
   src: url("/fonts/FugazOne-Regular.ttf") format("truetype");
+  font-display: swap;
 }
 /* IBMPlexSans */
 
@@ -46,6 +52,7 @@
   font-weight: 100;
   font-style: normal;
   src: url("/fonts/IBMPlexSans-Thin.ttf") format("truetype");
+  font-display: swap;
 }
 
 @font-face {
@@ -53,6 +60,7 @@
   font-weight: 200;
   font-style: normal;
   src: url("/fonts/IBMPlexSans-ExtraLight.ttf") format("truetype");
+  font-display: swap;
 }
 
 @font-face {
@@ -60,6 +68,7 @@
   font-weight: 300;
   font-style: normal;
   src: url("/fonts/IBMPlexSans-Light.ttf") format("truetype");
+  font-display: swap;
 }
 
 @font-face {
@@ -67,6 +76,7 @@
   font-weight: 400;
   font-style: normal;
   src: url("/fonts/IBMPlexSans-Regular.ttf") format("truetype");
+  font-display: swap;
 }
 
 @font-face {
@@ -74,6 +84,7 @@
   font-weight: 500;
   font-style: normal;
   src: url("/fonts/IBMPlexSans-Medium.ttf") format("truetype");
+  font-display: swap;
 }
 
 @font-face {
@@ -81,6 +92,7 @@
   font-weight: 600;
   font-style: normal;
   src: url("/fonts/IBMPlexSans-SemiBold.ttf") format("truetype");
+  font-display: swap;
 }
 
 @font-face {
@@ -88,4 +100,5 @@
   font-weight: 700;
   font-style: normal;
   src: url("/fonts/IBMPlexSans-Bold.ttf") format("truetype");
+  font-display: swap;
 }

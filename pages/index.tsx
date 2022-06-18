@@ -49,11 +49,11 @@ const Home: NextPage = () => {
             매주 월요일, 화요일, 수요일 세상에 모든 NFT 소식을 전하고 있지{" "}
             <br />
             우리 구독자들만을 위해 10,000개의 NOV 캐릭터를 준비했어! <br />
-            노브레터 구독/디스코드 접속, 카이카스와 소량의 수수료만 있다면{" "}
-            <br />
+            노브레터 구독/디스코드 접속, 카이카스와 소량의 수수료만 있다면
             참여가능!{" "}
           </div>
         </Container>
+
         {/* right */}
         <Container className="item2">
           <Box className="box1">
@@ -61,7 +61,11 @@ const Home: NextPage = () => {
             <div>
               <span>Only For Subscribers</span>
               <div
-                style={{ maxWidth: "3.75rem", transform: "translateY(6px)" }}
+                style={{
+                  maxWidth: "3.75rem",
+                  transform: "translateY(6px)",
+                  minHeight: "4.83rem",
+                }}
               >
                 <AutoHeightImage src="/images/hero_resized.png" />
               </div>
@@ -95,7 +99,45 @@ const Home: NextPage = () => {
           </ContentBox>
           <ContentBox>
             <SubTitle>quantity and price</SubTitle>
-            <Contents></Contents>
+            <Contents
+              style={{
+                flexDirection: "column",
+                padding: "0.8rem",
+                paddingTop: "1.5rem",
+              }}
+            >
+              <BarContainer>
+                <div className="bar__item1">
+                  <span>Remaining NFTS</span>
+                  <span>
+                    <span className="color__primary">0</span>/10,000
+                  </span>
+                </div>
+                <div className="bar__item2">
+                  <Bar />
+                </div>
+                <div className="bar__item3">
+                  <span>
+                    <span className="color__primary">1 MINT</span> PER 1 PERSON
+                  </span>
+                  <span className="color__primary">WHITELIST ONLY</span>
+                </div>
+              </BarContainer>
+              <div className="price">
+                <span>PRICE :</span> 0 KLAY ( + GAS FEE )
+              </div>
+              <div
+                style={{
+                  fontSize: theme.fontSizes.fontxs,
+                  padding: "0.6rem 0",
+                }}
+                className="kor__font"
+              >
+                *주의 : 소량의 가스비(수수료)가 발생할 수 있습니다. 카이카스
+                지갑에 최소 수량 (약 1KLAY) 이상의 <br />
+                KLAY를 보유하셔야 민팅에 참여하실 수 있습니다.
+              </div>
+            </Contents>
           </ContentBox>
           <Box>
             <Button>minting</Button>
@@ -117,13 +159,16 @@ const SectionEl = styled(PageSection)`
     /* width: 20rem; */
     transform: translateY(-2.75rem);
     width: 25rem;
+    min-height: 32.2rem;
     position: relative;
   }
   .item2 {
     border: 4px solid ${theme.colors.black};
     background: ${theme.colors.white};
-
-    padding: 2rem;
+    padding: 1.68rem;
+    /* padding: 2rem; */
+    //27px
+    max-width: 36rem;
   }
   .box1 {
     border-bottom: 2px solid ${theme.colors.black};
@@ -135,6 +180,13 @@ const SectionEl = styled(PageSection)`
       text-transform: capitalize;
       color: ${theme.colors.primaryLight};
       flex: 1;
+    }
+  }
+  .price {
+    padding-top: 1rem;
+    font-size: ${theme.fontSizes.fontmd};
+    > span {
+      font-size: ${theme.fontSizes.fontxs};
     }
   }
 `;
@@ -183,7 +235,7 @@ const Box = styled.div`
 `;
 
 const ContentBox = styled(Box)`
-  padding-top: 3rem;
+  padding-top: 2.5rem;
   flex-direction: column;
 `;
 
@@ -239,4 +291,29 @@ const CubeDesc = styled.div<{ highlight: boolean }>`
           0 -2px #f5d061;
       `}
   }
+`;
+
+const QuantityWrapper = styled.div``;
+const BarContainer = styled.div`
+  /* padding-top: 2.25rem; */
+  > div {
+    display: flex;
+  }
+  .bar__item1,
+  .bar__item3 {
+    align-items: center;
+    justify-content: space-between;
+    font-size: ${({ theme }) => theme.fontSizes.fontsm};
+    /* display: flex; */
+  }
+  .bar__item2 {
+    padding: 1rem 0;
+  }
+`;
+
+const Bar = styled.div`
+  height: ${theme.fontSizes.fontsm};
+  width: 100%;
+  background-color: ${({ theme }) => theme.colors.grayProgressBar};
+  border-radius: ${theme.borderRadius.progressBar};
 `;

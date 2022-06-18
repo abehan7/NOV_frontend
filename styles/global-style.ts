@@ -30,6 +30,9 @@ export const GlobalStyle = createGlobalStyle`
   .eng__font{
     font-family: "FugazOne";
   }
+  .color__primary{
+    color: ${theme.colors.primary};
+  }
 
   @media all and (min-width: 1025px){
   }

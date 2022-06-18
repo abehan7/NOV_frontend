@@ -85,8 +85,11 @@ const Box = styled.div`
   font-weight: 800;
   font-size: ${(props) => props.theme.fontSizes.fontlg};
   cursor: pointer;
-  width: 100px;
-  transform: translateY(-5px);
+  width: 150px;
+  /* transform: translateY(-5px); */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 const Navitation = styled.nav`
   display: flex;
@@ -109,6 +112,7 @@ const HeaderSection = styled(Section)<{ isScrollingDown: boolean }>`
   font-family: ${({ theme }) => theme.fonts.header};
   color: ${({ theme }) => theme.colors.gray70};
   height: ${({ theme }) => theme.headerHeight};
+  max-height: ${({ theme }) => theme.headerHeight};
   font-size: ${({ theme }) => theme.fontSizes.fontlg};
   .common__btn__container {
     font-size: ${({ theme }) => theme.fontSizes.fontsm};
@@ -118,19 +122,11 @@ const HeaderSection = styled(Section)<{ isScrollingDown: boolean }>`
   /* left: 0px; */
   width: 100%;
   z-index: 99;
-  /* padding: 1.3rem 1rem; */
-  /* color: white; */
   transition-property: background-color, padding;
   transition-timing-function: ease-in-out;
   transition-duration: 0.2s;
 
   background-color: ${({ theme }) => theme.colors.white};
-
-  background-color: ${({ theme, isScrollingDown }) =>
-    !isScrollingDown ? theme.colors.white : theme.colors.primary};
-
-  /* padding: ${({ isScrollingDown }) =>
-    isScrollingDown ? "1rem 1rem" : "1.3rem 1rem"}; */
 `;
 
 const Icon = styled.div`

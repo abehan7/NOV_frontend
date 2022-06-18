@@ -13,6 +13,7 @@ export const theme: DefaultTheme = {
     gray700: "#2D3748",
     gray800: "#1A202C",
     gray900: "#171923",
+    grayProgressBar: "#E8EAEC",
 
     primary: "#F5D061",
     primaryLight: "rgba(102, 84, 29, 0.8)",
@@ -41,6 +42,9 @@ export const theme: DefaultTheme = {
     font3xl: "3.5rem", // left title 56
   },
   headerHeight: "5.4rem", //86px
+  borderRadius: {
+    progressBar: "24px",
+  },
 };
 
 const customMediaQuery = (maxWidth: number): string =>
