@@ -1,11 +1,31 @@
 import type { NextPage } from "next";
 // import Image from "next/image";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import AutoHeightImage from "../components/common/AutoHeightImage";
 import { PageSection, Wrapper } from "../components/common/styles/page";
 import { useAccount } from "../hooks/useAccount";
 import { useCaver } from "../hooks/useCaver";
 import { theme } from "../styles/theme";
+
+interface CubeComponentProps {
+  src: string;
+  title: string;
+  desc: string;
+  highlight: boolean;
+}
+const CubeComponent = (props: CubeComponentProps) => {
+  return (
+    <CubeContainer>
+      <CubeImg>
+        <AutoHeightImage src={props.src} />
+      </CubeImg>
+      <CubeDesc highlight={props.highlight}>
+        <div style={{ fontSize: theme.fontSizes.fontxs }}>{props.title}</div>
+        <div style={{ fontSize: theme.fontSizes.fontlg }}>{props.desc}</div>
+      </CubeDesc>
+    </CubeContainer>
+  );
+};
 const Home: NextPage = () => {
   const { getAccount } = useAccount();
   const { publicMint } = useCaver();
@@ -13,12 +33,10 @@ const Home: NextPage = () => {
   return (
     <SectionEl>
       <Wrapper>
+        {/* left */}
         <Container className="item1">
           <TitleContainer>
             <Title fontSize={theme.fontSizes.font3xl}>WELCOME! I’M NOV.</Title>
-            <div>
-              <span></span>Only For Subscribers
-            </div>
           </TitleContainer>
           <div className="hero__img">
             <AutoHeightImage src="/images/hero_resized.png" />
@@ -36,18 +54,49 @@ const Home: NextPage = () => {
             참여가능!{" "}
           </div>
         </Container>
+        {/* right */}
         <Container className="item2">
-          <Box>
+          <Box className="box1">
             <Title fontSize={theme.fontSizes.font2xl}>free mint</Title>
+            <div>
+              <span>Only For Subscribers</span>
+              <div
+                style={{ maxWidth: "3.75rem", transform: "translateY(6px)" }}
+              >
+                <AutoHeightImage src="/images/hero_resized.png" />
+              </div>
+            </div>
           </Box>
-          <Box>
-            <SubTitle>minting block number</SubTitle>
-            <Contents></Contents>
-          </Box>
-          <Box>
+          <ContentBox>
+            <SubTitle>
+              <div>minting block number</div>
+              {/* <Circle /> */}
+            </SubTitle>
+            <Contents>
+              <CubeComponent
+                src="/images/block_white.png"
+                title="minting block"
+                desc="#89090290"
+                highlight={true}
+              />
+              <CubeComponent
+                src="/images/block_black.png"
+                title="current block"
+                desc="#89090290"
+                highlight={false}
+              />
+            </Contents>
+            <div style={{ fontSize: theme.fontSizes.fontxs, fontWeight: 500 }}>
+              보다 정확한 현재 블록 정보는, 클레이스코프와 클레이스왑을 참고
+              바랍니다.
+              <br />
+              표시되는 블락과 타 사이트의 실제 블락과 차이가 있을 수 있습니다.
+            </div>
+          </ContentBox>
+          <ContentBox>
             <SubTitle>quantity and price</SubTitle>
             <Contents></Contents>
-          </Box>
+          </ContentBox>
           <Box>
             <Button>minting</Button>
           </Box>
@@ -66,17 +115,27 @@ const SectionEl = styled(PageSection)`
   }
   .hero__img {
     /* width: 20rem; */
-    transform: translateY(-2rem);
+    transform: translateY(-2.75rem);
     width: 25rem;
     position: relative;
   }
   .item2 {
     border: 4px solid ${theme.colors.black};
     background: ${theme.colors.white};
-    /* width: 90%; */
-    /* height: 90%; */
+
     padding: 2rem;
-    /* width: 100%; */
+  }
+  .box1 {
+    border-bottom: 2px solid ${theme.colors.black};
+    padding-top: 1rem;
+    div:nth-child(2) {
+      display: flex;
+      justify-content: flex-end;
+      align-items: flex-end;
+      text-transform: capitalize;
+      color: ${theme.colors.primaryLight};
+      flex: 1;
+    }
   }
 `;
 
@@ -90,22 +149,12 @@ const Container = styled.div`
   max-width: 50%;
 `;
 
-const Box = styled.div`
-  display: flex;
-  width: 100%;
-`;
-
-const Title = styled.h2<{ fontSize: string }>`
-  font-size: ${(props) => props.fontSize};
-  font-weight: 400;
-`;
-const SubTitle = styled.div`
-  font-size: ${({ theme }) => theme.fontSizes.fontxl};
-  font-weight: 500;
-`;
-
 const TitleContainer = styled.div``;
-const Contents = styled.div``;
+const Contents = styled.div`
+  /* padding: 1rem 0; */
+  display: flex;
+`;
+
 const Button = styled.div`
   font-size: ${({ theme }) => theme.fontSizes.fontxl};
   font-weight: 800;
@@ -126,4 +175,68 @@ const HeroLogo = styled.div`
   left: 50%;
   width: 13rem;
   transform: translate(-50%, -50%);
+`;
+
+const Box = styled.div`
+  display: flex;
+  width: 100%;
+`;
+
+const ContentBox = styled(Box)`
+  padding-top: 3rem;
+  flex-direction: column;
+`;
+
+const CubeContainer = styled.div`
+  display: flex;
+  gap: 1rem;
+  flex: 1;
+  padding: 1.5rem 0;
+`;
+
+const Circle = styled.div`
+  position: absolute;
+  width: 2rem;
+  height: 2rem;
+  background-color: ${({ theme }) => theme.colors.primary};
+  border-radius: 50%;
+  top: 0;
+  left: 0;
+  /* z-index: -1; */
+  transform: translateX(-1rem);
+`;
+
+const Title = styled.h2<{ fontSize: string }>`
+  font-size: ${(props) => props.fontSize};
+  font-weight: 400;
+  padding-bottom: 1rem;
+`;
+
+const SubTitle = styled.div`
+  font-size: ${({ theme }) => theme.fontSizes.fontxl};
+  font-weight: 700;
+  position: relative;
+  ${Circle} {
+    z-index: 1;
+  }
+  div:nth-child(1) {
+    z-index: 10;
+  }
+`;
+const CubeImg = styled.div`
+  width: 4rem;
+`;
+const CubeDesc = styled.div<{ highlight: boolean }>`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  div:nth-child(2) {
+    ${({ highlight }) =>
+      highlight &&
+      css`
+        text-shadow: -2px 0 #f5d061, 0 2px #f5d061, 2px 0 #f5d061,
+          0 -2px #f5d061;
+      `}
+  }
 `;

@@ -15,6 +15,7 @@ export const theme: DefaultTheme = {
     gray900: "#171923",
 
     primary: "#F5D061",
+    primaryLight: "rgba(102, 84, 29, 0.8)",
 
     black: "#000000",
     white: "#FFFFFF",

@@ -22,7 +22,7 @@ const NavButton = (props: INaveButton) => {
   );
 };
 
-const account = "123456789";
+const account = "0x9E7aF1A7077B8D37322FC1199683a9446015b651";
 const Header = () => {
   //   const { chainId, account, deactivate, active } = useWeb3React();
   //   const dispatch = useTypedDispatch();
@@ -57,7 +57,7 @@ const Header = () => {
         </Box>
         <Navitation>
           <NavButton name="Home" href="/#Home" />
-          <NavButton name="Contact" href="/#About" />
+          <NavButton name="Contact" href="/#Contact" />
           <Icon>
             <AiOutlineTwitter className="icon__twitter" />
           </Icon>
@@ -138,4 +138,5 @@ const Icon = styled.div`
   align-items: center;
   justify-content: center;
   /* width: 2rem; */
+  color: ${({ theme }) => theme.colors.black};
 `;
