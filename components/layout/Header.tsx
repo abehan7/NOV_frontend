@@ -67,9 +67,12 @@ const Header = () => {
         </Navitation>
 
         {/* <ConnectWalletBtn /> */}
-        {!account ? (
+        {account ? (
           <ConnectButton onClick={onClickConnectWallet}>
-            connect wallet
+            <div style={{ width: "1.7rem" }}>
+              <AutoHeightImage src="/images/kaikas.png" />
+            </div>
+            <span>connect wallet</span>
           </ConnectButton>
         ) : (
           <ConnectButton onClick={() => {}}>{cutWallet(account)}</ConnectButton>
