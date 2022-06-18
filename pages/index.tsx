@@ -22,7 +22,9 @@ const CubeComponent = (props: CubeComponentProps) => {
         <AutoHeightImage src={props.src} />
       </CubeImg>
       <CubeDesc highlight={props.highlight}>
-        <div style={{ fontSize: theme.fontSizes.fontxs, padding: "0.2rem" }}>
+        <div
+          style={{ fontSize: theme.fontSizes.fontxs, padding: "0.4rem 1rem" }}
+        >
           {props.title}
         </div>
         {/* <div style={{ fontSize: theme.fontSizes.fontlg }}>{props.desc}</div> */}
