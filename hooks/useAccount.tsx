@@ -21,11 +21,5 @@ export const useAccount = (): IAccount => {
     console.log(account);
   }, [account]);
 
-  //   useEffect(() => {
-  //     if (window.klaytn) {
-  //       getAccount();
-  //     }
-  //   }, []);
-
   return { account, getAccount };
 };

@@ -6,6 +6,7 @@ import GlobalStyle from "../styles/global-style";
 import { theme } from "../styles/theme";
 import "../styles/fonts.css";
 import Layout from "../components/layout";
+import { AccountProvider } from "../contexts/AccountContext";
 function MyApp({ Component, pageProps }: AppProps) {
   const [showChild, setShowChild] = useState(false);
 
@@ -23,12 +24,14 @@ function MyApp({ Component, pageProps }: AppProps) {
   } else {
     return (
       <ApolloProvider>
-        <ThemeProvider theme={theme}>
-          <GlobalStyle />
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
-        </ThemeProvider>
+        <AccountProvider>
+          <ThemeProvider theme={theme}>
+            <GlobalStyle />
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </ThemeProvider>
+        </AccountProvider>
       </ApolloProvider>
     );
   }

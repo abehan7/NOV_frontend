@@ -1,10 +1,11 @@
 import type { NextPage } from "next";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled, { css } from "styled-components";
 import AutoHeightImage from "../components/common/AutoHeightImage";
 import { PageSection, Wrapper } from "../components/common/styles/page";
 import { useAccount } from "../hooks/useAccount";
 import { useCaver } from "../hooks/useCaver";
+import useProgressBar from "../hooks/useProgressBar";
 import { theme } from "../styles/theme";
 
 interface CubeComponentProps {
@@ -29,9 +30,24 @@ const CubeComponent = (props: CubeComponentProps) => {
 const Home: NextPage = () => {
   const { getAccount } = useAccount();
   const { publicMint } = useCaver();
-  const [percent, setPercent] = useState<number>(0);
+  const [percent, setPercent] = useState<number>(10);
   const progressBarRef = useRef<HTMLDivElement | null>(null);
   // console.log(window.klaytn.selectedAddress);
+  useProgressBar({ progressBarRef, percent });
+  // progress bar
+  // useEffect(() => {
+  //   if (!progressBarRef || !progressBarRef.current) return;
+  //   progressBarRef.current.style.setProperty(
+  //     "--progress--width",
+  //     `${percent}%`
+  //   );
+  //   console.log("time:", percent);
+  //   // if (percent < 100) setIsStakingCompleted(false);
+  //   if (percent >= 100) {
+  //     console.log("percent is 100:", percent);
+  //   }
+  // }, [percent]);
+
   return (
     <SectionEl>
       <Wrapper>
@@ -112,7 +128,7 @@ const Home: NextPage = () => {
                 <div className="bar__item1">
                   <span>Remaining NFTS</span>
                   <span>
-                    <span className="color__primary">0</span>/10,000
+                    <span className="color__primary">0</span> / 10,000
                   </span>
                 </div>
                 <Bar

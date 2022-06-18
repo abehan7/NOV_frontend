@@ -10,6 +10,7 @@ import AutoHeightImage from "../common/AutoHeightImage";
 import { ConnectButton } from "../common/styles/button";
 import { AiOutlineTwitter } from "react-icons/ai";
 import Discord from "../../public/svg/discord.svg";
+import { useAccount } from "../../contexts/AccountContext";
 interface INaveButton {
   name: string;
   href: string;
@@ -22,12 +23,13 @@ const NavButton = (props: INaveButton) => {
   );
 };
 
-const account = "0x9E7aF1A7077B8D37322FC1199683a9446015b651";
+// const account = "0x9E7aF1A7077B8D37322FC1199683a9446015b651";
 const Header = () => {
+  const getAccount = useAccount()?.getAccount;
+  const account = useAccount()?.account;
+  const disconnect = useAccount()?.disconnect;
   //   const { chainId, account, deactivate, active } = useWeb3React();
-  //   const dispatch = useTypedDispatch();
-  //   const onClickConnectWallet = () => dispatch(SET_WALLET_MODAL_OPEN(true));
-  const onClickConnectWallet = () => {};
+  // const onClickConnectWallet = () => getAccount();
   const onClickLogo = () => (document.location.href = "/");
   const isScrollingDown = useScrolling("down");
   const [isMobile, setIsMobile] = useState<boolean>(false);
@@ -67,15 +69,17 @@ const Header = () => {
         </Navitation>
 
         {/* <ConnectWalletBtn /> */}
-        {account ? (
-          <ConnectButton onClick={onClickConnectWallet}>
+        {!account ? (
+          <ConnectButton onClick={getAccount}>
             <div style={{ width: "1.7rem" }}>
               <AutoHeightImage src="/images/kaikas.png" />
             </div>
             <span>connect wallet</span>
           </ConnectButton>
         ) : (
-          <ConnectButton onClick={() => {}}>{cutWallet(account)}</ConnectButton>
+          <ConnectButton onClick={disconnect}>
+            {cutWallet(account)}
+          </ConnectButton>
         )}
       </Wrapper>
     </HeaderSection>
