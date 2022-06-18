@@ -437,6 +437,7 @@ const MintingBlockWrapper = styled.div`
   counter-reset: num var(--minting--block--num);
 
   ::after {
+    font-size: ${({ theme }) => theme.fontSizes.fontlg};
     content: counter(num);
   }
 `;

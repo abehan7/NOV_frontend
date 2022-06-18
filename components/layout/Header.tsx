@@ -27,7 +27,7 @@ const NavButton = (props: INaveButton) => {
 const links = {
   twitter: "https://twitter.com/nov_letter_nft",
   discord: "https://discord.gg/u2UQAPP6ds",
-  home: "",
+  home: "https://nov-letter.com/",
   contact: "https://nov-letter.com/contact",
 };
 
@@ -64,8 +64,12 @@ const Header = () => {
           />
         </Box>
         <Navitation>
-          <NavButton name="Home" href="/#Home" />
-          {/* <NavButton name="Contact" href="/#Contact" /> */}
+          <div
+            style={{ cursor: "pointer" }}
+            onClick={() => window.open(links.home)}
+          >
+            Home
+          </div>
           <div
             style={{ cursor: "pointer" }}
             onClick={() => window.open(links.contact)}

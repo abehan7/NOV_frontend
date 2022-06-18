@@ -1,4 +1,4 @@
-import Document, { DocumentContext } from "next/document";
+import Document, { DocumentContext, NextScript } from "next/document";
 import { useEffect } from "react";
 import { ServerStyleSheet } from "styled-components";
 //
@@ -21,6 +21,7 @@ export default class MyDocument extends Document {
           <>
             {initialProps.styles}
             {sheet.getStyleElement()}
+            <NextScript />
           </>,
         ],
       };
