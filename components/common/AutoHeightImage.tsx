@@ -9,7 +9,13 @@ import { flash } from "./styles/keyframes";
 const AutoHeightImage = ({ ...props }: ImageProps): React.ReactElement => {
   return (
     <AutoHeightImageWrapper className="autoImage__wrapper">
-      <Image layout="fill" className="autoImage" {...props} alt="img" />
+      <Image
+        layout="fill"
+        className="autoImage"
+        {...props}
+        alt="img"
+        priority={true}
+      />
     </AutoHeightImageWrapper>
   );
 };
