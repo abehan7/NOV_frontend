@@ -1,4 +1,5 @@
 import type { NextPage } from "next";
+import { useRef, useState } from "react";
 import styled, { css } from "styled-components";
 import AutoHeightImage from "../components/common/AutoHeightImage";
 import { PageSection, Wrapper } from "../components/common/styles/page";
@@ -28,6 +29,8 @@ const CubeComponent = (props: CubeComponentProps) => {
 const Home: NextPage = () => {
   const { getAccount } = useAccount();
   const { publicMint } = useCaver();
+  const [percent, setPercent] = useState<number>(0);
+  const progressBarRef = useRef<HTMLDivElement | null>(null);
   // console.log(window.klaytn.selectedAddress);
   return (
     <SectionEl>
@@ -101,8 +104,8 @@ const Home: NextPage = () => {
             <Contents
               style={{
                 flexDirection: "column",
-                padding: "0.8rem",
-                paddingTop: "1.5rem",
+                padding: "0.5rem",
+                paddingTop: "1.7rem",
               }}
             >
               <BarContainer>
@@ -112,9 +115,13 @@ const Home: NextPage = () => {
                     <span className="color__primary">0</span>/10,000
                   </span>
                 </div>
-                <div className="bar__item2">
-                  <Bar />
-                </div>
+                <Bar
+                  className="bar__item2"
+                  percent={percent}
+                  ref={progressBarRef}
+                >
+                  <div />
+                </Bar>
                 <div className="bar__item3">
                   <span>
                     <span className="color__primary">1 MINT</span> PER 1 PERSON
@@ -128,7 +135,7 @@ const Home: NextPage = () => {
               <div
                 style={{
                   fontSize: theme.fontSizes.fontxs,
-                  padding: "0.6rem 0",
+                  padding: "0.6rem 0.3rem",
                 }}
                 className="kor__font"
               >
@@ -192,6 +199,7 @@ const SectionEl = styled(PageSection)`
     }
   }
   .price {
+    padding: 0 0.3rem;
     padding-top: 1rem;
     font-size: ${theme.fontSizes.fontmd};
     > span {
@@ -314,26 +322,56 @@ const BarContainer = styled.div`
     /* display: flex; */
     padding: 0 0.3rem;
   }
-  .bar__item2 {
-    padding: 0.8rem 0;
+`;
+
+// const Bar = styled.div`
+//   height: ${theme.fontSizes.fontsm};
+//   width: 100%;
+//   background-color: ${({ theme }) => theme.colors.grayProgressBar};
+//   border-radius: ${theme.borderRadius.progressBar};
+// `;
+
+export const Bar = styled.div<{ percent: number }>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* padding: 0.5rem 1rem; */
+  padding: 1rem 0;
+  transition: all 1s ease-in-out;
+
+  > div {
+    width: 100%;
+    height: ${theme.fontSizes.fontsm};
+    border-radius: 2rem;
+    background: ${({ theme }) => theme.colors.grayProgressBar};
+    /* border: 2.25px solid ${(props) => props.theme.colors.black}; */
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    ::before {
+      content: "";
+      transition: all 1s ease-in-out;
+
+      /* width: 0%; */
+      /* width: ${({ percent }) => percent}%; */
+      width: var(--progress--width);
+
+      height: 100%;
+      background: ${({ theme }) => theme.colors.primary};
+      /* 다 되면  */
+      ${({ percent }) => percent >= 100 && `background: #5ccbf5;`}
+      border-radius: 2rem;
+      position: absolute;
+    }
   }
 `;
 
-const Bar = styled.div`
-  height: ${theme.fontSizes.fontsm};
-  width: 100%;
-  background-color: ${({ theme }) => theme.colors.grayProgressBar};
-  border-radius: ${theme.borderRadius.progressBar};
-`;
-
 const Sticker = styled.div<{ x: string; y: string; t: string; l: string }>`
-  /* position: absolute; */
   position: absolute;
   width: 5.8125rem;
   height: 5px;
-  /* left: 0; */
-  /* top: 0; */
-  /* transform: ; */
 
   background: rgba(255, 255, 255, 0.8);
 
@@ -341,5 +379,5 @@ const Sticker = styled.div<{ x: string; y: string; t: string; l: string }>`
     transform: rotate(135.87deg) translate(${x}, ${y});
     left: ${l};
     top: ${t};
-  `}/* transform: rotate(135.87deg) translate(50%, 2rem); */
+  `}
 `;
