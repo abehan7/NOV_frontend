@@ -51,7 +51,7 @@ import StatComponent from "./dashboardComponent/StatComponent";
 import ToggleBtnComponent from "./dashboardComponent/ToggleBtnComponent";
 import InputComponent from "./dashboardComponent/InputComponent";
 import MemberItemComponent from "./dashboardComponent/MemberItemComponent";
-import { useAccount } from "../../hooks/useAccount";
+import { useAccount } from "../../contexts/AccountContext";
 
 const DashboardComponent = () => {
   // const [{ wallet, connecting }, connect, disconnect] = useConnectWallet();

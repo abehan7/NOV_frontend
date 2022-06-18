@@ -1,15 +1,11 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import styled from "styled-components";
-// import { useAccount } from "../contexts/AccountContext";
-// import { IProjectInfo } from "../interfaces";
-// import DeployComponent from "../components/dashboard/DeployComponent";
 import DashboardComponent from "../components/dashboard/DashboardComponent";
 import { Toaster } from "react-hot-toast";
-// import { Link } from "react-router-dom";
 import Link from "next/link";
 import { IoIosArrowBack } from "react-icons/io";
-import { useAccount } from "../hooks/useAccount";
 import { IProjectInfo } from "../interfaces";
+import { useAccount } from "../contexts/AccountContext";
 const Section = styled.section`
   width: 100%;
   min-height: 100vh;

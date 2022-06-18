@@ -11,6 +11,7 @@ import { ConnectButton } from "../common/styles/button";
 import { AiOutlineTwitter } from "react-icons/ai";
 import Discord from "../../public/svg/discord.svg";
 import { useAccount } from "../../contexts/AccountContext";
+import { theme } from "../../styles/theme";
 interface INaveButton {
   name: string;
   href: string;
@@ -23,13 +24,18 @@ const NavButton = (props: INaveButton) => {
   );
 };
 
-// const account = "0x9E7aF1A7077B8D37322FC1199683a9446015b651";
+const links = {
+  twitter: "https://twitter.com/nov_letter_nft",
+  discord: "https://discord.gg/u2UQAPP6ds",
+  home: "",
+  contact: "https://nov-letter.com/contact",
+};
+
 const Header = () => {
   const getAccount = useAccount()?.getAccount;
   const account = useAccount()?.account;
   const disconnect = useAccount()?.disconnect;
-  //   const { chainId, account, deactivate, active } = useWeb3React();
-  // const onClickConnectWallet = () => getAccount();
+
   const onClickLogo = () => (document.location.href = "/");
   const isScrollingDown = useScrolling("down");
   const [isMobile, setIsMobile] = useState<boolean>(false);
@@ -59,11 +65,17 @@ const Header = () => {
         </Box>
         <Navitation>
           <NavButton name="Home" href="/#Home" />
-          <NavButton name="Contact" href="/#Contact" />
-          <Icon>
+          {/* <NavButton name="Contact" href="/#Contact" /> */}
+          <div
+            style={{ cursor: "pointer" }}
+            onClick={() => window.open(links.contact)}
+          >
+            Contact
+          </div>
+          <Icon onClick={() => window.open(links.twitter)}>
             <AiOutlineTwitter className="icon__twitter" />
           </Icon>
-          <Icon>
+          <Icon onClick={() => window.open(links.discord)}>
             <Discord />
           </Icon>
         </Navitation>

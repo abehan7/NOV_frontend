@@ -1,9 +1,9 @@
 import type { NextPage } from "next";
 import { useEffect, useRef, useState } from "react";
-import styled, { css } from "styled-components";
+import styled, { css, keyframes } from "styled-components";
 import AutoHeightImage from "../components/common/AutoHeightImage";
 import { PageSection, Wrapper } from "../components/common/styles/page";
-import { useAccount } from "../hooks/useAccount";
+import { useAccount } from "../contexts/AccountContext";
 import { useCaver } from "../hooks/useCaver";
 import useProgressBar from "../hooks/useProgressBar";
 import { theme } from "../styles/theme";
@@ -28,25 +28,35 @@ const CubeComponent = (props: CubeComponentProps) => {
   );
 };
 const Home: NextPage = () => {
-  const { getAccount } = useAccount();
+  const getAccount = useAccount()?.getAccount;
   const { publicMint } = useCaver();
-  const [percent, setPercent] = useState<number>(10);
+  const [percent, setPercent] = useState<number>(0);
+  const [currentBlock, setCurrentBlock] = useState<number>(0);
   const progressBarRef = useRef<HTMLDivElement | null>(null);
-  // console.log(window.klaytn.selectedAddress);
   useProgressBar({ progressBarRef, percent });
-  // progress bar
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setPercent(percent + 10);
+    }, 500);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, []);
+
+  useEffect(() => {
+    // const timer = setInterval(() => {
+    //   setCurrentBlock(currentBlock + 1);
+    // }, 1000);
+    // if (currentBlock > 8000) clearInterval(timer);
+    // return () => {
+    //   clearInterval(timer);
+    // };
+  }, [currentBlock]);
+
   // useEffect(() => {
-  //   if (!progressBarRef || !progressBarRef.current) return;
-  //   progressBarRef.current.style.setProperty(
-  //     "--progress--width",
-  //     `${percent}%`
-  //   );
-  //   console.log("time:", percent);
-  //   // if (percent < 100) setIsStakingCompleted(false);
-  //   if (percent >= 100) {
-  //     console.log("percent is 100:", percent);
-  //   }
-  // }, [percent]);
+  //   console.log(currentBlock);
+  // }, [currentBlock]);
 
   return (
     <SectionEl>
@@ -165,14 +175,15 @@ const Home: NextPage = () => {
             <Button>minting</Button>
           </Box>
 
-          {/* <Sticker /> */}
-          {/* <Sticker /> */}
-          {/* <Sticker /> */}
+          {/* TOP */}
           <Sticker x="50%" y="2rem" t="0" l="0" />
           <Sticker x="50%" y="1.45rem" t="0" l="0" />
-          {/* borrom */}
+          {/* BOTTOM */}
           <Sticker x="40%" y="2rem" t="100%" l="100%" />
           <Sticker x="40%" y="1.45rem" t="100%" l="100%" />
+          <NumberText>
+            <div></div>
+          </NumberText>
         </Container>
       </Wrapper>
     </SectionEl>
@@ -340,13 +351,6 @@ const BarContainer = styled.div`
   }
 `;
 
-// const Bar = styled.div`
-//   height: ${theme.fontSizes.fontsm};
-//   width: 100%;
-//   background-color: ${({ theme }) => theme.colors.grayProgressBar};
-//   border-radius: ${theme.borderRadius.progressBar};
-// `;
-
 export const Bar = styled.div<{ percent: number }>`
   display: flex;
   justify-content: center;
@@ -396,4 +400,36 @@ const Sticker = styled.div<{ x: string; y: string; t: string; l: string }>`
     left: ${l};
     top: ${t};
   `}
+`;
+
+const NumberText = styled.div`
+  @property --num {
+    syntax: "<integer>";
+    initial-value: 89090290;
+    inherits: false;
+  }
+
+  > div {
+    // go fast and slow down
+    animation: counter 5s alternate ease-out;
+    counter-reset: num var(--num);
+    padding: 2rem;
+  }
+  div::after {
+    content: counter(num);
+  }
+
+  @keyframes counter {
+    0% {
+      --num: 0;
+    }
+
+    30% {
+      --num: 89090250;
+    }
+
+    100% {
+      --num: 89090290;
+    }
+  }
 `;

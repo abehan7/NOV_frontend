@@ -19,3 +19,17 @@ export const flash_v2 = keyframes`
 80% {  opacity: 0; }
 100% {  opacity: 0; }
 `;
+
+export const mintingBlockCounter = keyframes`
+    0% {
+      --minting--block--num: 0;
+    }
+
+    30% {
+      --minting--block--num: 89090250;
+    }
+
+    100% {
+      --minting--block--num: 89090290;
+    }
+`;
