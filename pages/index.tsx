@@ -123,7 +123,7 @@ const Home: NextPage = () => {
                 highlight={false}
               />
             </Contents>
-            <div style={{ fontSize: theme.fontSizes.fontxs, fontWeight: 500 }}>
+            <div style={{ fontSize: theme.fontSizes.fontxs, fontWeight: 800 }}>
               보다 정확한 현재 블록 정보는, 클레이스코프와 클레이스왑을 참고
               바랍니다.
               <br />
@@ -167,6 +167,7 @@ const Home: NextPage = () => {
                 style={{
                   fontSize: theme.fontSizes.fontxs,
                   padding: "0.6rem 0.3rem",
+                  fontWeight: 800,
                 }}
                 className="kor__font"
               >
