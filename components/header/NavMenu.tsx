@@ -7,6 +7,7 @@ import { media } from "../../styles/theme";
 import { useHeader } from "../layout/Header";
 import { ConnectButton2 } from "../common/styles/button";
 import { cutWallet } from "../../utils/common";
+import { links } from "../../constants";
 
 interface NavMenuProps {
   isOpen: boolean;
@@ -14,14 +15,23 @@ interface NavMenuProps {
 
 const NavMenu: FC<NavMenuProps> = ({ isOpen }) => {
   const getAccount = useAccount()?.getAccount;
+  const disconnect = useAccount()?.disconnect;
   const account = useAccount()?.account;
   return (
     <NavMenuEl className="nav__menu show-menu" id="nav-menu" isOpen={isOpen}>
       <ul className="nav__list">
-        <NavBtn href="/">Home</NavBtn>
-        <NavBtn href="/#performance">Contact</NavBtn>
-        <NavBtn href="/#roadmap">twitter</NavBtn>
-        <NavBtn href="/#nft">discord</NavBtn>
+        <NavBtn href="#" handleClick={() => window.open(links.home)}>
+          Home
+        </NavBtn>
+        <NavBtn href="#" handleClick={() => window.open(links.contact)}>
+          Contact
+        </NavBtn>
+        <NavBtn href="#" handleClick={() => window.open(links.twitter)}>
+          twitter
+        </NavBtn>
+        <NavBtn href="#" handleClick={() => window.open(links.discord)}>
+          discord
+        </NavBtn>
         {account ? (
           <ConnectButton2 style={{ cursor: "default" }}>
             {cutWallet(account)}
@@ -42,12 +52,18 @@ export default NavMenu;
 interface NavBtnProps {
   href: string;
   children: ReactNode;
+  handleClick: () => any;
 }
 
-const NavBtn: FC<NavBtnProps> = ({ href, children }) => {
+const NavBtn: FC<NavBtnProps> = ({ href, children, handleClick }) => {
   const toggle = useHeader()?.toggle;
+  const onClick = () => {
+    if (!toggle) return;
+    handleClick();
+    toggle();
+  };
   return (
-    <li className="nav__item" onClick={toggle}>
+    <li className="nav__item" onClick={onClick}>
       <Link href={href}>
         <a className="nav__link"> {children}</a>
       </Link>

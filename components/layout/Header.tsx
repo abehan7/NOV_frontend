@@ -14,6 +14,7 @@ import { useAccount } from "../../contexts/AccountContext";
 import { media, theme } from "../../styles/theme";
 import Hamburger from "../header/Hamburger";
 import NavMenu from "../header/NavMenu";
+import { links } from "../../constants";
 interface INaveButton {
   name: string;
   href: string;
@@ -26,12 +27,12 @@ const NavButton = (props: INaveButton) => {
   );
 };
 
-const links = {
-  twitter: "https://twitter.com/nov_letter_nft",
-  discord: "https://discord.gg/u2UQAPP6ds",
-  home: "https://nov-letter.com/",
-  contact: "https://nov-letter.com/contact",
-};
+// const links = {
+//   twitter: "https://twitter.com/nov_letter_nft",
+//   discord: "https://discord.gg/u2UQAPP6ds",
+//   home: "https://nov-letter.com/",
+//   contact: "https://nov-letter.com/contact",
+// };
 
 interface IHeaderContext {
   isOpen: boolean;
