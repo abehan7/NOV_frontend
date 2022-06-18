@@ -24,6 +24,12 @@ export const GlobalStyle = createGlobalStyle`
     background: ${theme.colors.primary};
   }
 
+  ::selection {
+  /* background: var(--clr-selection-bg); */
+  background: ${theme.colors.primary};
+  color:${(props) => props.theme.colors.white};
+  }
+
   .kor__font{
     font-family: "IBMPlexSans";
   }
