@@ -454,15 +454,16 @@ const SectionEl = styled(PageSection)`
     /* width: 20rem; */
     transform: translateY(-2.75rem);
     width: 25rem;
-    min-height: 32.2rem;
+    min-height: 32.8rem;
     position: relative;
     ${media[768]} {
-      min-height: 0;
+      min-height: 25.7rem;
       width: 20rem;
     }
     ${media.mobile} {
       width: 14rem;
       transform: translateY(-1rem);
+      min-height: 18rem;
     }
   }
   .item2 {

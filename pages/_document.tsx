@@ -32,6 +32,7 @@ export default class MyDocument extends Document {
   render() {
     return (
       <Html lang="en">
+        {/* 여기서 이렇게 preload하니까 플리커링 없어짐 */}
         <Head>
           <link
             rel="preload"
