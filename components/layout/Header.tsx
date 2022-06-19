@@ -161,9 +161,11 @@ const HeaderSection = styled(Section)<{ isScrollingDown: boolean }>`
   .common__btn__container {
     font-size: ${({ theme }) => theme.fontSizes.fontsm};
   }
-  /* position: fixed; */
-  /* top: 0px; */
-  /* left: 0px; */
+  ${media[1200]} {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+  }
   width: 100%;
   z-index: 99;
   transition-property: background-color, padding;
