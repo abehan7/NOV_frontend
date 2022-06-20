@@ -28,6 +28,18 @@ export const useCaver = () => {
     }
   };
 
+  const getCurrentBlock = async () => {
+    if (!caver) return;
+    try {
+      // caver.klay.defaultBlock
+      const response = await caver.klay.getBlockNumber();
+      // console.log(response);
+      return response;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     if (window.klaytn) {
       setCaver(new Caver(window.klaytn));
@@ -42,5 +54,5 @@ export const useCaver = () => {
     );
   }, [caver]);
 
-  return { caver, nftContract, publicMint };
+  return { caver, nftContract, publicMint, getCurrentBlock };
 };

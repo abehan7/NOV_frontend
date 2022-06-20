@@ -6,7 +6,6 @@ import { mintingBlockCounter } from "../components/common/styles/keyframes";
 import { PageSection, Wrapper } from "../components/common/styles/page";
 import { useAccount } from "../contexts/AccountContext";
 import { useCaver } from "../hooks/useCaver";
-import useBlockNumber from "../hooks/useCurrentBlock";
 import useProgressBar from "../hooks/useProgressBar";
 import { media, theme } from "../styles/theme";
 
@@ -15,17 +14,9 @@ interface CubeComponentProps {
   title: string;
   desc: string;
   highlight: boolean;
-  cssBarName: string;
-  blockNumber: number;
 }
+
 const CubeComponent = (props: CubeComponentProps) => {
-  const blockNumberRef = useRef<HTMLDivElement | null>(null);
-  // const [blockNumber, setBlockNumber] = useState(400000);
-  useBlockNumber({
-    blockNumberRef,
-    blockNumber: props.blockNumber,
-    cssBarName: "--minting--block--num",
-  });
   return (
     <CubeContainer>
       <CubeImg>
@@ -38,20 +29,18 @@ const CubeComponent = (props: CubeComponentProps) => {
           {props.title}
         </div>
         {/* <div style={{ fontSize: theme.fontSizes.fontlg }}>{props.desc}</div> */}
-        <MintingBlockWrapper ref={blockNumberRef}></MintingBlockWrapper>
+        <MintingBlockWrapper></MintingBlockWrapper>
       </CubeDesc>
     </CubeContainer>
   );
 };
 const Home: NextPage = () => {
   const getAccount = useAccount()?.getAccount;
-  const { publicMint, getCurrentBlock } = useCaver();
+  const { publicMint } = useCaver();
   const [percent, setPercent] = useState<number>(0);
-  const [currentBlock, setCurrentBlock] = useState<number>(89090290);
+  const [currentBlock, setCurrentBlock] = useState<number>(0);
   const progressBarRef = useRef<HTMLDivElement | null>(null);
   useProgressBar({ progressBarRef, percent });
-
-  // useBlockNumber({ blockNumberRef, currentBlock });
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -61,14 +50,6 @@ const Home: NextPage = () => {
     return () => {
       clearTimeout(timer);
     };
-  }, []);
-
-  useEffect(() => {
-    const init = async () => {
-      const block = await getCurrentBlock();
-      console.log(block);
-    };
-    init();
   }, []);
 
   return (
@@ -124,17 +105,13 @@ const Home: NextPage = () => {
                 title="minting block"
                 desc="#89090290"
                 highlight={true}
-                cssBarName="--minting--block--num"
-                blockNumber={30}
               />
-
+              {/* <CubeLine> </CubeLine> */}
               <CubeComponent
                 src="/images/block_black.png"
                 title="current block"
                 desc="#89090290"
                 highlight={false}
-                cssBarName="--current--block--num"
-                blockNumber={90}
               />
             </Contents>
             <div style={{ fontSize: theme.fontSizes.fontxs, fontWeight: 500 }}>
@@ -408,12 +385,6 @@ const CurrentBlockWraapper = styled.div`
     inherits: false;
   }
 
-  @property --init--current--block--num {
-    syntax: "<integer>";
-    initial-value: 89090290;
-    inherits: false;
-  }
-
   counter-reset: num var(--current--block--num);
 
   ::after {
@@ -424,12 +395,12 @@ const CurrentBlockWraapper = styled.div`
 const MintingBlockWrapper = styled.div`
   @property --minting--block--num {
     syntax: "<integer>";
-    /* initial-value: 89090290; */
+    initial-value: 89090290;
     inherits: false;
   }
   @property --init--minting--block--num {
     syntax: "<integer>";
-    /* initial-value: 89090290; */
+    initial-value: 89090290;
     inherits: false;
   }
 
