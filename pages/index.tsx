@@ -28,10 +28,7 @@ const Home: NextPage = () => {
   const [isPaused, setIsPaused] = useState<boolean>(false);
   const [isMinting, setIsMinting] = useState<boolean>(false);
   const [mintingBlockNumber, setMintingBlockNumber] = useState<number>(0);
-  // const [mintingMessage]
   const progressBarRef = useRef<HTMLDivElement | null>(null);
-
-  // const getMerkleProof = () => {};
 
   const onClickMint = async () => {
     if (!account) return;
@@ -41,11 +38,15 @@ const Home: NextPage = () => {
       const { status, success } = await presaleMint(merkleProof);
       console.log(status, success);
       setIsMinting(false);
+      // 트랜젝션 정보 가지고오기
+      // 이거는 일단 임시방편
+      success && setTotalSupply(await getTotalSupply());
     } catch (error) {
       console.error(error);
       setIsMinting(false);
     }
   };
+
   useProgressBar({ progressBarRef, percent });
 
   useEffect(() => {
@@ -54,7 +55,6 @@ const Home: NextPage = () => {
       setIsPaused(await getIsPaused());
       setTotalSupply(await getTotalSupply());
       setMintingBlockNumber(await getMintingBlockNumber());
-      // console.log(block);
     };
     init();
   }, []);
@@ -62,7 +62,7 @@ const Home: NextPage = () => {
   useEffect(() => {
     totalSupply === 0 && setPercent(0);
     totalSupply !== 0 && setPercent((totalSupply / config.maxMintSupply) * 100);
-    console.log(totalSupply);
+    // console.log(totalSupply);
   }, [totalSupply]);
 
   useEffect(() => {
@@ -74,27 +74,23 @@ const Home: NextPage = () => {
     };
   }, [currentBlock]);
 
-  useEffect(() => {
-    console.log(mintingBlockNumber);
-  }, []);
-
   const MintButtonComponent = () => {
     const isNotMintable =
       isPaused || mintingBlockNumber < currentBlock || currentBlock === 0;
+    // when use didn't connect to klaytn wallet don't show mint button
     if (!account) return <Button onClick={getAccount}>connect wallet</Button>;
+    // when user connected and is not minting and isNotMintable
     if (account && !isMinting && isNotMintable)
       return <Button disabled={true}>disabled</Button>;
+    // when user connected and is not minting and Mintable
     if (account && !isMinting && !isNotMintable)
       return <Button onClick={onClickMint}>minting</Button>;
+    //when user is minting nft
     if (account && isMinting)
       return <Button disabled={true}>on process</Button>;
-
-    // wallet connection
-    // if (!isDisable) return <Button>minting</Button>;
   };
 
   return (
-    // <>
     <SectionEl>
       <WrapperEl>
         {/* left */}
@@ -225,7 +221,6 @@ const Home: NextPage = () => {
         </Container>
       </WrapperEl>
     </SectionEl>
-    // </>
   );
 };
 
