@@ -3,14 +3,16 @@ import { useEffect, useRef, useState } from "react";
 import styled, { css } from "styled-components";
 import { config } from "../caverConfig";
 import AutoHeightImage from "../components/common/AutoHeightImage";
-import { PageSection, Wrapper } from "../components/common/styles/page";
 import CubeComponent from "../components/mint/CubeComponent";
+import { setNumberDot } from "../utils/common";
+import { getMerkleProof } from "../utils/merkleTree";
 import { useAccount } from "../contexts/AccountContext";
 import { useCaver } from "../hooks/useCaver";
 import useProgressBar from "../hooks/useProgressBar";
 import { media, theme } from "../styles/theme";
-import { setNumberDot } from "../utils/common";
-import { getMerkleProof } from "../utils/merkleTree";
+import { PageSection, Wrapper } from "../components/common/styles/page";
+// TODO: detect network
+// TODO: detect kaikas extension
 
 const Home: NextPage = () => {
   const getAccount = useAccount()?.getAccount;
@@ -40,6 +42,7 @@ const Home: NextPage = () => {
       setIsMinting(false);
       // 트랜젝션 정보 가지고오기
       // 이거는 일단 임시방편
+      // TODO: 웹소켓 달기
       success && setTotalSupply(await getTotalSupply());
     } catch (error) {
       console.error(error);
