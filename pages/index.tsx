@@ -9,6 +9,7 @@ import { useCaver } from "../hooks/useCaver";
 import useBlockNumber from "../hooks/useCurrentBlock";
 import useProgressBar from "../hooks/useProgressBar";
 import { media, theme } from "../styles/theme";
+// import {Title}
 
 interface CubeComponentProps {
   src: string;
@@ -37,12 +38,10 @@ const CubeComponent = (props: CubeComponentProps) => {
         >
           {props.title}
         </div>
-        {/* <div style={{ fontSize: theme.fontSizes.fontlg }}>{props.desc}</div> */}
         {props.blockNumber === 0 && (
           <MintingBlockWrapper
             ref={blockNumberRef}
             blockNumber={90000000}
-            // style={{ visibility: "hidden" }}
             isLoading={true}
           />
         )}
@@ -96,6 +95,7 @@ const Home: NextPage = () => {
   }, [currentBlock]);
 
   return (
+    // <>
     <SectionEl>
       <WrapperEl>
         {/* left */}
@@ -227,6 +227,7 @@ const Home: NextPage = () => {
         </Container>
       </WrapperEl>
     </SectionEl>
+    // </>
   );
 };
 

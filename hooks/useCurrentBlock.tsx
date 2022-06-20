@@ -13,20 +13,11 @@ const useBlockNumber = (props: BlockNumberProps) => {
       props.cssBarName,
       `${props.blockNumber}`
     );
-    // props.blockNumberRef.current.style.setProperty(
-    //     "--minting--block--num",
-    //     `${props.blockNumber}`
-    //   );
+
     props.blockNumberRef.current.style.setProperty(
       `--init${props.cssBarName}`,
       `${props.blockNumber}`
     );
-
-    // console.log("time:", props.blockNumber);
-    // if (props.blockNumber < 100) setIsStakingCompleted(false);
-    // if (props.blockNumber >= 100) {
-    //   console.log("props.blockNumber is 100:", props.blockNumber);
-    // }
   }, [props.blockNumber]);
 };
 

@@ -1,5 +1,6 @@
 import Document, { Html, Head, Main, NextScript } from "next/document";
 import { ServerStyleSheet } from "styled-components";
+const BASE_URL = "https://www.novmint.xyz";
 
 export default class MyDocument extends Document {
   //--------------For styled-components only------------//
@@ -55,6 +56,19 @@ export default class MyDocument extends Document {
             type="font/ttf"
             crossOrigin=""
           />
+
+          <meta
+            name="msapplication-TileImage"
+            content={`${BASE_URL}/favicon.png`}
+          />
+
+          <meta
+            id="meta_og_image"
+            property="og:image"
+            content={`${BASE_URL}/meta/NOV_banner.png`}
+          />
+          <meta property="og:image:width" content="1200" />
+          <meta property="og:image:height" content="627" />
         </Head>
         <body>
           <Main />

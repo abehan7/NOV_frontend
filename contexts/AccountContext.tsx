@@ -20,10 +20,16 @@ export const AccountProvider: FC<IAccountProviderProps> = ({
   children,
 }): ReactElement => {
   const [account, setAccount] = useState<string>("");
+  const [network, setNetwork] = useState<string>("");
+  // 1001 테스트넷
+  // 메인넷 8217
+
   const getAccount = async () => {
     if (!window.klaytn) return;
     try {
       const accounts = await window.klaytn.enable();
+      // window.klaytn.networkVersion
+
       setAccount(accounts[0]);
     } catch (error) {
       console.error(error);

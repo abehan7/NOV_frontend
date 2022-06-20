@@ -20,16 +20,16 @@ const NavMenu: FC<NavMenuProps> = ({ isOpen }) => {
   return (
     <NavMenuEl className="nav__menu show-menu" id="nav-menu" isOpen={isOpen}>
       <ul className="nav__list">
-        <NavBtn href="#" handleClick={() => window.open(links.home)}>
+        <NavBtn href="#" handleClick={() => window.open(links.HOME)}>
           Home
         </NavBtn>
-        <NavBtn href="#" handleClick={() => window.open(links.contact)}>
+        <NavBtn href="#" handleClick={() => window.open(links.CONTACT)}>
           Contact
         </NavBtn>
-        <NavBtn href="#" handleClick={() => window.open(links.twitter)}>
+        <NavBtn href="#" handleClick={() => window.open(links.TWITTER)}>
           twitter
         </NavBtn>
-        <NavBtn href="#" handleClick={() => window.open(links.discord)}>
+        <NavBtn href="#" handleClick={() => window.open(links.DISCORD)}>
           discord
         </NavBtn>
         {account ? (

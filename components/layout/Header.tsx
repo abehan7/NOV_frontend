@@ -80,20 +80,20 @@ const Header = () => {
           <Navitation>
             <div
               style={{ cursor: "pointer" }}
-              onClick={() => window.open(links.home)}
+              onClick={() => window.open(links.HOME)}
             >
               Home
             </div>
             <div
               style={{ cursor: "pointer" }}
-              onClick={() => window.open(links.contact)}
+              onClick={() => window.open(links.CONTACT)}
             >
               Contact
             </div>
-            <Icon onClick={() => window.open(links.twitter)}>
+            <Icon onClick={() => window.open(links.TWITTER)}>
               <AiOutlineTwitter className="icon__twitter" />
             </Icon>
-            <Icon onClick={() => window.open(links.discord)}>
+            <Icon onClick={() => window.open(links.DISCORD)}>
               <Discord />
             </Icon>
           </Navitation>

@@ -7,6 +7,7 @@ import { theme } from "../styles/theme";
 import "../styles/fonts.css";
 import Layout from "../components/layout";
 import { AccountProvider } from "../contexts/AccountContext";
+import Head from "next/head";
 function MyApp({ Component, pageProps }: AppProps) {
   const [showChild, setShowChild] = useState(false);
 
@@ -23,16 +24,21 @@ function MyApp({ Component, pageProps }: AppProps) {
     return <></>;
   } else {
     return (
-      <ApolloProvider>
-        <AccountProvider>
-          <ThemeProvider theme={theme}>
-            <GlobalStyle />
-            <Layout>
-              <Component {...pageProps} />
-            </Layout>
-          </ThemeProvider>
-        </AccountProvider>
-      </ApolloProvider>
+      <>
+        <Head>
+          <title>NOV-MINT 노브</title>
+        </Head>
+        <ApolloProvider>
+          <AccountProvider>
+            <ThemeProvider theme={theme}>
+              <GlobalStyle />
+              <Layout>
+                <Component {...pageProps} />
+              </Layout>
+            </ThemeProvider>
+          </AccountProvider>
+        </ApolloProvider>
+      </>
     );
   }
 }

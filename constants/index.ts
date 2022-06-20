@@ -13,8 +13,13 @@ export const navNames = {
 };
 
 export const links = {
-  twitter: "https://twitter.com/nov_letter_nft",
-  discord: "https://discord.gg/u2UQAPP6ds",
-  home: "https://nov-letter.com/",
-  contact: "https://nov-letter.com/contact",
+  TWITTER: "https://twitter.com/nov_letter_nft",
+  DISCORD: "https://discord.gg/u2UQAPP6ds",
+  HOME: "https://nov-letter.com/",
+  CONTACT: "https://nov-letter.com/contact",
+};
+
+export const NETWORKS = {
+  MAIN_NET: "8217",
+  TEST_NET: "1001",
 };
