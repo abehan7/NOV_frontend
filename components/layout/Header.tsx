@@ -15,6 +15,7 @@ import { media, theme } from "../../styles/theme";
 import Hamburger from "../header/Hamburger";
 import NavMenu from "../header/NavMenu";
 import { links } from "../../constants";
+import { getNetworkType } from "caver-js";
 interface INaveButton {
   name: string;
   href: string;
@@ -46,11 +47,13 @@ const Header = () => {
   const getAccount = useAccount()?.getAccount;
   const account = useAccount()?.account;
   const disconnect = useAccount()?.disconnect;
+  const getNetwork = useAccount()?.getNetwork;
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isMobile, setIsMobile] = useState<boolean>(false);
 
   const onClickLogo = () => (document.location.href = "/");
   const isScrollingDown = useScrolling("down");
-  const [isMobile, setIsMobile] = useState<boolean>(false);
+  const onClickHamburger = () => setIsOpen(!isOpen);
 
   useEffect(() => {
     setIsMobile(window.innerWidth < 640);
@@ -65,7 +68,11 @@ const Header = () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
-  const onClickHamburger = () => setIsOpen(!isOpen);
+
+  useEffect(() => {
+    if (!getNetwork) return;
+    getNetwork();
+  }, [getNetwork]);
 
   return (
     <HeaderContext.Provider value={{ isOpen, toggle: onClickHamburger }}>

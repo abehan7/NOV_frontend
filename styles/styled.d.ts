@@ -14,6 +14,18 @@ declare module "styled-components" {
       gray700: string;
       gray800: string;
       gray900: string;
+
+      whiteAlpha50: string;
+      whiteAlpha100: string;
+      whiteAlpha200: string;
+      whiteAlpha300: string;
+      whiteAlpha400: string;
+      whiteAlpha500: string;
+      whiteAlpha600: string;
+      whiteAlpha700: string;
+      whiteAlpha800: string;
+      whiteAlpha900: string;
+
       grayProgressBar: string;
 
       primary: string;

@@ -8,6 +8,8 @@ interface IAccountContext {
   account: string;
   getAccount: () => Promise<void>;
   disconnect: () => void;
+  getNetwork: () => void;
+  network: number;
 }
 export const AccountContext = createContext<IAccountContext | null>(null);
 
@@ -20,7 +22,7 @@ export const AccountProvider: FC<IAccountProviderProps> = ({
   children,
 }): ReactElement => {
   const [account, setAccount] = useState<string>("");
-  const [network, setNetwork] = useState<string>("");
+  const [network, setNetwork] = useState<number>(0);
   // 1001 테스트넷
   // 메인넷 8217
 
@@ -36,12 +38,22 @@ export const AccountProvider: FC<IAccountProviderProps> = ({
     }
   };
 
+  const getNetwork = async () => {
+    if (!window.klaytn) return;
+    try {
+      const _network = window.klaytn.networkVersion;
+      setNetwork(_network);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const disconnect = () => {
     console.log("disconnect");
     setAccount("");
   };
 
-  const value = { account, getAccount, disconnect };
+  const value = { account, getAccount, disconnect, getNetwork, network };
   return (
     <AccountContext.Provider value={value}>{children}</AccountContext.Provider>
   );

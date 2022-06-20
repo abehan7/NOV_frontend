@@ -20,6 +20,6 @@ export const links = {
 };
 
 export const NETWORKS = {
-  MAIN_NET: "8217",
-  TEST_NET: "1001",
+  MAIN_NET: 8217,
+  TEST_NET: 1001,
 };

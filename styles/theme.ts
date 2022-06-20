@@ -13,6 +13,18 @@ export const theme: DefaultTheme = {
     gray700: "#2D3748",
     gray800: "#1A202C",
     gray900: "#171923",
+
+    whiteAlpha50: "rgba(255, 255, 255, 0.04)",
+    whiteAlpha100: "rgba(255, 255, 255, 0.06)",
+    whiteAlpha200: "rgba(255, 255, 255, 0.08)",
+    whiteAlpha300: "rgba(255, 255, 255, 0.16)",
+    whiteAlpha400: "rgba(255, 255, 255, 0.24)",
+    whiteAlpha500: "rgba(255, 255, 255, 0.36)",
+    whiteAlpha600: "rgba(255, 255, 255, 0.48)",
+    whiteAlpha700: "rgba(255, 255, 255, 0.64)",
+    whiteAlpha800: "rgba(255, 255, 255, 0.80)",
+    whiteAlpha900: "rgba(255, 255, 255, 0.92)",
+
     grayProgressBar: "#E8EAEC",
 
     primary: "#F5D061",

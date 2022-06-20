@@ -11,6 +11,7 @@ import { useCaver } from "../hooks/useCaver";
 import useProgressBar from "../hooks/useProgressBar";
 import { media, theme } from "../styles/theme";
 import { PageSection, Wrapper } from "../components/common/styles/page";
+import NoticeBanner from "../components/layout/NoticeBanner";
 // TODO: detect network
 // TODO: detect kaikas extension
 
@@ -405,6 +406,7 @@ const Sticker = styled.div<{ x: string; y: string; t: string; l: string }>`
 `;
 
 const SectionEl = styled(PageSection)`
+  /* position: relative; */
   .item1 {
     .kor__font {
       font-weight: 700;
