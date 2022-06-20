@@ -69,6 +69,11 @@ export default class MyDocument extends Document {
           />
           <meta property="og:image:width" content="1200" />
           <meta property="og:image:height" content="627" />
+
+          <meta
+            name="description"
+            content="🎁구독자에게만 무료로 주는 노브NFT"
+          />
         </Head>
         <body>
           <Main />
