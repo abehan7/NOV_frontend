@@ -22,7 +22,7 @@ const useBlockNumber = (props: BlockNumberProps) => {
       `${props.blockNumber}`
     );
 
-    console.log("time:", props.blockNumber);
+    // console.log("time:", props.blockNumber);
     // if (props.blockNumber < 100) setIsStakingCompleted(false);
     // if (props.blockNumber >= 100) {
     //   console.log("props.blockNumber is 100:", props.blockNumber);

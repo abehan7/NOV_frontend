@@ -38,7 +38,20 @@ const CubeComponent = (props: CubeComponentProps) => {
           {props.title}
         </div>
         {/* <div style={{ fontSize: theme.fontSizes.fontlg }}>{props.desc}</div> */}
-        <MintingBlockWrapper ref={blockNumberRef}></MintingBlockWrapper>
+        {props.blockNumber === 0 && (
+          <MintingBlockWrapper
+            ref={blockNumberRef}
+            blockNumber={90000000}
+            // style={{ visibility: "hidden" }}
+            isLoading={true}
+          />
+        )}
+        {props.blockNumber !== 0 && (
+          <MintingBlockWrapper
+            ref={blockNumberRef}
+            blockNumber={props.blockNumber}
+          />
+        )}
       </CubeDesc>
     </CubeContainer>
   );
@@ -65,11 +78,22 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     const init = async () => {
-      const block = await getCurrentBlock();
-      console.log(block);
+      setCurrentBlock(await getCurrentBlock());
+      // console.log(block);
     };
     init();
   }, []);
+
+  useEffect(() => {
+    // if (currentBlock !== 0) return;
+    const timer = setInterval(async () => {
+      setCurrentBlock(await getCurrentBlock());
+      // console.log("currentBlock:", currentBlock);
+    }, 1000);
+    return () => {
+      clearInterval(timer);
+    };
+  }, [currentBlock]);
 
   return (
     <SectionEl>
@@ -125,7 +149,7 @@ const Home: NextPage = () => {
                 desc="#89090290"
                 highlight={true}
                 cssBarName="--minting--block--num"
-                blockNumber={30}
+                blockNumber={100000000}
               />
 
               <CubeComponent
@@ -134,7 +158,7 @@ const Home: NextPage = () => {
                 desc="#89090290"
                 highlight={false}
                 cssBarName="--current--block--num"
-                blockNumber={90}
+                blockNumber={currentBlock}
               />
             </Contents>
             <div style={{ fontSize: theme.fontSizes.fontxs, fontWeight: 500 }}>
@@ -421,15 +445,18 @@ const CurrentBlockWraapper = styled.div`
   }
 `;
 
-const MintingBlockWrapper = styled.div`
+const MintingBlockWrapper = styled.div<{
+  blockNumber: number;
+  isLoading?: boolean;
+}>`
   @property --minting--block--num {
     syntax: "<integer>";
-    /* initial-value: 89090290; */
+    initial-value: 80090250;
     inherits: false;
   }
   @property --init--minting--block--num {
     syntax: "<integer>";
-    /* initial-value: 89090290; */
+    initial-value: ${({ blockNumber }) => blockNumber};
     inherits: false;
   }
 
@@ -439,6 +466,11 @@ const MintingBlockWrapper = styled.div`
   ::after {
     font-size: ${({ theme }) => theme.fontSizes.fontlg};
     content: counter(num);
+    ${({ isLoading }) =>
+      isLoading &&
+      css`
+        content: "Loading...";
+      `}
   }
 `;
 

@@ -28,15 +28,14 @@ export const useCaver = () => {
     }
   };
 
-  const getCurrentBlock = async () => {
-    if (!caver) return;
+  const getCurrentBlock = async (): Promise<number> => {
+    if (!caver) return 0;
     try {
-      // caver.klay.defaultBlock
       const response = await caver.klay.getBlockNumber();
-      // console.log(response);
       return response;
     } catch (error) {
       console.error(error);
+      return 0;
     }
   };
 

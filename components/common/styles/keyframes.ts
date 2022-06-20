@@ -26,7 +26,7 @@ export const mintingBlockCounter = keyframes`
     }
 
     20% {
-      --minting--block--num: 87090250;
+      --minting--block--num: var(--init--minting--block--num);
     }
 
     100% {
