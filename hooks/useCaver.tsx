@@ -8,20 +8,21 @@ export const useCaver = () => {
     undefined
   );
 
-  const publicMint = async (amount: number) => {
+  const presaleMint = async (merkleProof: string) => {
     if (!caver || !nftContract) return;
-    console.log(window.klaytn.selectedAddress);
+    // console.log(window.klaytn.selectedAddress);
     const account = window.klaytn.selectedAddress;
     try {
       const response = await caver.klay.sendTransaction({
         type: "SMART_CONTRACT_EXECUTION",
         from: account,
         to: NFT_CONTRACT_ADDRESS,
-        value: caver.utils.convertToPeb(10, "mKLAY"),
+        value: caver.utils.convertToPeb(0, "KLAY"),
         gas: "3000000",
-        data: nftContract.methods.publicSaleMint(amount).encodeABI(),
+        data: nftContract.methods.presaleMint(merkleProof).encodeABI(),
       });
-      console.log(response);
+      // value: caver.utils.convertToPeb(0, "mKLAY"),
+      // console.log(response);
       return response;
     } catch (error) {
       console.error(error);
@@ -32,6 +33,28 @@ export const useCaver = () => {
     if (!caver) return 0;
     try {
       const response = await caver.klay.getBlockNumber();
+      return response;
+    } catch (error) {
+      console.error(error);
+      return 0;
+    }
+  };
+
+  const getIsPaused = async (): Promise<boolean> => {
+    if (!caver || !nftContract) return false;
+    try {
+      const response = await nftContract.methods.paused().call();
+      return response;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };
+
+  const getMintingBlockNumber = async (): Promise<number> => {
+    if (!caver || !nftContract) return 0;
+    try {
+      const response = await nftContract.methods.mintingBlockNumber().call();
       return response;
     } catch (error) {
       console.error(error);
@@ -53,5 +76,12 @@ export const useCaver = () => {
     );
   }, [caver]);
 
-  return { caver, nftContract, publicMint, getCurrentBlock };
+  return {
+    caver,
+    nftContract,
+    presaleMint,
+    getCurrentBlock,
+    getIsPaused,
+    getMintingBlockNumber,
+  };
 };

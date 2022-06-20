@@ -21,7 +21,6 @@ interface CubeComponentProps {
 }
 const CubeComponent = (props: CubeComponentProps) => {
   const blockNumberRef = useRef<HTMLDivElement | null>(null);
-  // const [blockNumber, setBlockNumber] = useState(400000);
   useBlockNumber({
     blockNumberRef,
     blockNumber: props.blockNumber,
@@ -57,14 +56,13 @@ const CubeComponent = (props: CubeComponentProps) => {
 };
 const Home: NextPage = () => {
   const getAccount = useAccount()?.getAccount;
-  const { publicMint, getCurrentBlock } = useCaver();
+  const { presaleMint, getCurrentBlock, getIsPaused, getMintingBlockNumber } =
+    useCaver();
   const [percent, setPercent] = useState<number>(0);
   const [currentBlock, setCurrentBlock] = useState<number>(89090290);
   const progressBarRef = useRef<HTMLDivElement | null>(null);
   useProgressBar({ progressBarRef, percent });
-
   // useBlockNumber({ blockNumberRef, currentBlock });
-
   useEffect(() => {
     const timer = setTimeout(() => {
       if (percent >= 100) setPercent(100);
@@ -87,7 +85,6 @@ const Home: NextPage = () => {
     // if (currentBlock !== 0) return;
     const timer = setInterval(async () => {
       setCurrentBlock(await getCurrentBlock());
-      // console.log("currentBlock:", currentBlock);
     }, 1000);
     return () => {
       clearInterval(timer);
