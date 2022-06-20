@@ -1,5 +1,6 @@
 import keccak256 from "keccak256";
 import { MerkleTree } from "merkletreejs";
+import { whitelist } from "../data/whitelist";
 
 export const createTree = (wallets: Array<number | string>) => {
   const leaves = wallets.map((x) => keccak256(x));
@@ -15,3 +16,10 @@ export const getProof = (tree: MerkleTree, leaf: string) =>
   tree.getProof(leaf).map((x) => buf2hex(x.data));
 
 const buf2hex = (x: Buffer) => "0x" + x.toString("hex");
+
+export const getMerkleProof = (wallet: string): Array<string | number> => {
+  const tree = createTree(whitelist);
+  const leaf = getLeaf(wallet);
+  const proof = getProof(tree, leaf);
+  return proof;
+};

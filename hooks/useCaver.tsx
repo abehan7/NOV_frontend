@@ -1,5 +1,5 @@
 import Caver, { Contract } from "caver-js";
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { NFT_CONTRACT_ADDRESS, NFT_CONTRACT_ABI } from "../caverConfig";
 
 export const useCaver = () => {
@@ -8,24 +8,50 @@ export const useCaver = () => {
     undefined
   );
 
-  const presaleMint = async (merkleProof: string) => {
-    if (!caver || !nftContract) return;
-    // console.log(window.klaytn.selectedAddress);
+  const presaleMint = async (
+    merkleProof: Array<string | number>
+  ): Promise<{ success: boolean; status: ReactNode }> => {
+    if (!caver || !nftContract) return { success: false, status: "Loading" };
     const account = window.klaytn.selectedAddress;
+
+    if (!account) {
+      return {
+        success: false,
+        status: "To be able to mint, you need to connect your wallet",
+      };
+    }
+
+    const tx = {
+      type: "SMART_CONTRACT_EXECUTION",
+      from: account,
+      to: NFT_CONTRACT_ADDRESS,
+      value: 0,
+      gas: "3000000",
+      data: nftContract.methods.presaleMint(merkleProof).encodeABI(),
+    };
+
     try {
-      const response = await caver.klay.sendTransaction({
-        type: "SMART_CONTRACT_EXECUTION",
-        from: account,
-        to: NFT_CONTRACT_ADDRESS,
-        value: 0,
-        gas: "3000000",
-        data: nftContract.methods.presaleMint(merkleProof).encodeABI(),
-      });
+      const txHash = await caver.klay.sendTransaction(tx);
       // value: caver.utils.convertToPeb(0, "mKLAY"),
-      // console.log(response);
-      return response;
-    } catch (error) {
+      return {
+        success: true,
+        status: (
+          <a
+            href={`https://rinkeby.etherscan.io/tx/${txHash}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            <p>✅ Check out your transaction on Etherscan:</p>
+            <p>{`https://rinkeby.etherscan.io/tx/${txHash}`}</p>
+          </a>
+        ),
+      };
+    } catch (error: any) {
       console.error(error);
+      return {
+        success: false,
+        status: "😞 민팅실패:" + error.message,
+      };
     }
   };
 

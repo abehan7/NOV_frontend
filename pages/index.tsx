@@ -10,9 +10,11 @@ import { useCaver } from "../hooks/useCaver";
 import useProgressBar from "../hooks/useProgressBar";
 import { media, theme } from "../styles/theme";
 import { setNumberDot } from "../utils/common";
+import { getMerkleProof } from "../utils/merkleTree";
 
 const Home: NextPage = () => {
   const getAccount = useAccount()?.getAccount;
+  const account = useAccount()?.account;
   const {
     presaleMint,
     getCurrentBlock,
@@ -26,7 +28,24 @@ const Home: NextPage = () => {
   const [isPaused, setIsPaused] = useState<boolean>(false);
   const [isMinting, setIsMinting] = useState<boolean>(false);
   const [mintingBlockNumber, setMintingBlockNumber] = useState<number>(0);
+  // const [mintingMessage]
   const progressBarRef = useRef<HTMLDivElement | null>(null);
+
+  // const getMerkleProof = () => {};
+
+  const onClickMint = async () => {
+    if (!account) return;
+    const merkleProof = await getMerkleProof(account);
+    try {
+      setIsMinting(true);
+      const { status, success } = await presaleMint(merkleProof);
+      console.log(status, success);
+      setIsMinting(false);
+    } catch (error) {
+      console.error(error);
+      setIsMinting(false);
+    }
+  };
   useProgressBar({ progressBarRef, percent });
 
   useEffect(() => {
@@ -62,10 +81,15 @@ const Home: NextPage = () => {
   const MintButtonComponent = () => {
     const isNotMintable =
       isPaused || mintingBlockNumber < currentBlock || currentBlock === 0;
-    if (!isMinting && isNotMintable)
+    if (!account) return <Button onClick={getAccount}>connect wallet</Button>;
+    if (account && !isMinting && isNotMintable)
       return <Button disabled={true}>disabled</Button>;
-    if (!isMinting && !isNotMintable) return <Button>minting</Button>;
-    if (isMinting) return <Button disabled={true}>on process</Button>;
+    if (account && !isMinting && !isNotMintable)
+      return <Button onClick={onClickMint}>minting</Button>;
+    if (account && isMinting)
+      return <Button disabled={true}>on process</Button>;
+
+    // wallet connection
     // if (!isDisable) return <Button>minting</Button>;
   };
 
