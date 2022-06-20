@@ -1,60 +1,16 @@
 import type { NextPage } from "next";
 import { useEffect, useRef, useState } from "react";
-import styled, { css, keyframes } from "styled-components";
+import styled, { css } from "styled-components";
 import { config } from "../caverConfig";
 import AutoHeightImage from "../components/common/AutoHeightImage";
-import { mintingBlockCounter } from "../components/common/styles/keyframes";
 import { PageSection, Wrapper } from "../components/common/styles/page";
+import CubeComponent from "../components/mint/CubeComponent";
 import { useAccount } from "../contexts/AccountContext";
 import { useCaver } from "../hooks/useCaver";
-import useBlockNumber from "../hooks/useCurrentBlock";
 import useProgressBar from "../hooks/useProgressBar";
 import { media, theme } from "../styles/theme";
-// import {Title}
+import { setNumberDot } from "../utils/common";
 
-interface CubeComponentProps {
-  src: string;
-  title: string;
-  desc: string;
-  highlight: boolean;
-  cssBarName: string;
-  blockNumber: number;
-}
-const CubeComponent = (props: CubeComponentProps) => {
-  const blockNumberRef = useRef<HTMLDivElement | null>(null);
-  useBlockNumber({
-    blockNumberRef,
-    blockNumber: props.blockNumber,
-    cssBarName: "--minting--block--num",
-  });
-  return (
-    <CubeContainer>
-      <CubeImg>
-        <AutoHeightImage src={props.src} />
-      </CubeImg>
-      <CubeDesc highlight={props.highlight}>
-        <div
-          style={{ fontSize: theme.fontSizes.fontxs, padding: "0.4rem 1rem" }}
-        >
-          {props.title}
-        </div>
-        {props.blockNumber === 0 && (
-          <MintingBlockWrapper
-            ref={blockNumberRef}
-            blockNumber={90000000}
-            isLoading={true}
-          />
-        )}
-        {props.blockNumber !== 0 && (
-          <MintingBlockWrapper
-            ref={blockNumberRef}
-            blockNumber={props.blockNumber}
-          />
-        )}
-      </CubeDesc>
-    </CubeContainer>
-  );
-};
 const Home: NextPage = () => {
   const getAccount = useAccount()?.getAccount;
   const {
@@ -68,19 +24,10 @@ const Home: NextPage = () => {
   const [currentBlock, setCurrentBlock] = useState<number>(89090290);
   const [totalSupply, setTotalSupply] = useState<number>(0);
   const [isPaused, setIsPaused] = useState<boolean>(false);
+  const [isMinting, setIsMinting] = useState<boolean>(false);
   const [mintingBlockNumber, setMintingBlockNumber] = useState<number>(0);
   const progressBarRef = useRef<HTMLDivElement | null>(null);
   useProgressBar({ progressBarRef, percent });
-  // useBlockNumber({ blockNumberRef, currentBlock });
-  // useEffect(() => {
-  //   const timer = setTimeout(() => {
-  //     if (percent >= 100) setPercent(100);
-  //     if (percent < 100) setPercent(percent + 10);
-  //   }, 500);
-  //   return () => {
-  //     clearTimeout(timer);
-  //   };
-  // }, []);
 
   useEffect(() => {
     const init = async () => {
@@ -111,6 +58,16 @@ const Home: NextPage = () => {
   useEffect(() => {
     console.log(mintingBlockNumber);
   }, []);
+
+  const MintButtonComponent = () => {
+    const isNotMintable =
+      isPaused || mintingBlockNumber < currentBlock || currentBlock === 0;
+    if (!isMinting && isNotMintable)
+      return <Button disabled={true}>disabled</Button>;
+    if (!isMinting && !isNotMintable) return <Button>minting</Button>;
+    if (isMinting) return <Button disabled={true}>on process</Button>;
+    // if (!isDisable) return <Button>minting</Button>;
+  };
 
   return (
     // <>
@@ -167,7 +124,7 @@ const Home: NextPage = () => {
                 desc="#89090290"
                 highlight={true}
                 cssBarName="--minting--block--num"
-                blockNumber={mintingBlockNumber}
+                blockNumber={1000000000}
               />
 
               <CubeComponent
@@ -199,7 +156,8 @@ const Home: NextPage = () => {
                 <div className="bar__item1">
                   <span>Remaining NFTS</span>
                   <span>
-                    <span className="color__primary">0</span> / 10,000
+                    <span className="color__primary">{totalSupply}</span> /{" "}
+                    {setNumberDot(config.maxMintSupply)}
                   </span>
                 </div>
                 <Bar
@@ -232,9 +190,7 @@ const Home: NextPage = () => {
               </div>
             </Contents>
           </ContentBox>
-          <Box>
-            <Button>minting</Button>
-          </Box>
+          <Box>{MintButtonComponent()}</Box>
 
           {/* TOP */}
           <Sticker x="50%" y="2rem" t="0" l="0" />
@@ -281,7 +237,7 @@ const Contents = styled.div`
   display: flex;
 `;
 
-const Button = styled.div`
+const Button = styled.div<{ disabled?: boolean }>`
   font-size: ${({ theme }) => theme.fontSizes.fontxl};
   font-weight: 800;
   color: ${({ theme }) => theme.colors.white};
@@ -293,6 +249,12 @@ const Button = styled.div`
   padding: 0.75rem;
   border-radius: 4px;
   cursor: pointer;
+  ${({ disabled }) =>
+    disabled &&
+    css`
+      cursor: not-allowed;
+      background: ${({ theme: { colors } }) => colors.gray300};
+    `}
 `;
 
 const HeroLogo = styled.div`
@@ -317,13 +279,6 @@ const Box = styled.div`
 const ContentBox = styled(Box)`
   padding-top: 2.5rem;
   flex-direction: column;
-`;
-
-const CubeContainer = styled.div`
-  display: flex;
-  gap: 1rem;
-  flex: 1;
-  padding: 1.5rem 0;
 `;
 
 const Circle = styled.div`
@@ -356,24 +311,6 @@ const SubTitle = styled.div`
   }
   ${media[768]} {
     font-size: ${({ theme }) => theme.fontSizes.fontmd};
-  }
-`;
-const CubeImg = styled.div`
-  width: 4rem;
-  height: 4rem;
-`;
-const CubeDesc = styled.div<{ highlight: boolean }>`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  div:nth-child(2) {
-    ${({ highlight }) =>
-      highlight &&
-      css`
-        text-shadow: -2px 0 #f5d061, 0 2px #f5d061, 2px 0 #f5d061,
-          0 -2px #f5d061;
-      `}
   }
 `;
 
@@ -443,78 +380,6 @@ const Sticker = styled.div<{ x: string; y: string; t: string; l: string }>`
   ${media.mobile} {
     display: none;
   }
-`;
-const CurrentBlockWraapper = styled.div`
-  @property --current--block--num {
-    syntax: "<integer>";
-    initial-value: 89090290;
-    inherits: false;
-  }
-
-  @property --init--current--block--num {
-    syntax: "<integer>";
-    initial-value: 89090290;
-    inherits: false;
-  }
-
-  counter-reset: num var(--current--block--num);
-
-  ::after {
-    content: counter(num);
-  }
-`;
-
-const MintingBlockWrapper = styled.div<{
-  blockNumber: number;
-  isLoading?: boolean;
-}>`
-  @property --minting--block--num {
-    syntax: "<integer>";
-    initial-value: 80090250;
-    inherits: false;
-  }
-  @property --init--minting--block--num {
-    syntax: "<integer>";
-    initial-value: ${({ blockNumber }) => blockNumber};
-    inherits: false;
-  }
-
-  animation: ${mintingBlockCounter} 3s alternate ease-out;
-  counter-reset: num var(--minting--block--num);
-
-  ::after {
-    font-size: ${({ theme }) => theme.fontSizes.fontlg};
-    content: counter(num);
-    ${({ isLoading }) =>
-      isLoading &&
-      css`
-        content: "Loading...";
-      `}
-  }
-`;
-
-const NumberText = styled.div`
-  @property --num {
-    syntax: "<integer>";
-    initial-value: 89090290;
-    inherits: false;
-  }
-
-  > div {
-    // go fast and slow down
-    animation: counter 5s alternate ease-out;
-    counter-reset: num var(--num);
-    padding: 2rem;
-  }
-  div::after {
-    content: counter(num);
-  }
-`;
-
-const CubeLine = styled.div`
-  height: 50px;
-  width: 2px;
-  background: ${({ theme }) => theme.colors.black};
 `;
 
 const SectionEl = styled(PageSection)`

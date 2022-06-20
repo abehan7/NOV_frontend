@@ -15,3 +15,7 @@ export const throttle = (callback: Function, delay: number) => {
     }, delay);
   };
 };
+
+export const setNumberDot = (x: number) => {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+};

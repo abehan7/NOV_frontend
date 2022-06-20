@@ -1,22 +1,33 @@
 import type { NextPage } from "next";
 import { useEffect, useRef, useState } from "react";
 import styled, { css, keyframes } from "styled-components";
+import { config } from "../caverConfig";
 import AutoHeightImage from "../components/common/AutoHeightImage";
 import { mintingBlockCounter } from "../components/common/styles/keyframes";
 import { PageSection, Wrapper } from "../components/common/styles/page";
 import { useAccount } from "../contexts/AccountContext";
 import { useCaver } from "../hooks/useCaver";
+import useBlockNumber from "../hooks/useCurrentBlock";
 import useProgressBar from "../hooks/useProgressBar";
 import { media, theme } from "../styles/theme";
+import { setNumberDot } from "../utils/common";
+// import {Title}
 
 interface CubeComponentProps {
   src: string;
   title: string;
   desc: string;
   highlight: boolean;
+  cssBarName: string;
+  blockNumber: number;
 }
-
 const CubeComponent = (props: CubeComponentProps) => {
+  const blockNumberRef = useRef<HTMLDivElement | null>(null);
+  useBlockNumber({
+    blockNumberRef,
+    blockNumber: props.blockNumber,
+    cssBarName: "--minting--block--num",
+  });
   return (
     <CubeContainer>
       <CubeImg>
@@ -28,31 +39,82 @@ const CubeComponent = (props: CubeComponentProps) => {
         >
           {props.title}
         </div>
-        {/* <div style={{ fontSize: theme.fontSizes.fontlg }}>{props.desc}</div> */}
-        <MintingBlockWrapper></MintingBlockWrapper>
+        {props.blockNumber === 0 && (
+          <MintingBlockWrapper
+            ref={blockNumberRef}
+            blockNumber={90000000}
+            isLoading={true}
+          />
+        )}
+        {props.blockNumber !== 0 && (
+          <MintingBlockWrapper
+            ref={blockNumberRef}
+            blockNumber={props.blockNumber}
+          />
+        )}
       </CubeDesc>
     </CubeContainer>
   );
 };
-const Home: NextPage = () => {
+const TestNet: NextPage = () => {
   const getAccount = useAccount()?.getAccount;
-  const { publicMint } = useCaver();
+  const {
+    presaleMint,
+    getCurrentBlock,
+    getIsPaused,
+    getMintingBlockNumber,
+    getTotalSupply,
+  } = useCaver();
   const [percent, setPercent] = useState<number>(0);
-  const [currentBlock, setCurrentBlock] = useState<number>(0);
+  const [currentBlock, setCurrentBlock] = useState<number>(89090290);
+  const [totalSupply, setTotalSupply] = useState<number>(0);
+  const [isPaused, setIsPaused] = useState<boolean>(false);
+  const [mintingBlockNumber, setMintingBlockNumber] = useState<number>(0);
   const progressBarRef = useRef<HTMLDivElement | null>(null);
   useProgressBar({ progressBarRef, percent });
+  // useBlockNumber({ blockNumberRef, currentBlock });
+  // useEffect(() => {
+  //   const timer = setTimeout(() => {
+  //     if (percent >= 100) setPercent(100);
+  //     if (percent < 100) setPercent(percent + 10);
+  //   }, 500);
+  //   return () => {
+  //     clearTimeout(timer);
+  //   };
+  // }, []);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      if (percent >= 100) setPercent(100);
-      if (percent < 100) setPercent(percent + 10);
-    }, 500);
-    return () => {
-      clearTimeout(timer);
+    const init = async () => {
+      setCurrentBlock(await getCurrentBlock());
+      setIsPaused(await getIsPaused());
+      setTotalSupply(await getTotalSupply());
+      setMintingBlockNumber(await getMintingBlockNumber());
+      // console.log(block);
     };
+    init();
+  }, []);
+
+  useEffect(() => {
+    totalSupply === 0 && setPercent(0);
+    totalSupply !== 0 && setPercent((totalSupply / config.maxMintSupply) * 100);
+    console.log(totalSupply);
+  }, [totalSupply]);
+
+  useEffect(() => {
+    const timer = setInterval(async () => {
+      setCurrentBlock(await getCurrentBlock());
+    }, 1000);
+    return () => {
+      clearInterval(timer);
+    };
+  }, [currentBlock]);
+
+  useEffect(() => {
+    console.log(mintingBlockNumber);
   }, []);
 
   return (
+    // <>
     <SectionEl>
       <WrapperEl>
         {/* left */}
@@ -105,13 +167,17 @@ const Home: NextPage = () => {
                 title="minting block"
                 desc="#89090290"
                 highlight={true}
+                cssBarName="--minting--block--num"
+                blockNumber={mintingBlockNumber}
               />
-              {/* <CubeLine> </CubeLine> */}
+
               <CubeComponent
                 src="/images/block_black.png"
                 title="current block"
                 desc="#89090290"
                 highlight={false}
+                cssBarName="--current--block--num"
+                blockNumber={currentBlock}
               />
             </Contents>
             <div style={{ fontSize: theme.fontSizes.fontxs, fontWeight: 500 }}>
@@ -134,7 +200,8 @@ const Home: NextPage = () => {
                 <div className="bar__item1">
                   <span>Remaining NFTS</span>
                   <span>
-                    <span className="color__primary">0</span> / 10,000
+                    <span className="color__primary">{totalSupply}</span> /{" "}
+                    {setNumberDot(config.maxMintSupply)}
                   </span>
                 </div>
                 <Bar
@@ -180,10 +247,11 @@ const Home: NextPage = () => {
         </Container>
       </WrapperEl>
     </SectionEl>
+    // </>
   );
 };
 
-export default Home;
+export default TestNet;
 
 const WrapperEl = styled(Wrapper)`
   ${media[1200]} {
@@ -385,6 +453,12 @@ const CurrentBlockWraapper = styled.div`
     inherits: false;
   }
 
+  @property --init--current--block--num {
+    syntax: "<integer>";
+    initial-value: 89090290;
+    inherits: false;
+  }
+
   counter-reset: num var(--current--block--num);
 
   ::after {
@@ -392,15 +466,18 @@ const CurrentBlockWraapper = styled.div`
   }
 `;
 
-const MintingBlockWrapper = styled.div`
+const MintingBlockWrapper = styled.div<{
+  blockNumber: number;
+  isLoading?: boolean;
+}>`
   @property --minting--block--num {
     syntax: "<integer>";
-    initial-value: 89090290;
+    initial-value: 80090250;
     inherits: false;
   }
   @property --init--minting--block--num {
     syntax: "<integer>";
-    initial-value: 89090290;
+    initial-value: ${({ blockNumber }) => blockNumber};
     inherits: false;
   }
 
@@ -410,6 +487,11 @@ const MintingBlockWrapper = styled.div`
   ::after {
     font-size: ${({ theme }) => theme.fontSizes.fontlg};
     content: counter(num);
+    ${({ isLoading }) =>
+      isLoading &&
+      css`
+        content: "Loading...";
+      `}
   }
 `;
 
