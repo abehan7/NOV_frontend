@@ -1,6 +1,7 @@
 import type { NextPage } from "next";
 import { useEffect, useRef, useState } from "react";
 import styled, { css, keyframes } from "styled-components";
+import { config } from "../caverConfig";
 import AutoHeightImage from "../components/common/AutoHeightImage";
 import { mintingBlockCounter } from "../components/common/styles/keyframes";
 import { PageSection, Wrapper } from "../components/common/styles/page";
@@ -56,33 +57,49 @@ const CubeComponent = (props: CubeComponentProps) => {
 };
 const Home: NextPage = () => {
   const getAccount = useAccount()?.getAccount;
-  const { presaleMint, getCurrentBlock, getIsPaused, getMintingBlockNumber } =
-    useCaver();
+  const {
+    presaleMint,
+    getCurrentBlock,
+    getIsPaused,
+    getMintingBlockNumber,
+    getTotalSupply,
+  } = useCaver();
   const [percent, setPercent] = useState<number>(0);
   const [currentBlock, setCurrentBlock] = useState<number>(89090290);
+  const [totalSupply, setTotalSupply] = useState<number>(0);
+  const [isPaused, setIsPaused] = useState<boolean>(false);
+  const [mintingBlockNumber, setMintingBlockNumber] = useState<number>(0);
   const progressBarRef = useRef<HTMLDivElement | null>(null);
   useProgressBar({ progressBarRef, percent });
   // useBlockNumber({ blockNumberRef, currentBlock });
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (percent >= 100) setPercent(100);
-      if (percent < 100) setPercent(percent + 10);
-    }, 500);
-    return () => {
-      clearTimeout(timer);
-    };
-  }, []);
+  // useEffect(() => {
+  //   const timer = setTimeout(() => {
+  //     if (percent >= 100) setPercent(100);
+  //     if (percent < 100) setPercent(percent + 10);
+  //   }, 500);
+  //   return () => {
+  //     clearTimeout(timer);
+  //   };
+  // }, []);
 
   useEffect(() => {
     const init = async () => {
       setCurrentBlock(await getCurrentBlock());
+      setIsPaused(await getIsPaused());
+      setTotalSupply(await getTotalSupply());
+      setMintingBlockNumber(await getMintingBlockNumber());
       // console.log(block);
     };
     init();
   }, []);
 
   useEffect(() => {
-    // if (currentBlock !== 0) return;
+    totalSupply === 0 && setPercent(0);
+    totalSupply !== 0 && setPercent((totalSupply / config.maxMintSupply) * 100);
+    console.log(totalSupply);
+  }, [totalSupply]);
+
+  useEffect(() => {
     const timer = setInterval(async () => {
       setCurrentBlock(await getCurrentBlock());
     }, 1000);
@@ -90,6 +107,10 @@ const Home: NextPage = () => {
       clearInterval(timer);
     };
   }, [currentBlock]);
+
+  useEffect(() => {
+    console.log(mintingBlockNumber);
+  }, []);
 
   return (
     // <>
@@ -146,7 +167,7 @@ const Home: NextPage = () => {
                 desc="#89090290"
                 highlight={true}
                 cssBarName="--minting--block--num"
-                blockNumber={100000000}
+                blockNumber={mintingBlockNumber}
               />
 
               <CubeComponent

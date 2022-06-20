@@ -17,7 +17,7 @@ export const useCaver = () => {
         type: "SMART_CONTRACT_EXECUTION",
         from: account,
         to: NFT_CONTRACT_ADDRESS,
-        value: caver.utils.convertToPeb(0, "KLAY"),
+        value: 0,
         gas: "3000000",
         data: nftContract.methods.presaleMint(merkleProof).encodeABI(),
       });
@@ -62,6 +62,17 @@ export const useCaver = () => {
     }
   };
 
+  const getTotalSupply = async (): Promise<number> => {
+    if (!caver || !nftContract) return 0;
+    try {
+      const response = await nftContract.methods.totalSupply().call();
+      return response;
+    } catch (error) {
+      console.error(error);
+      return 0;
+    }
+  };
+
   useEffect(() => {
     if (window.klaytn) {
       setCaver(new Caver(window.klaytn));
@@ -83,5 +94,6 @@ export const useCaver = () => {
     getCurrentBlock,
     getIsPaused,
     getMintingBlockNumber,
+    getTotalSupply,
   };
 };
