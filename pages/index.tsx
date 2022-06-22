@@ -27,7 +27,6 @@ const Home: NextPage = () => {
   } = useCaver();
   const [percent, setPercent] = useState<number>(0);
   const [currentBlock, setCurrentBlock] = useState<number>(89090290);
-  const [getBlockStatus, setGetBlockStatus] = useState<boolean>(false);
   const [totalSupply, setTotalSupply] = useState<number>(0);
   const [isPaused, setIsPaused] = useState<boolean>(false);
   const [isMinting, setIsMinting] = useState<boolean>(false);
@@ -60,7 +59,6 @@ const Home: NextPage = () => {
       setIsPaused(await getIsPaused());
       setTotalSupply(await getTotalSupply());
       setMintingBlockNumber(await getMintingBlockNumber());
-      setGetBlockStatus(true);
     };
     init();
   }, []);
@@ -72,19 +70,13 @@ const Home: NextPage = () => {
   }, [totalSupply]);
 
   useEffect(() => {
-    let timer: any;
-    const init = async () => {
-      if (!getBlockStatus) return setCurrentBlock(await getCurrentBlock());
-      if (currentBlock === 0) return setCurrentBlock(await getCurrentBlock());
-      timer = setInterval(async () => {
-        setCurrentBlock(currentBlock + 1);
-      }, 1000);
-    };
-    init();
+    const timer = setInterval(async () => {
+      setCurrentBlock(await getCurrentBlock());
+    }, 1000);
     return () => {
       clearInterval(timer);
     };
-  }, [currentBlock, getBlockStatus]);
+  }, [currentBlock]);
 
   const MintButtonComponent = () => {
     const isNotMintable =
