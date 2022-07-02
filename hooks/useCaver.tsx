@@ -1,7 +1,7 @@
 import Caver, { Contract } from "caver-js";
 import { ReactNode, useEffect, useState } from "react";
 import { NFT_CONTRACT_ADDRESS, NFT_CONTRACT_ABI } from "../caverConfig";
-import { IPhaseInfo } from "../interfaces";
+import { IPhaseInfo, ITxInfo } from "../interfaces";
 import { getMerkleProof } from "../utils/merkleTree";
 
 export const useCaver = () => {
@@ -10,6 +10,7 @@ export const useCaver = () => {
     undefined
   );
 
+  //revert 넣어놓기
   const presaleMint = async (
     merkleProof: Array<string | number>
   ): Promise<{ success: boolean; status: ReactNode }> => {
@@ -33,18 +34,21 @@ export const useCaver = () => {
     };
 
     try {
-      const txHash = await caver.klay.sendTransaction(tx);
+      const txInfo = (await caver.klay.sendTransaction(
+        tx
+      )) as unknown as ITxInfo;
       // value: caver.utils.convertToPeb(0, "mKLAY"),
+      console.log(txInfo);
       return {
         success: true,
         status: (
           <a
-            href={`https://baobab.scope.klaytn.com/tx/${txHash}`}
+            href={`https://baobab.scope.klaytn.com/tx/${txInfo.transactionHash}`}
             target="_blank"
             rel="noreferrer"
           >
             <p>✅ Check out your transaction on Etherscan:</p>
-            <p>{`https://baobab.scope.klaytn.com/tx/${txHash}`}</p>
+            <p>{`https://baobab.scope.klaytn.com/tx/${txInfo.transactionHash}`}</p>
           </a>
         ),
       };
@@ -104,12 +108,6 @@ export const useCaver = () => {
   const getIsValidMerkleProof = async (wallet: string): Promise<boolean> => {
     if (!caver || !nftContract) return false;
     const proof = getMerkleProof(wallet);
-    // const _proof = proof.map((p) => p.toString().replace(', '"'));
-    // console.log(_proof);
-    console.log(proof);
-    // const list = proof.map((s) => `"${s}"`).join(", ");
-
-    // console.log(`[${list}]`);
     try {
       const response = await nftContract.methods
         .getIsValidMerkleProof(proof, wallet)

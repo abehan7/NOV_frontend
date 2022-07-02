@@ -74,7 +74,7 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     const init = async () => {
-      if (!caver || !nftContract || !account) return;
+      if (!caver || !nftContract) return;
       setCurrentBlock(await getCurrentBlock());
       setIsPaused(await getIsPaused());
       setTotalSupply(await getTotalSupply());
@@ -84,10 +84,19 @@ const Home: NextPage = () => {
       setPresaleBlockNum(await getPresaleBlockNum());
       setPublicBlockNum(await getPublicBlockNum());
       setMaxSupply(await getMaxSupply());
-      setIsWhitelisted(await getIsValidMerkleProof(account));
+      // setIsWhitelisted(await getIsValidMerkleProof(account));
       setIsAccountLoading(true);
     };
+    if (!caver || !nftContract) return;
+    init();
+  }, [caver, nftContract, account]);
+
+  useEffect(() => {
     if (!caver || !nftContract || !account) return;
+    const init = async () => {
+      if (!caver || !nftContract || !account) return;
+      setIsWhitelisted(await getIsValidMerkleProof(account));
+    };
     init();
   }, [caver, nftContract, account]);
 
