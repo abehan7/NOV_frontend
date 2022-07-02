@@ -23,3 +23,12 @@ export const getMerkleProof = (wallet: string): Array<string | number> => {
   const proof = getProof(tree, leaf);
   return proof;
 };
+
+export const isWhitelistedWallet = (wallet: string): boolean => {
+  const tree = createTree(whitelist);
+  const leaf = getLeaf(wallet);
+  const proof = getProof(tree, leaf);
+  const root = getRoot(tree);
+  const isValid = tree.verify(proof, leaf, root);
+  return isValid;
+};

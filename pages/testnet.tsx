@@ -19,21 +19,40 @@ const Home: NextPage = () => {
   const getAccount = useAccount()?.getAccount;
   const account = useAccount()?.account;
   const {
+    caver,
+    nftContract,
     presaleMint,
     getCurrentBlock,
     getIsPaused,
     getMintingBlockNumber,
     getTotalSupply,
+    getPublicM,
+    getPresaleM,
+    getPresaleBlockNum,
+    getPublicBlockNum,
+    getMaxSupply,
+    getIsValidMerkleProof,
   } = useCaver();
   const [percent, setPercent] = useState<number>(0);
   const [currentBlock, setCurrentBlock] = useState<number>(89090290);
   const [totalSupply, setTotalSupply] = useState<number>(0);
   const [isPaused, setIsPaused] = useState<boolean>(false);
   const [isMinting, setIsMinting] = useState<boolean>(false);
-  const [mintingBlockNumber, setMintingBlockNumber] = useState<number>(0);
+  // const [mintingBlockNumber, setMintingBlockNumber] = useState<number>(0);
+  const [publicM, setPublicM] = useState<boolean>(false);
+  const [presaleM, setPresaleM] = useState<boolean>(false);
+  const [presaleBlockNum, setPresaleBlockNum] = useState<number>(0);
+  const [publicBlockNum, setPublicBlockNum] = useState<number>(0);
+  const [maxSupply, setMaxSupply] = useState<number>(0);
+  const [isWhitelisted, setIsWhitelisted] = useState<boolean>(false);
+
+  const [isAccountLoading, setIsAccountLoading] = useState<boolean>(false);
   const progressBarRef = useRef<HTMLDivElement | null>(null);
 
   const onClickMint = async () => {
+    // 여기에서 1차적으로 blocknumber 안됐는지 체킹하고 막기
+    // 그리고 alert 보여주기
+
     if (!account) return;
     const merkleProof = await getMerkleProof(account);
     try {
@@ -55,13 +74,22 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     const init = async () => {
+      if (!caver || !nftContract || !account) return;
       setCurrentBlock(await getCurrentBlock());
       setIsPaused(await getIsPaused());
       setTotalSupply(await getTotalSupply());
-      setMintingBlockNumber(await getMintingBlockNumber());
+      // setMintingBlockNumber(await getMintingBlockNumber());
+      setPublicM(await getPublicM());
+      setPresaleM(await getPresaleM());
+      setPresaleBlockNum(await getPresaleBlockNum());
+      setPublicBlockNum(await getPublicBlockNum());
+      setMaxSupply(await getMaxSupply());
+      setIsWhitelisted(await getIsValidMerkleProof(account));
+      setIsAccountLoading(true);
     };
+    if (!caver || !nftContract || !account) return;
     init();
-  }, []);
+  }, [caver, nftContract, account]);
 
   useEffect(() => {
     totalSupply === 0 && setPercent(0);
@@ -78,17 +106,55 @@ const Home: NextPage = () => {
     };
   }, [currentBlock]);
 
+  // useEffect(() => {
+  // presaleBlockNum
+  // publicBlockNum
+  // console.log("presaleBlockNum", presaleBlockNum);
+  // console.log("presaleM", presaleM);
+  // }, [presaleBlockNum]);
+
   const MintButtonComponent = () => {
+    // setPublicM
+    // setPresaleM
+
+    const presaleMintable = presaleBlockNum <= currentBlock && presaleM;
+    const publicMintable = publicBlockNum <= currentBlock && publicM;
+    const maxSupplyExceed = maxSupply - totalSupply > 0;
+    // const isWhitelisted = await getIsValidMerkleProof(account);
+
     const isNotMintable =
-      isPaused || mintingBlockNumber < currentBlock || currentBlock === 0;
+      isPaused ||
+      currentBlock === 0 ||
+      !(presaleMintable || publicMintable) ||
+      !maxSupplyExceed;
+
     // when use didn't connect to klaytn wallet don't show mint button
     if (!account) return <Button onClick={getAccount}>connect wallet</Button>;
+
+    if (!isAccountLoading) return <Button disabled={true}>disabled</Button>;
+
     // when user connected and is not minting and isNotMintable
     if (account && !isMinting && isNotMintable)
-      return <Button disabled={true}>disabled</Button>;
+      return (
+        <Button disabled={true}>
+          {isPaused && "Paused"}
+          {!isPaused &&
+            (!presaleMintable ? "whitelist minting" : "public minting")}
+          {/* disabled */}
+        </Button>
+      );
     // when user connected and is not minting and Mintable
-    if (account && !isMinting && !isNotMintable)
-      return <Button onClick={onClickMint}>minting</Button>;
+    if (account && !isMinting && !isNotMintable && presaleMintable)
+      return isWhitelisted ? (
+        <Button onClick={onClickMint}>whitelist minting</Button>
+      ) : (
+        <Button onClick={() => {}} disabled={true}>
+          you&apos;re not whitelisted
+        </Button>
+      );
+
+    if (account && !isMinting && !isNotMintable && publicM)
+      return <Button onClick={onClickMint}>public minting</Button>;
     //when user is minting nft
     if (account && isMinting)
       return <Button disabled={true}>on process</Button>;
@@ -148,7 +214,7 @@ const Home: NextPage = () => {
                 desc="#89090290"
                 highlight={true}
                 cssBarName="--minting--block--num"
-                blockNumber={mintingBlockNumber}
+                blockNumber={presaleBlockNum}
               />
 
               <CubeComponent

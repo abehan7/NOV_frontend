@@ -1,7 +1,7 @@
 import { AbiItem } from "caver-js";
 
 export const NFT_CONTRACT_ADDRESS =
-  "0x455C7dA7B5a8f27572D9D6607768c9E9F602f2c2";
+  "0x94d678A739C0fF5d2024eA79AA77eE86e028A96A";
 
 export const NFT_CONTRACT_ABI: AbiItem[] = [
   {
@@ -23,13 +23,7 @@ export const NFT_CONTRACT_ABI: AbiItem[] = [
     type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "string",
-        name: "_revealedURI",
-        type: "string",
-      },
-    ],
+    inputs: [],
     stateMutability: "nonpayable",
     type: "constructor",
   },
@@ -236,6 +230,13 @@ export const NFT_CONTRACT_ABI: AbiItem[] = [
   },
   {
     inputs: [],
+    name: "publicSaleMint",
+    outputs: [],
+    stateMutability: "payable",
+    type: "function",
+  },
+  {
+    inputs: [],
     name: "renounceOwnership",
     outputs: [],
     stateMutability: "nonpayable",
@@ -313,12 +314,12 @@ export const NFT_CONTRACT_ABI: AbiItem[] = [
   {
     inputs: [
       {
-        internalType: "string",
-        name: "_tokenBaseURI",
-        type: "string",
+        internalType: "uint256",
+        name: "_currentPhase",
+        type: "uint256",
       },
     ],
-    name: "setBaseURI",
+    name: "setCurrentPhase",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -327,11 +328,24 @@ export const NFT_CONTRACT_ABI: AbiItem[] = [
     inputs: [
       {
         internalType: "uint256",
-        name: "_maxMintAmountPerTx",
+        name: "_maxMintAmountPerWallet",
         type: "uint256",
       },
     ],
-    name: "setMaxMintAmountPerTx",
+    name: "setMaxPresaleMintAmountPerWallet",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_maxMintAmountPerWallet",
+        type: "uint256",
+      },
+    ],
+    name: "setMaxPublicMintAmountPerWallet",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -365,19 +379,6 @@ export const NFT_CONTRACT_ABI: AbiItem[] = [
   {
     inputs: [
       {
-        internalType: "uint256",
-        name: "_mintingBlockNumber",
-        type: "uint256",
-      },
-    ],
-    name: "setMintingBlockNumber",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
         internalType: "string",
         name: "_notRevealedURI",
         type: "string",
@@ -389,8 +390,94 @@ export const NFT_CONTRACT_ABI: AbiItem[] = [
     type: "function",
   },
   {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_phase",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_phaseMaxSupply",
+        type: "uint256",
+      },
+      {
+        internalType: "string",
+        name: "_tokenURI",
+        type: "string",
+      },
+      {
+        internalType: "uint256",
+        name: "_publicSalePriceForKlay",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_presalePriceForKlay",
+        type: "uint256",
+      },
+    ],
+    name: "setPhaseInfo",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_presaleBlockNum",
+        type: "uint256",
+      },
+    ],
+    name: "setPresaleBlockNum",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_publicBlockNum",
+        type: "uint256",
+      },
+    ],
+    name: "setPublicBlockNum",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_totalPhaseNumber",
+        type: "uint256",
+      },
+    ],
+    name: "setTotalPhaseNumber",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
     inputs: [],
     name: "togglePause",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "togglePresale",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "togglePublicSale",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -473,12 +560,80 @@ export const NFT_CONTRACT_ABI: AbiItem[] = [
   {
     inputs: [
       {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    name: "_phaseInfo",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "phase",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "phaseMaxSupply",
+        type: "uint256",
+      },
+      {
+        internalType: "string",
+        name: "tokenURI",
+        type: "string",
+      },
+      {
+        internalType: "uint256",
+        name: "publicSalePrice",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "presalePrice",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+      {
         internalType: "address",
         name: "",
         type: "address",
       },
     ],
-    name: "_presaleClaimed",
+    name: "_presaleClaimedByPhase",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    name: "_publicSaleClaimedByPhase",
     outputs: [
       {
         internalType: "uint256",
@@ -516,6 +671,19 @@ export const NFT_CONTRACT_ABI: AbiItem[] = [
         internalType: "string",
         name: "",
         type: "string",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "currentPhase",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
       },
     ],
     stateMutability: "view",
@@ -560,6 +728,11 @@ export const NFT_CONTRACT_ABI: AbiItem[] = [
         name: "_merkleProof",
         type: "bytes32[]",
       },
+      {
+        internalType: "address",
+        name: "_wallet",
+        type: "address",
+      },
     ],
     name: "getIsValidMerkleProof",
     outputs: [
@@ -573,8 +746,40 @@ export const NFT_CONTRACT_ABI: AbiItem[] = [
     type: "function",
   },
   {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_phase",
+        type: "uint256",
+      },
+    ],
+    name: "getPhaseMaxSupply",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [],
-    name: "getMintingBlockNumber",
+    name: "getPresaleBlockNum",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getPublicBlockNum",
     outputs: [
       {
         internalType: "uint256",
@@ -612,6 +817,52 @@ export const NFT_CONTRACT_ABI: AbiItem[] = [
   {
     inputs: [
       {
+        internalType: "uint256",
+        name: "_phase",
+        type: "uint256",
+      },
+    ],
+    name: "getTotalPhaseInfo",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "phase",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "phaseMaxSupply",
+            type: "uint256",
+          },
+          {
+            internalType: "string",
+            name: "tokenURI",
+            type: "string",
+          },
+          {
+            internalType: "uint256",
+            name: "publicSalePrice",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "presalePrice",
+            type: "uint256",
+          },
+        ],
+        internalType: "struct NOV.PhaseInfo",
+        name: "",
+        type: "tuple",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "address",
         name: "owner",
         type: "address",
@@ -635,7 +886,20 @@ export const NFT_CONTRACT_ABI: AbiItem[] = [
   },
   {
     inputs: [],
-    name: "maxMintAmountPerTx",
+    name: "maxPresaleMintAmountPerWallet",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "maxPublicMintAmountPerWallet",
     outputs: [
       {
         internalType: "uint256",
@@ -667,19 +931,6 @@ export const NFT_CONTRACT_ABI: AbiItem[] = [
         internalType: "bytes32",
         name: "",
         type: "bytes32",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "mintingBlockNumber",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
       },
     ],
     stateMutability: "view",
@@ -758,6 +1009,58 @@ export const NFT_CONTRACT_ABI: AbiItem[] = [
   },
   {
     inputs: [],
+    name: "presaleBlockNum",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "presaleM",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "publicBlockNum",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "publicM",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
     name: "revealed",
     outputs: [
       {
@@ -815,6 +1118,19 @@ export const NFT_CONTRACT_ABI: AbiItem[] = [
         internalType: "string",
         name: "",
         type: "string",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "totalPhaseNumber",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
       },
     ],
     stateMutability: "view",
@@ -836,7 +1152,7 @@ export const NFT_CONTRACT_ABI: AbiItem[] = [
 ];
 
 export const NFT_CONTRACT_ADDRESS_TESTNET =
-  "0x455C7dA7B5a8f27572D9D6607768c9E9F602f2c2";
+  "0xE9C933392066414Ab66acb0dd8DbA1fCeC04b6f3";
 
 export const NFT_CONTRACT_ABI_TESTNET: AbiItem[] = [
   {
@@ -858,13 +1174,7 @@ export const NFT_CONTRACT_ABI_TESTNET: AbiItem[] = [
     type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "string",
-        name: "_revealedURI",
-        type: "string",
-      },
-    ],
+    inputs: [],
     stateMutability: "nonpayable",
     type: "constructor",
   },
@@ -1071,6 +1381,13 @@ export const NFT_CONTRACT_ABI_TESTNET: AbiItem[] = [
   },
   {
     inputs: [],
+    name: "publicSaleMint",
+    outputs: [],
+    stateMutability: "payable",
+    type: "function",
+  },
+  {
+    inputs: [],
     name: "renounceOwnership",
     outputs: [],
     stateMutability: "nonpayable",
@@ -1148,12 +1465,12 @@ export const NFT_CONTRACT_ABI_TESTNET: AbiItem[] = [
   {
     inputs: [
       {
-        internalType: "string",
-        name: "_tokenBaseURI",
-        type: "string",
+        internalType: "uint256",
+        name: "_currentPhase",
+        type: "uint256",
       },
     ],
-    name: "setBaseURI",
+    name: "setCurrentPhase",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -1162,11 +1479,24 @@ export const NFT_CONTRACT_ABI_TESTNET: AbiItem[] = [
     inputs: [
       {
         internalType: "uint256",
-        name: "_maxMintAmountPerTx",
+        name: "_maxMintAmountPerWallet",
         type: "uint256",
       },
     ],
-    name: "setMaxMintAmountPerTx",
+    name: "setMaxPresaleMintAmountPerWallet",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_maxMintAmountPerWallet",
+        type: "uint256",
+      },
+    ],
+    name: "setMaxPublicMintAmountPerWallet",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -1200,19 +1530,6 @@ export const NFT_CONTRACT_ABI_TESTNET: AbiItem[] = [
   {
     inputs: [
       {
-        internalType: "uint256",
-        name: "_mintingBlockNumber",
-        type: "uint256",
-      },
-    ],
-    name: "setMintingBlockNumber",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
         internalType: "string",
         name: "_notRevealedURI",
         type: "string",
@@ -1224,8 +1541,94 @@ export const NFT_CONTRACT_ABI_TESTNET: AbiItem[] = [
     type: "function",
   },
   {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_phase",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_phaseMaxSupply",
+        type: "uint256",
+      },
+      {
+        internalType: "string",
+        name: "_tokenURI",
+        type: "string",
+      },
+      {
+        internalType: "uint256",
+        name: "_publicSalePriceForKlay",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_presalePriceForKlay",
+        type: "uint256",
+      },
+    ],
+    name: "setPhaseInfo",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_presaleBlockNum",
+        type: "uint256",
+      },
+    ],
+    name: "setPresaleBlockNum",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_publicBlockNum",
+        type: "uint256",
+      },
+    ],
+    name: "setPublicBlockNum",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_totalPhaseNumber",
+        type: "uint256",
+      },
+    ],
+    name: "setTotalPhaseNumber",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
     inputs: [],
     name: "togglePause",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "togglePresale",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "togglePublicSale",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -1308,12 +1711,80 @@ export const NFT_CONTRACT_ABI_TESTNET: AbiItem[] = [
   {
     inputs: [
       {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    name: "_phaseInfo",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "phase",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "phaseMaxSupply",
+        type: "uint256",
+      },
+      {
+        internalType: "string",
+        name: "tokenURI",
+        type: "string",
+      },
+      {
+        internalType: "uint256",
+        name: "publicSalePrice",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "presalePrice",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+      {
         internalType: "address",
         name: "",
         type: "address",
       },
     ],
-    name: "_presaleClaimed",
+    name: "_presaleClaimedByPhase",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    name: "_publicSaleClaimedByPhase",
     outputs: [
       {
         internalType: "uint256",
@@ -1351,6 +1822,19 @@ export const NFT_CONTRACT_ABI_TESTNET: AbiItem[] = [
         internalType: "string",
         name: "",
         type: "string",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "currentPhase",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
       },
     ],
     stateMutability: "view",
@@ -1408,8 +1892,40 @@ export const NFT_CONTRACT_ABI_TESTNET: AbiItem[] = [
     type: "function",
   },
   {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_phase",
+        type: "uint256",
+      },
+    ],
+    name: "getPhaseMaxSupply",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [],
-    name: "getMintingBlockNumber",
+    name: "getPresaleBlockNum",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getPublicBlockNum",
     outputs: [
       {
         internalType: "uint256",
@@ -1447,6 +1963,52 @@ export const NFT_CONTRACT_ABI_TESTNET: AbiItem[] = [
   {
     inputs: [
       {
+        internalType: "uint256",
+        name: "_phase",
+        type: "uint256",
+      },
+    ],
+    name: "getTotalPhaseInfo",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "phase",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "phaseMaxSupply",
+            type: "uint256",
+          },
+          {
+            internalType: "string",
+            name: "tokenURI",
+            type: "string",
+          },
+          {
+            internalType: "uint256",
+            name: "publicSalePrice",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "presalePrice",
+            type: "uint256",
+          },
+        ],
+        internalType: "struct NOV.PhaseInfo",
+        name: "",
+        type: "tuple",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "address",
         name: "owner",
         type: "address",
@@ -1470,7 +2032,20 @@ export const NFT_CONTRACT_ABI_TESTNET: AbiItem[] = [
   },
   {
     inputs: [],
-    name: "maxMintAmountPerTx",
+    name: "maxPresaleMintAmountPerWallet",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "maxPublicMintAmountPerWallet",
     outputs: [
       {
         internalType: "uint256",
@@ -1502,19 +2077,6 @@ export const NFT_CONTRACT_ABI_TESTNET: AbiItem[] = [
         internalType: "bytes32",
         name: "",
         type: "bytes32",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "mintingBlockNumber",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
       },
     ],
     stateMutability: "view",
@@ -1593,6 +2155,58 @@ export const NFT_CONTRACT_ABI_TESTNET: AbiItem[] = [
   },
   {
     inputs: [],
+    name: "presaleBlockNum",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "presaleM",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "publicBlockNum",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "publicM",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
     name: "revealed",
     outputs: [
       {
@@ -1650,6 +2264,19 @@ export const NFT_CONTRACT_ABI_TESTNET: AbiItem[] = [
         internalType: "string",
         name: "",
         type: "string",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "totalPhaseNumber",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
       },
     ],
     stateMutability: "view",
@@ -1674,7 +2301,7 @@ export const config = {
   NFT_CONTRACT_ABI,
   NFT_CONTRACT_ADDRESS,
   maxMintAmount: 1,
-  presaleMaxMintAmount: 1,
+  presaleMaxMintAmount: 2,
   price: 0,
   maxMintSupply: 5000,
 };
@@ -1683,7 +2310,7 @@ export const testnetConfig = {
   NFT_CONTRACT_ABI_TESTNET,
   NFT_CONTRACT_ADDRESS_TESTNET,
   maxMintAmount: 1,
-  presaleMaxMintAmount: 1,
+  presaleMaxMintAmount: 2,
   price: 0,
   maxMintSupply: 5000,
 };

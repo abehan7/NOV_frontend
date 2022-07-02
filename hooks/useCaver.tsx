@@ -1,6 +1,8 @@
 import Caver, { Contract } from "caver-js";
 import { ReactNode, useEffect, useState } from "react";
 import { NFT_CONTRACT_ADDRESS, NFT_CONTRACT_ABI } from "../caverConfig";
+import { IPhaseInfo } from "../interfaces";
+import { getMerkleProof } from "../utils/merkleTree";
 
 export const useCaver = () => {
   const [caver, setCaver] = useState<Caver | undefined>(undefined);
@@ -37,12 +39,12 @@ export const useCaver = () => {
         success: true,
         status: (
           <a
-            href={`https://rinkeby.etherscan.io/tx/${txHash}`}
+            href={`https://baobab.scope.klaytn.com/tx/${txHash}`}
             target="_blank"
             rel="noreferrer"
           >
             <p>✅ Check out your transaction on Etherscan:</p>
-            <p>{`https://rinkeby.etherscan.io/tx/${txHash}`}</p>
+            <p>{`https://baobab.scope.klaytn.com/tx/${txHash}`}</p>
           </a>
         ),
       };
@@ -77,6 +79,71 @@ export const useCaver = () => {
     }
   };
 
+  const getPresaleM = async (): Promise<boolean> => {
+    if (!caver || !nftContract) return false;
+    try {
+      const response = await nftContract.methods.presaleM().call();
+      return response;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };
+
+  const getPublicM = async (): Promise<boolean> => {
+    if (!caver || !nftContract) return false;
+    try {
+      const response = await nftContract.methods.publicM().call();
+      return response;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };
+
+  const getIsValidMerkleProof = async (wallet: string): Promise<boolean> => {
+    if (!caver || !nftContract) return false;
+    const proof = getMerkleProof(wallet);
+    // const _proof = proof.map((p) => p.toString().replace(', '"'));
+    // console.log(_proof);
+    console.log(proof);
+    // const list = proof.map((s) => `"${s}"`).join(", ");
+
+    // console.log(`[${list}]`);
+    try {
+      const response = await nftContract.methods
+        .getIsValidMerkleProof(proof, wallet)
+        .call();
+      console.log(response);
+      return response as boolean;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };
+
+  const getPublicBlockNum = async (): Promise<number> => {
+    if (!caver || !nftContract) return 0;
+    try {
+      const response = await nftContract.methods.publicBlockNum().call();
+      return response;
+    } catch (error) {
+      console.error(error);
+      return 0;
+    }
+  };
+
+  const getPresaleBlockNum = async (): Promise<number> => {
+    if (!caver || !nftContract) return 0;
+    try {
+      const response = await nftContract.methods.presaleBlockNum().call();
+      return response;
+    } catch (error) {
+      console.error(error);
+      return 0;
+    }
+  };
+
   const getMintingBlockNumber = async (): Promise<number> => {
     if (!caver || !nftContract) return 0;
     try {
@@ -87,6 +154,22 @@ export const useCaver = () => {
       return 0;
     }
   };
+
+  const getMaxSupply = async (): Promise<number> => {
+    if (!caver || !nftContract) return 0;
+    try {
+      const response = await nftContract.methods.maxSupply().call();
+      return response as number;
+    } catch (error) {
+      console.error(error);
+      return 0;
+    }
+  };
+
+  // const getPhaseMaxSupply = async (): Promise<number> => {};
+
+  // presaleBlockNum
+  // publicBlockNum
 
   const getTotalSupply = async (): Promise<number> => {
     if (!caver || !nftContract) return 0;
@@ -99,8 +182,21 @@ export const useCaver = () => {
     }
   };
 
+  const getPhaseInfo = async (): Promise<IPhaseInfo | null> => {
+    if (!caver || !nftContract) return null;
+    try {
+      const response = await nftContract.methods.phaseInfo(1).call();
+      // console.log(response);
+      return response as IPhaseInfo;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  };
+
   useEffect(() => {
     if (window.klaytn) {
+      // const caver = new Caver('https://api.baobab.klaytn.net:8651');
       setCaver(new Caver(window.klaytn));
     }
   }, []);
@@ -121,5 +217,12 @@ export const useCaver = () => {
     getIsPaused,
     getMintingBlockNumber,
     getTotalSupply,
+    getPresaleM,
+    getPublicM,
+    getPublicBlockNum,
+    getPresaleBlockNum,
+    getPhaseInfo,
+    getMaxSupply,
+    getIsValidMerkleProof,
   };
 };

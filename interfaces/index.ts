@@ -49,3 +49,10 @@ export interface IInputEventInfo {
   done: boolean;
   status: boolean;
 }
+
+export interface IPhaseInfo {
+  phase: number;
+  phaseMaxSupply: number;
+  publicSalePrice: number;
+  presalePrice: number;
+}
