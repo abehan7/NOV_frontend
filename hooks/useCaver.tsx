@@ -192,6 +192,33 @@ export const useCaver = () => {
     }
   };
 
+  const getPresaleClaimedByPhase = (phase: number, wallet: string) => {
+    if (!caver || !nftContract) return 0;
+    try {
+      const response = nftContract.methods
+        ._presaleClaimedByPhase(phase, wallet)
+        .call();
+      return response;
+    } catch (error) {
+      console.error(error);
+      return 0;
+    }
+  };
+
+  const getPublicClaimedByPhase = (phase: number, wallet: string) => {
+    if (!caver || !nftContract) return 0;
+    try {
+      const response = nftContract.methods
+
+        ._publicClaimedByPhase(phase, wallet)
+        .call();
+      return response;
+    } catch (error) {
+      console.error(error);
+      return 0;
+    }
+  };
+
   useEffect(() => {
     if (window.klaytn) {
       // const caver = new Caver('https://api.baobab.klaytn.net:8651');
@@ -222,5 +249,7 @@ export const useCaver = () => {
     getPhaseInfo,
     getMaxSupply,
     getIsValidMerkleProof,
+    getPresaleClaimedByPhase,
+    getPublicClaimedByPhase,
   };
 };

@@ -32,6 +32,8 @@ const Home: NextPage = () => {
     getPublicBlockNum,
     getMaxSupply,
     getIsValidMerkleProof,
+    getPresaleClaimedByPhase,
+    getPublicClaimedByPhase,
   } = useCaver();
   const [percent, setPercent] = useState<number>(0);
   const [currentBlock, setCurrentBlock] = useState<number>(89090290);
@@ -47,6 +49,8 @@ const Home: NextPage = () => {
   const [isWhitelisted, setIsWhitelisted] = useState<boolean>(false);
 
   const [isAccountLoading, setIsAccountLoading] = useState<boolean>(false);
+  const [presaleClaimedByPhase, setPresaleClaimedByPhase] = useState<number>(2);
+  const [publicClaimedByPhase, setPublicClaimedByPhase] = useState<number>(1);
   const progressBarRef = useRef<HTMLDivElement | null>(null);
 
   const onClickMint = async () => {
@@ -96,6 +100,10 @@ const Home: NextPage = () => {
     const init = async () => {
       if (!caver || !nftContract || !account) return;
       setIsWhitelisted(await getIsValidMerkleProof(account));
+      setPresaleClaimedByPhase(await getPresaleClaimedByPhase(1, account));
+      setPublicClaimedByPhase(await getPublicClaimedByPhase(1, account));
+      //       getPresaleClaimedByPhase
+      // getPublicClaimedByPhase
     };
     init();
   }, [caver, nftContract, account]);
@@ -127,6 +135,9 @@ const Home: NextPage = () => {
     // setPresaleM
 
     const presaleMintable = presaleBlockNum <= currentBlock && presaleM;
+    const presaleClaimed = presaleClaimedByPhase >= 2;
+    const publicClaimed = publicClaimedByPhase > 0;
+    // publicClaimedByPhase
     const publicMintable = publicBlockNum <= currentBlock && publicM;
     const maxSupplyExceed = maxSupply - totalSupply > 0;
     // const isWhitelisted = await getIsValidMerkleProof(account);
@@ -141,6 +152,20 @@ const Home: NextPage = () => {
     if (!account) return <Button onClick={getAccount}>connect wallet</Button>;
 
     if (!isAccountLoading) return <Button disabled={true}>disabled</Button>;
+
+    if (account && !isMinting && presaleM && presaleClaimed)
+      return (
+        <Button disabled={true}>
+          you already claimed {presaleClaimedByPhase} tokens
+        </Button>
+      );
+
+    if (account && !isMinting && publicM && publicClaimed)
+      return (
+        <Button disabled={true}>
+          you already claimed {publicClaimedByPhase} tokens
+        </Button>
+      );
 
     // when user connected and is not minting and isNotMintable
     if (account && !isMinting && isNotMintable)
