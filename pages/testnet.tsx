@@ -22,6 +22,7 @@ const Home: NextPage = () => {
     caver,
     nftContract,
     presaleMint,
+    publicSaleMint,
     getCurrentBlock,
     getIsPaused,
     getMintingBlockNumber,
@@ -49,11 +50,11 @@ const Home: NextPage = () => {
   const [isWhitelisted, setIsWhitelisted] = useState<boolean>(false);
 
   const [isAccountLoading, setIsAccountLoading] = useState<boolean>(false);
-  const [presaleClaimedByPhase, setPresaleClaimedByPhase] = useState<number>(2);
-  const [publicClaimedByPhase, setPublicClaimedByPhase] = useState<number>(1);
+  const [presaleClaimedByPhase, setPresaleClaimedByPhase] = useState<number>(0);
+  const [publicClaimedByPhase, setPublicClaimedByPhase] = useState<number>(0);
   const progressBarRef = useRef<HTMLDivElement | null>(null);
-
-  const onClickMint = async () => {
+  // publicSaleMint
+  const onClickPresaleMint = async () => {
     // 여기에서 1차적으로 blocknumber 안됐는지 체킹하고 막기
     // 그리고 alert 보여주기
 
@@ -62,6 +63,26 @@ const Home: NextPage = () => {
     try {
       setIsMinting(true);
       const { status, success } = await presaleMint(merkleProof);
+      console.log(status, success);
+      setIsMinting(false);
+      // 트랜젝션 정보 가지고오기
+      // 이거는 일단 임시방편
+      // TODO: 웹소켓 달기
+      success && setTotalSupply(await getTotalSupply());
+    } catch (error) {
+      console.error(error);
+      setIsMinting(false);
+    }
+  };
+
+  const onClickPublicMint = async () => {
+    // 여기에서 1차적으로 blocknumber 안됐는지 체킹하고 막기
+    // 그리고 alert 보여주기
+
+    if (!account) return;
+    try {
+      setIsMinting(true);
+      const { status, success } = await publicSaleMint();
       console.log(status, success);
       setIsMinting(false);
       // 트랜젝션 정보 가지고오기
@@ -89,7 +110,6 @@ const Home: NextPage = () => {
       setPublicBlockNum(await getPublicBlockNum());
       setMaxSupply(await getMaxSupply());
       // setIsWhitelisted(await getIsValidMerkleProof(account));
-      setIsAccountLoading(true);
     };
     if (!caver || !nftContract) return;
     init();
@@ -102,6 +122,7 @@ const Home: NextPage = () => {
       setIsWhitelisted(await getIsValidMerkleProof(account));
       setPresaleClaimedByPhase(await getPresaleClaimedByPhase(1, account));
       setPublicClaimedByPhase(await getPublicClaimedByPhase(1, account));
+      setIsAccountLoading(true);
       //       getPresaleClaimedByPhase
       // getPublicClaimedByPhase
     };
@@ -152,6 +173,7 @@ const Home: NextPage = () => {
     if (!account) return <Button onClick={getAccount}>connect wallet</Button>;
 
     if (!isAccountLoading) return <Button disabled={true}>disabled</Button>;
+    if (!presaleM && !publicM) return <Button disabled={true}>disabled</Button>;
 
     if (account && !isMinting && presaleM && presaleClaimed)
       return (
@@ -163,7 +185,7 @@ const Home: NextPage = () => {
     if (account && !isMinting && publicM && publicClaimed)
       return (
         <Button disabled={true}>
-          you already claimed {publicClaimedByPhase} tokens
+          you already claimed {publicClaimedByPhase} token
         </Button>
       );
 
@@ -180,7 +202,7 @@ const Home: NextPage = () => {
     // when user connected and is not minting and Mintable
     if (account && !isMinting && !isNotMintable && presaleMintable)
       return isWhitelisted ? (
-        <Button onClick={onClickMint}>whitelist minting</Button>
+        <Button onClick={onClickPresaleMint}>whitelist minting</Button>
       ) : (
         <Button onClick={() => {}} disabled={true}>
           you&apos;re not whitelisted
@@ -188,7 +210,7 @@ const Home: NextPage = () => {
       );
 
     if (account && !isMinting && !isNotMintable && publicM)
-      return <Button onClick={onClickMint}>public minting</Button>;
+      return <Button onClick={onClickPublicMint}>public minting</Button>;
     //when user is minting nft
     if (account && isMinting)
       return <Button disabled={true}>on process</Button>;

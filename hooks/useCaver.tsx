@@ -61,6 +61,54 @@ export const useCaver = () => {
     }
   };
 
+  const publicSaleMint = async () => {
+    if (!caver || !nftContract) return { success: false, status: "Loading" };
+    const account = window.klaytn.selectedAddress;
+
+    if (!account) {
+      return {
+        success: false,
+        status: "To be able to mint, you need to connect your wallet",
+      };
+    }
+
+    const tx = {
+      type: "SMART_CONTRACT_EXECUTION",
+      from: account,
+      to: NFT_CONTRACT_ADDRESS,
+      value: 0,
+      gas: "3000000",
+      data: nftContract.methods.publicSaleMint().encodeABI(),
+    };
+
+    try {
+      const txInfo = (await caver.klay.sendTransaction(
+        tx
+      )) as unknown as ITxInfo;
+      // value: caver.utils.convertToPeb(0, "mKLAY"),
+      console.log(txInfo);
+      return {
+        success: true,
+        status: (
+          <a
+            href={`https://baobab.scope.klaytn.com/tx/${txInfo.transactionHash}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            <p>✅ Check out your transaction on Etherscan:</p>
+            <p>{`https://baobab.scope.klaytn.com/tx/${txInfo.transactionHash}`}</p>
+          </a>
+        ),
+      };
+    } catch (error: any) {
+      console.error(error);
+      return {
+        success: false,
+        status: "😞 민팅실패:" + error.message,
+      };
+    }
+  };
+
   const getCurrentBlock = async (): Promise<number> => {
     if (!caver) return 0;
     try {
@@ -210,7 +258,7 @@ export const useCaver = () => {
     try {
       const response = nftContract.methods
 
-        ._publicClaimedByPhase(phase, wallet)
+        ._publicSaleClaimedByPhase(phase, wallet)
         .call();
       return response;
     } catch (error) {
@@ -251,5 +299,6 @@ export const useCaver = () => {
     getIsValidMerkleProof,
     getPresaleClaimedByPhase,
     getPublicClaimedByPhase,
+    publicSaleMint,
   };
 };
