@@ -491,6 +491,7 @@ export const Bar = styled.div<{ percent: number }>`
     display: flex;
     align-items: center;
     justify-content: flex-start;
+    overflow: hidden;
 
     ::before {
       content: "";
