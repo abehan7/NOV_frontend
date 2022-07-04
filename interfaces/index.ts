@@ -49,3 +49,33 @@ export interface IInputEventInfo {
   done: boolean;
   status: boolean;
 }
+
+export interface IPhaseInfo {
+  phase: number;
+  phaseMaxSupply: number;
+  publicSalePrice: number;
+  presalePrice: number;
+}
+
+export interface ITxInfo {
+  blockHash: string;
+  blockNumber: number;
+  contractAddress: null;
+  from: string;
+  gas: string;
+  gasPrice: string;
+  gasUsed: number;
+  input: string;
+  logs: [any];
+  logsBloom: string;
+  nonce: string;
+  senderTxHash: string;
+  signatures: [any];
+  status: true;
+  to: string;
+  transactionHash: string;
+  transactionIndex: number;
+  type: string;
+  typeInt: number;
+  value: string;
+}
