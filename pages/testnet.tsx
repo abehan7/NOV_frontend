@@ -14,11 +14,19 @@ import { PageSection, Wrapper } from "../components/common/styles/page";
 import NoticeBanner from "../components/layout/NoticeBanner";
 import { IPhaseInfo } from "../interfaces";
 import { phaseInfoObj } from "../object";
-// TODO: detect network
+import io from "socket.io-client";
+
+export let socket = io("wss://public-node-api.klaytnapi.com/v1/baobab/ws", {
+  transports: ["websocket"],
+});
+export const initSocketConnection = () => {
+  if (socket) return;
+};
+// TODO: detect network DONE
 // TODO: detect kaikas extension
-// TODO: 블록 차면 풀리게하기 테스팅
+// TODO: 블록 차면 풀리게하기 테스팅 DONE
 // TODO: 소켓으로 실시간으로 민팅 수 올라가게 하기
-// TODO: 민팅 하면 전체 totalsupply 업데이트 하기 done
+// TODO: 민팅 하면 전체 totalsupply 업데이트 하기 DONE
 // TODO: 본인이 민팅한 업데이트하기
 // TODO: 트랜젝션 결과 보여주기
 
