@@ -14,6 +14,7 @@ import { PageSection, Wrapper } from "../components/common/styles/page";
 import NoticeBanner from "../components/layout/NoticeBanner";
 import { IPhaseInfo } from "../interfaces";
 import { phaseInfoObj } from "../object";
+import Toast from "../components/common/Toast";
 // TODO: detect network
 // TODO: detect kaikas extension
 // TODO: 블록 차면 풀리게하기 테스팅
@@ -258,6 +259,8 @@ const Home: NextPage = () => {
 
   return (
     <SectionEl>
+      {/* 여기서 트랜젝션 보여주기 */}
+      <Toast>go and check your transaction on klayscope</Toast>
       <WrapperEl>
         {/* left */}
         <Container className="item1">

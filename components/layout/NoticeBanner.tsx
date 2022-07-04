@@ -10,7 +10,7 @@ const NoticeBanner: FC<BannerProps> = ({ children }) => {
 
 export default NoticeBanner;
 
-const Section = styled.div`
+export const Section = styled.div`
   font-family: ${({ theme }) => theme.fonts.header};
   color: ${({ theme }) => theme.colors.gray70};
   height: ${({ theme }) => theme.headerHeight};
