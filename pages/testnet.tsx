@@ -13,6 +13,7 @@ import { media, theme } from "../styles/theme";
 import { PageSection, Wrapper } from "../components/common/styles/page";
 import NoticeBanner from "../components/layout/NoticeBanner";
 import { IPhaseInfo } from "../interfaces";
+import { phaseInfoObj } from "../object";
 // TODO: detect network
 // TODO: detect kaikas extension
 // TODO: 블록 차면 풀리게하기 테스팅
@@ -59,12 +60,7 @@ const Home: NextPage = () => {
   const [isAccountLoading, setIsAccountLoading] = useState<boolean>(false);
   const [presaleClaimedByPhase, setPresaleClaimedByPhase] = useState<number>(0);
   const [publicClaimedByPhase, setPublicClaimedByPhase] = useState<number>(0);
-  const [phaseInfo, setPhaseInfo] = useState<IPhaseInfo>({
-    phase: 1,
-    phaseMaxSupply: 0,
-    publicSalePrice: 0,
-    presalePrice: 0,
-  });
+  const [phaseInfo, setPhaseInfo] = useState<IPhaseInfo>(phaseInfoObj);
   const progressBarRef = useRef<HTMLDivElement | null>(null);
   // publicSaleMint
   const onClickPresaleMint = async () => {
@@ -192,8 +188,8 @@ const Home: NextPage = () => {
       isPaused ||
       currentBlock === 0 ||
       !(presaleMintable || publicMintable) ||
-      !maxSupplyExceed ||
-      !maxSupplyExceedByPhase;
+      maxSupplyExceed ||
+      maxSupplyExceedByPhase;
 
     // when use didn't connect to klaytn wallet don't show mint button
     if (!account) return <Button onClick={getAccount}>connect wallet</Button>;
@@ -208,12 +204,10 @@ const Home: NextPage = () => {
       return (
         <Button disabled={true}>
           {isPaused && "Paused"}
+          {!isPaused && presaleM && !presaleMintable && "whitelist minting"}
+          {!isPaused && publicM && !publicMintable && "public minting"}
 
-          {!isPaused && !presaleMintable && publicMintable && "public minting"}
-          {!isPaused &&
-            !publicMintable &&
-            presaleMintable &&
-            "whitelist minting"}
+          {/* {!isPaused && !presaleMintable && publicMintable && "public minting"} */}
 
           {/* disabled */}
         </Button>

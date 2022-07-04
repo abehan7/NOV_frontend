@@ -2,6 +2,7 @@ import Caver, { Contract } from "caver-js";
 import { ReactNode, useEffect, useState } from "react";
 import { NFT_CONTRACT_ADDRESS, NFT_CONTRACT_ABI } from "../caverConfig";
 import { IPhaseInfo, ITxInfo } from "../interfaces";
+import { phaseInfoObj } from "../object";
 import { getMerkleProof } from "../utils/merkleTree";
 
 export const useCaver = () => {
@@ -228,14 +229,14 @@ export const useCaver = () => {
     }
   };
 
-  const getPhaseInfo = async (phase: number): Promise<IPhaseInfo | null> => {
-    if (!caver || !nftContract) return null;
+  const getPhaseInfo = async (phase: number): Promise<IPhaseInfo> => {
+    if (!caver || !nftContract) return phaseInfoObj;
     try {
       const response = await nftContract.methods._phaseInfo(phase).call();
       return response as IPhaseInfo;
     } catch (error) {
       console.error(error);
-      return null;
+      return phaseInfoObj;
     }
   };
 
