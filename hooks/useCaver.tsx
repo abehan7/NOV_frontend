@@ -228,11 +228,10 @@ export const useCaver = () => {
     }
   };
 
-  const getPhaseInfo = async (): Promise<IPhaseInfo | null> => {
+  const getPhaseInfo = async (phase: number): Promise<IPhaseInfo | null> => {
     if (!caver || !nftContract) return null;
     try {
-      const response = await nftContract.methods.phaseInfo(1).call();
-      // console.log(response);
+      const response = await nftContract.methods._phaseInfo(phase).call();
       return response as IPhaseInfo;
     } catch (error) {
       console.error(error);
@@ -240,10 +239,10 @@ export const useCaver = () => {
     }
   };
 
-  const getPresaleClaimedByPhase = (phase: number, wallet: string) => {
+  const getPresaleClaimedByPhase = async (phase: number, wallet: string) => {
     if (!caver || !nftContract) return 0;
     try {
-      const response = nftContract.methods
+      const response = await nftContract.methods
         ._presaleClaimedByPhase(phase, wallet)
         .call();
       return response;
@@ -253,11 +252,10 @@ export const useCaver = () => {
     }
   };
 
-  const getPublicClaimedByPhase = (phase: number, wallet: string) => {
+  const getPublicClaimedByPhase = async (phase: number, wallet: string) => {
     if (!caver || !nftContract) return 0;
     try {
-      const response = nftContract.methods
-
+      const response = await nftContract.methods
         ._publicSaleClaimedByPhase(phase, wallet)
         .call();
       return response;

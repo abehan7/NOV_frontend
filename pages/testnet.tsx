@@ -12,8 +12,14 @@ import useProgressBar from "../hooks/useProgressBar";
 import { media, theme } from "../styles/theme";
 import { PageSection, Wrapper } from "../components/common/styles/page";
 import NoticeBanner from "../components/layout/NoticeBanner";
+import { IPhaseInfo } from "../interfaces";
 // TODO: detect network
 // TODO: detect kaikas extension
+// TODO: 블록 차면 풀리게하기 테스팅
+// TODO: 소켓으로 실시간으로 민팅 수 올라가게 하기
+// TODO: 민팅 하면 전체 totalsupply 업데이트 하기 done
+// TODO: 본인이 민팅한 업데이트하기
+// TODO: 트랜젝션 결과 보여주기
 
 const Home: NextPage = () => {
   const getAccount = useAccount()?.getAccount;
@@ -35,6 +41,7 @@ const Home: NextPage = () => {
     getIsValidMerkleProof,
     getPresaleClaimedByPhase,
     getPublicClaimedByPhase,
+    getPhaseInfo,
   } = useCaver();
   const [percent, setPercent] = useState<number>(0);
   const [currentBlock, setCurrentBlock] = useState<number>(89090290);
@@ -52,6 +59,12 @@ const Home: NextPage = () => {
   const [isAccountLoading, setIsAccountLoading] = useState<boolean>(false);
   const [presaleClaimedByPhase, setPresaleClaimedByPhase] = useState<number>(0);
   const [publicClaimedByPhase, setPublicClaimedByPhase] = useState<number>(0);
+  const [phaseInfo, setPhaseInfo] = useState<IPhaseInfo>({
+    phase: 1,
+    phaseMaxSupply: 0,
+    publicSalePrice: 0,
+    presalePrice: 0,
+  });
   const progressBarRef = useRef<HTMLDivElement | null>(null);
   // publicSaleMint
   const onClickPresaleMint = async () => {
@@ -68,7 +81,9 @@ const Home: NextPage = () => {
       // 트랜젝션 정보 가지고오기
       // 이거는 일단 임시방편
       // TODO: 웹소켓 달기
-      success && setTotalSupply(await getTotalSupply());
+      if (!success) return;
+      setTotalSupply(await getTotalSupply());
+      setPresaleClaimedByPhase(await getPresaleClaimedByPhase(1, account));
     } catch (error) {
       console.error(error);
       setIsMinting(false);
@@ -88,7 +103,9 @@ const Home: NextPage = () => {
       // 트랜젝션 정보 가지고오기
       // 이거는 일단 임시방편
       // TODO: 웹소켓 달기
-      success && setTotalSupply(await getTotalSupply());
+      if (!success) return;
+      setTotalSupply(await getTotalSupply());
+      setPublicClaimedByPhase(await getPublicClaimedByPhase(1, account));
     } catch (error) {
       console.error(error);
       setIsMinting(false);
@@ -109,6 +126,7 @@ const Home: NextPage = () => {
       setPresaleBlockNum(await getPresaleBlockNum());
       setPublicBlockNum(await getPublicBlockNum());
       setMaxSupply(await getMaxSupply());
+      setPhaseInfo(await getPhaseInfo(1));
       // setIsWhitelisted(await getIsValidMerkleProof(account));
     };
     if (!caver || !nftContract) return;
@@ -122,7 +140,10 @@ const Home: NextPage = () => {
       setIsWhitelisted(await getIsValidMerkleProof(account));
       setPresaleClaimedByPhase(await getPresaleClaimedByPhase(1, account));
       setPublicClaimedByPhase(await getPublicClaimedByPhase(1, account));
-      setIsAccountLoading(true);
+
+      setTimeout(() => {
+        setIsAccountLoading(true);
+      }, 1000);
       //       getPresaleClaimedByPhase
       // getPublicClaimedByPhase
     };
@@ -156,24 +177,47 @@ const Home: NextPage = () => {
     // setPresaleM
 
     const presaleMintable = presaleBlockNum <= currentBlock && presaleM;
+    const publicMintable = publicBlockNum <= currentBlock && publicM;
+
     const presaleClaimed = presaleClaimedByPhase >= 2;
     const publicClaimed = publicClaimedByPhase > 0;
     // publicClaimedByPhase
-    const publicMintable = publicBlockNum <= currentBlock && publicM;
-    const maxSupplyExceed = maxSupply - totalSupply > 0;
-    // const isWhitelisted = await getIsValidMerkleProof(account);
+    const maxSupplyExceed = maxSupply - totalSupply <= 0;
+    const maxSupplyExceedByPhase =
+      Number(phaseInfo.phaseMaxSupply) - totalSupply <= 0;
+    // console.log(totalSupply);
+    // console.log("phaseInfo", phaseInfo);
 
     const isNotMintable =
       isPaused ||
       currentBlock === 0 ||
       !(presaleMintable || publicMintable) ||
-      !maxSupplyExceed;
+      !maxSupplyExceed ||
+      !maxSupplyExceedByPhase;
 
     // when use didn't connect to klaytn wallet don't show mint button
     if (!account) return <Button onClick={getAccount}>connect wallet</Button>;
 
     if (!isAccountLoading) return <Button disabled={true}>disabled</Button>;
     if (!presaleM && !publicM) return <Button disabled={true}>disabled</Button>;
+
+    if (maxSupplyExceed || maxSupplyExceedByPhase)
+      return <Button disabled={true}>sold out</Button>;
+    // when user connected and is not minting and isNotMintable
+    if (account && !isMinting && isNotMintable)
+      return (
+        <Button disabled={true}>
+          {isPaused && "Paused"}
+
+          {!isPaused && !presaleMintable && publicMintable && "public minting"}
+          {!isPaused &&
+            !publicMintable &&
+            presaleMintable &&
+            "whitelist minting"}
+
+          {/* disabled */}
+        </Button>
+      );
 
     if (account && !isMinting && presaleM && presaleClaimed)
       return (
@@ -189,16 +233,6 @@ const Home: NextPage = () => {
         </Button>
       );
 
-    // when user connected and is not minting and isNotMintable
-    if (account && !isMinting && isNotMintable)
-      return (
-        <Button disabled={true}>
-          {isPaused && "Paused"}
-          {!isPaused &&
-            (!presaleMintable ? "whitelist minting" : "public minting")}
-          {/* disabled */}
-        </Button>
-      );
     // when user connected and is not minting and Mintable
     if (account && !isMinting && !isNotMintable && presaleMintable)
       return isWhitelisted ? (
