@@ -2304,6 +2304,7 @@ export const config = {
   presaleMaxMintAmount: 2,
   price: 0,
   maxMintSupply: 5000,
+  currentPhase: 1,
 };
 
 export const testnetConfig = {

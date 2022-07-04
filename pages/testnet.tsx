@@ -73,13 +73,17 @@ const Home: NextPage = () => {
       setIsMinting(true);
       const { status, success } = await presaleMint(merkleProof);
       console.log(status, success);
-      setIsMinting(false);
+      setTimeout(() => {
+        setIsMinting(false);
+      }, 1000);
       // 트랜젝션 정보 가지고오기
       // 이거는 일단 임시방편
       // TODO: 웹소켓 달기
       if (!success) return;
       setTotalSupply(await getTotalSupply());
-      setPresaleClaimedByPhase(await getPresaleClaimedByPhase(1, account));
+      setPresaleClaimedByPhase(
+        await getPresaleClaimedByPhase(config.currentPhase, account)
+      );
     } catch (error) {
       console.error(error);
       setIsMinting(false);
@@ -101,7 +105,9 @@ const Home: NextPage = () => {
       // TODO: 웹소켓 달기
       if (!success) return;
       setTotalSupply(await getTotalSupply());
-      setPublicClaimedByPhase(await getPublicClaimedByPhase(1, account));
+      setPublicClaimedByPhase(
+        await getPublicClaimedByPhase(config.currentPhase, account)
+      );
     } catch (error) {
       console.error(error);
       setIsMinting(false);
@@ -122,7 +128,7 @@ const Home: NextPage = () => {
       setPresaleBlockNum(await getPresaleBlockNum());
       setPublicBlockNum(await getPublicBlockNum());
       setMaxSupply(await getMaxSupply());
-      setPhaseInfo(await getPhaseInfo(1));
+      setPhaseInfo(await getPhaseInfo(config.currentPhase));
       // setIsWhitelisted(await getIsValidMerkleProof(account));
     };
     if (!caver || !nftContract) return;
@@ -134,8 +140,12 @@ const Home: NextPage = () => {
     const init = async () => {
       if (!caver || !nftContract || !account) return;
       setIsWhitelisted(await getIsValidMerkleProof(account));
-      setPresaleClaimedByPhase(await getPresaleClaimedByPhase(1, account));
-      setPublicClaimedByPhase(await getPublicClaimedByPhase(1, account));
+      setPresaleClaimedByPhase(
+        await getPresaleClaimedByPhase(config.currentPhase, account)
+      );
+      setPublicClaimedByPhase(
+        await getPublicClaimedByPhase(config.currentPhase, account)
+      );
 
       setTimeout(() => {
         setIsAccountLoading(true);
@@ -155,6 +165,7 @@ const Home: NextPage = () => {
   useEffect(() => {
     const timer = setInterval(async () => {
       setCurrentBlock(await getCurrentBlock());
+      setTotalSupply(await getTotalSupply());
     }, 1000);
     return () => {
       clearInterval(timer);
