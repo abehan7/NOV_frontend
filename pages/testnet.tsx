@@ -203,6 +203,7 @@ const Home: NextPage = () => {
       maxSupplyExceedByPhase;
 
     // when use didn't connect to klaytn wallet don't show mint button
+
     if (!account) return <Button onClick={getAccount}>connect wallet</Button>;
 
     if (!isAccountLoading) return <Button disabled={true}>disabled</Button>;

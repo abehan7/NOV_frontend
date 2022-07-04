@@ -1,7 +1,7 @@
 import { AbiItem } from "caver-js";
 
 export const NFT_CONTRACT_ADDRESS =
-  "0x94d678A739C0fF5d2024eA79AA77eE86e028A96A";
+  "0x0A737786B3583F16749b3c629FE4426ffc8B41d5";
 
 export const NFT_CONTRACT_ABI: AbiItem[] = [
   {
@@ -2304,7 +2304,7 @@ export const config = {
   presaleMaxMintAmount: 2,
   price: 0,
   maxMintSupply: 5000,
-  currentPhase: 1,
+  currentPhase: 2,
 };
 
 export const testnetConfig = {
