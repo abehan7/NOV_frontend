@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import { useEffect, useRef, useState } from "react";
 import styled, { css } from "styled-components";
-import { config } from "../caverConfig";
+import { testnetConfig } from "../caverConfig";
 import AutoHeightImage from "../components/common/AutoHeightImage";
 import CubeComponent from "../components/mint/CubeComponent";
 import { setNumberDot } from "../utils/common";
@@ -25,7 +25,7 @@ import Toast from "../components/common/Toast";
 // TODO: 본인이 민팅한 업데이트하기
 // TODO: 트랜젝션 결과 보여주기
 
-const Home: NextPage = () => {
+const Testnet: NextPage = () => {
   const getAccount = useAccount()?.getAccount;
   const account = useAccount()?.account;
   const {
@@ -101,7 +101,7 @@ const Home: NextPage = () => {
       if (!success) return;
       setTotalSupply(await getTotalSupply());
       setPresaleClaimedByPhase(
-        await getPresaleClaimedByPhase(config.currentPhase, account)
+        await getPresaleClaimedByPhase(testnetConfig.currentPhase, account)
       );
     } catch (error) {
       console.error(error);
@@ -127,7 +127,7 @@ const Home: NextPage = () => {
       if (!success) return;
       setTotalSupply(await getTotalSupply());
       setPublicClaimedByPhase(
-        await getPublicClaimedByPhase(config.currentPhase, account)
+        await getPublicClaimedByPhase(testnetConfig.currentPhase, account)
       );
     } catch (error) {
       console.error(error);
@@ -149,7 +149,7 @@ const Home: NextPage = () => {
       setPresaleBlockNum(await getPresaleBlockNum());
       setPublicBlockNum(await getPublicBlockNum());
       setMaxSupply(await getMaxSupply());
-      setPhaseInfo(await getPhaseInfo(config.currentPhase));
+      setPhaseInfo(await getPhaseInfo(testnetConfig.currentPhase));
       // setIsWhitelisted(await getIsValidMerkleProof(account));
     };
     if (!caver || !nftContract) return;
@@ -162,10 +162,10 @@ const Home: NextPage = () => {
       if (!caver || !nftContract || !account) return;
       setIsWhitelisted(await getIsValidMerkleProof(account));
       setPresaleClaimedByPhase(
-        await getPresaleClaimedByPhase(config.currentPhase, account)
+        await getPresaleClaimedByPhase(testnetConfig.currentPhase, account)
       );
       setPublicClaimedByPhase(
-        await getPublicClaimedByPhase(config.currentPhase, account)
+        await getPublicClaimedByPhase(testnetConfig.currentPhase, account)
       );
 
       setTimeout(() => {
@@ -179,7 +179,8 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     totalSupply === 0 && setPercent(0);
-    totalSupply !== 0 && setPercent((totalSupply / config.maxMintSupply) * 100);
+    totalSupply !== 0 &&
+      setPercent((totalSupply / testnetConfig.maxMintSupply) * 100);
     // console.log(totalSupply);
   }, [totalSupply]);
 
@@ -370,7 +371,7 @@ const Home: NextPage = () => {
                   <span>Remaining NFTS</span>
                   <span>
                     <span className="color__primary">{totalSupply}</span> /{" "}
-                    {setNumberDot(config.maxMintSupply)}
+                    {setNumberDot(testnetConfig.maxMintSupply)}
                   </span>
                 </div>
                 <Bar
@@ -417,7 +418,7 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default Testnet;
 
 const WrapperEl = styled(Wrapper)`
   ${media[1200]} {

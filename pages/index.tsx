@@ -12,39 +12,123 @@ import useProgressBar from "../hooks/useProgressBar";
 import { media, theme } from "../styles/theme";
 import { PageSection, Wrapper } from "../components/common/styles/page";
 import NoticeBanner from "../components/layout/NoticeBanner";
+import { IMintingTxInfo, IPhaseInfo } from "../interfaces";
+import { phaseInfoObj } from "../object";
+import { AnimatePresence } from "framer-motion";
+
+import Toast from "../components/common/Toast";
 // TODO: detect network
 // TODO: detect kaikas extension
+// TODO: 블록 차면 풀리게하기 테스팅
+// TODO: 소켓으로 실시간으로 민팅 수 올라가게 하기
+// TODO: 민팅 하면 전체 totalsupply 업데이트 하기 done
+// TODO: 본인이 민팅한 업데이트하기
+// TODO: 트랜젝션 결과 보여주기
 
 const Home: NextPage = () => {
   const getAccount = useAccount()?.getAccount;
   const account = useAccount()?.account;
   const {
+    caver,
+    nftContract,
     presaleMint,
+    publicSaleMint,
     getCurrentBlock,
     getIsPaused,
     getMintingBlockNumber,
     getTotalSupply,
+    getPublicM,
+    getPresaleM,
+    getPresaleBlockNum,
+    getPublicBlockNum,
+    getMaxSupply,
+    getIsValidMerkleProof,
+    getPresaleClaimedByPhase,
+    getPublicClaimedByPhase,
+    getPhaseInfo,
   } = useCaver();
   const [percent, setPercent] = useState<number>(0);
   const [currentBlock, setCurrentBlock] = useState<number>(89090290);
   const [totalSupply, setTotalSupply] = useState<number>(0);
   const [isPaused, setIsPaused] = useState<boolean>(false);
   const [isMinting, setIsMinting] = useState<boolean>(false);
-  const [mintingBlockNumber, setMintingBlockNumber] = useState<number>(0);
+  // const [mintingBlockNumber, setMintingBlockNumber] = useState<number>(0);
+  const [publicM, setPublicM] = useState<boolean>(false);
+  const [presaleM, setPresaleM] = useState<boolean>(false);
+  const [presaleBlockNum, setPresaleBlockNum] = useState<number>(0);
+  const [publicBlockNum, setPublicBlockNum] = useState<number>(0);
+  const [maxSupply, setMaxSupply] = useState<number>(0);
+  const [isWhitelisted, setIsWhitelisted] = useState<boolean>(false);
+
+  const [isAccountLoading, setIsAccountLoading] = useState<boolean>(false);
+  const [presaleClaimedByPhase, setPresaleClaimedByPhase] = useState<number>(0);
+  const [publicClaimedByPhase, setPublicClaimedByPhase] = useState<number>(0);
+  const [phaseInfo, setPhaseInfo] = useState<IPhaseInfo>(phaseInfoObj);
   const progressBarRef = useRef<HTMLDivElement | null>(null);
 
-  const onClickMint = async () => {
+  const [mintingTxInfo, setMintingTxInfo] = useState<IMintingTxInfo | null>(
+    null
+  );
+
+  const getMintingBlock = (): number => {
+    if (!presaleM && !publicM) return presaleBlockNum;
+    if (publicM) return publicBlockNum;
+    if (presaleM) return presaleBlockNum;
+    return 0;
+  };
+
+  const handleCloseModal = () => {
+    setMintingTxInfo(null);
+  };
+  // publicSaleMint
+  const onClickPresaleMint = async () => {
+    // 여기에서 1차적으로 blocknumber 안됐는지 체킹하고 막기
+    // 그리고 alert 보여주기
+
     if (!account) return;
     const merkleProof = await getMerkleProof(account);
     try {
       setIsMinting(true);
       const { status, success } = await presaleMint(merkleProof);
       console.log(status, success);
+      setMintingTxInfo({ status, success });
+      setTimeout(() => {
+        setIsMinting(false);
+      }, 1000);
+      // 트랜젝션 정보 가지고오기
+      // 이거는 일단 임시방편
+      // TODO: 웹소켓 달기
+      if (!success) return;
+      setTotalSupply(await getTotalSupply());
+      setPresaleClaimedByPhase(
+        await getPresaleClaimedByPhase(config.currentPhase, account)
+      );
+    } catch (error) {
+      console.error(error);
+      setIsMinting(false);
+    }
+  };
+
+  const onClickPublicMint = async () => {
+    // 여기에서 1차적으로 blocknumber 안됐는지 체킹하고 막기
+    // 그리고 alert 보여주기
+
+    if (!account) return;
+    try {
+      setIsMinting(true);
+      const { status, success } = await publicSaleMint();
+      console.log(status, success);
+      setMintingTxInfo({ status, success });
+
       setIsMinting(false);
       // 트랜젝션 정보 가지고오기
       // 이거는 일단 임시방편
       // TODO: 웹소켓 달기
-      success && setTotalSupply(await getTotalSupply());
+      if (!success) return;
+      setTotalSupply(await getTotalSupply());
+      setPublicClaimedByPhase(
+        await getPublicClaimedByPhase(config.currentPhase, account)
+      );
     } catch (error) {
       console.error(error);
       setIsMinting(false);
@@ -55,13 +139,43 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     const init = async () => {
+      if (!caver || !nftContract) return;
       setCurrentBlock(await getCurrentBlock());
       setIsPaused(await getIsPaused());
       setTotalSupply(await getTotalSupply());
-      setMintingBlockNumber(await getMintingBlockNumber());
+      // setMintingBlockNumber(await getMintingBlockNumber());
+      setPublicM(await getPublicM());
+      setPresaleM(await getPresaleM());
+      setPresaleBlockNum(await getPresaleBlockNum());
+      setPublicBlockNum(await getPublicBlockNum());
+      setMaxSupply(await getMaxSupply());
+      setPhaseInfo(await getPhaseInfo(config.currentPhase));
+      // setIsWhitelisted(await getIsValidMerkleProof(account));
+    };
+    if (!caver || !nftContract) return;
+    init();
+  }, [caver, nftContract, account]);
+
+  useEffect(() => {
+    if (!caver || !nftContract || !account) return;
+    const init = async () => {
+      if (!caver || !nftContract || !account) return;
+      setIsWhitelisted(await getIsValidMerkleProof(account));
+      setPresaleClaimedByPhase(
+        await getPresaleClaimedByPhase(config.currentPhase, account)
+      );
+      setPublicClaimedByPhase(
+        await getPublicClaimedByPhase(config.currentPhase, account)
+      );
+
+      setTimeout(() => {
+        setIsAccountLoading(true);
+      }, 1000);
+      //       getPresaleClaimedByPhase
+      // getPublicClaimedByPhase
     };
     init();
-  }, []);
+  }, [caver, nftContract, account]);
 
   useEffect(() => {
     totalSupply === 0 && setPercent(0);
@@ -72,23 +186,92 @@ const Home: NextPage = () => {
   useEffect(() => {
     const timer = setInterval(async () => {
       setCurrentBlock(await getCurrentBlock());
+      setTotalSupply(await getTotalSupply());
     }, 1000);
     return () => {
       clearInterval(timer);
     };
   }, [currentBlock]);
 
+  // useEffect(() => {
+  // presaleBlockNum
+  // publicBlockNum
+  // console.log("presaleBlockNum", presaleBlockNum);
+  // console.log("presaleM", presaleM);
+  // }, [presaleBlockNum]);
+
   const MintButtonComponent = () => {
+    // setPublicM
+    // setPresaleM
+
+    const presaleMintable = presaleBlockNum <= currentBlock && presaleM;
+    const publicMintable = publicBlockNum <= currentBlock && publicM;
+
+    const presaleClaimed = presaleClaimedByPhase > 0;
+    const publicClaimed = publicClaimedByPhase > 0;
+    // publicClaimedByPhase
+    const maxSupplyExceed = maxSupply - totalSupply <= 0;
+    const maxSupplyExceedByPhase =
+      Number(phaseInfo.phaseMaxSupply) - totalSupply <= 0;
+    // console.log(totalSupply);
+    // console.log("phaseInfo", phaseInfo);
+
     const isNotMintable =
-      isPaused || mintingBlockNumber < currentBlock || currentBlock === 0;
+      isPaused ||
+      currentBlock === 0 ||
+      !(presaleMintable || publicMintable) ||
+      maxSupplyExceed ||
+      maxSupplyExceedByPhase;
+
     // when use didn't connect to klaytn wallet don't show mint button
+
     if (!account) return <Button onClick={getAccount}>connect wallet</Button>;
+
+    if (!isAccountLoading) return <Button disabled={true}>disabled</Button>;
+    if (!presaleM && !publicM) return <Button disabled={true}>disabled</Button>;
+
+    if (maxSupplyExceed || maxSupplyExceedByPhase)
+      return <Button disabled={true}>sold out</Button>;
     // when user connected and is not minting and isNotMintable
     if (account && !isMinting && isNotMintable)
-      return <Button disabled={true}>disabled</Button>;
+      return (
+        <Button disabled={true}>
+          {isPaused && "Paused"}
+          {!isPaused && presaleM && !presaleMintable && "whitelist minting"}
+          {!isPaused && publicM && !publicMintable && "public minting"}
+
+          {/* {!isPaused && !presaleMintable && publicMintable && "public minting"} */}
+
+          {/* disabled */}
+        </Button>
+      );
+
+    if (account && !isMinting && presaleM && presaleClaimed)
+      return (
+        <Button disabled={true}>
+          you already claimed {presaleClaimedByPhase} tokens
+        </Button>
+      );
+
+    if (account && !isMinting && publicM && publicClaimed)
+      return (
+        <Button disabled={true}>
+          you already claimed {publicClaimedByPhase} token
+        </Button>
+      );
+
     // when user connected and is not minting and Mintable
-    if (account && !isMinting && !isNotMintable)
-      return <Button onClick={onClickMint}>minting</Button>;
+    if (account && !isMinting && !isNotMintable && presaleMintable)
+      return isWhitelisted ? (
+        <Button onClick={onClickPresaleMint}>whitelist minting</Button>
+      ) : (
+        <Button onClick={() => {}} disabled={true}>
+          you&apos;re not whitelisted
+        </Button>
+      );
+
+    if (account && !isMinting && !isNotMintable && publicM)
+      return <Button onClick={onClickPublicMint}>public minting</Button>;
     //when user is minting nft
     if (account && isMinting)
       return <Button disabled={true}>on process</Button>;
@@ -96,6 +279,12 @@ const Home: NextPage = () => {
 
   return (
     <SectionEl>
+      {/* 여기서 트랜젝션 보여주기 */}
+      <AnimatePresence>
+        {mintingTxInfo && (
+          <Toast handleClose={handleCloseModal}>{mintingTxInfo?.status}</Toast>
+        )}
+      </AnimatePresence>
       <WrapperEl>
         {/* left */}
         <Container className="item1">
@@ -148,7 +337,7 @@ const Home: NextPage = () => {
                 desc="#89090290"
                 highlight={true}
                 cssBarName="--minting--block--num"
-                blockNumber={1000000000}
+                blockNumber={getMintingBlock()}
               />
 
               <CubeComponent
@@ -369,6 +558,7 @@ export const Bar = styled.div<{ percent: number }>`
     display: flex;
     align-items: center;
     justify-content: flex-start;
+    overflow: hidden;
 
     ::before {
       content: "";
@@ -392,7 +582,6 @@ const Sticker = styled.div<{ x: string; y: string; t: string; l: string }>`
   position: absolute;
   width: 5.8125rem;
   height: 5px;
-
   background: rgba(255, 255, 255, 0.8);
 
   ${({ x, y, t, l }) => css`

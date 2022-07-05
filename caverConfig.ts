@@ -2313,5 +2313,6 @@ export const testnetConfig = {
   maxMintAmount: 1,
   presaleMaxMintAmount: 1,
   price: 0,
-  maxMintSupply: 5000,
+  maxMintSupply: 10,
+  currentPhase: 1,
 };
