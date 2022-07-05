@@ -70,6 +70,13 @@ const Home: NextPage = () => {
     null
   );
 
+  const getMintingBlock = (): number => {
+    if (!presaleM && !publicM) return presaleBlockNum;
+    if (publicM) return publicBlockNum;
+    if (presaleM) return presaleBlockNum;
+    return 0;
+  };
+
   const handleCloseModal = () => {
     setMintingTxInfo(null);
   };
@@ -200,7 +207,7 @@ const Home: NextPage = () => {
     const presaleMintable = presaleBlockNum <= currentBlock && presaleM;
     const publicMintable = publicBlockNum <= currentBlock && publicM;
 
-    const presaleClaimed = presaleClaimedByPhase >= 2;
+    const presaleClaimed = presaleClaimedByPhase > 0;
     const publicClaimed = publicClaimedByPhase > 0;
     // publicClaimedByPhase
     const maxSupplyExceed = maxSupply - totalSupply <= 0;
@@ -330,7 +337,7 @@ const Home: NextPage = () => {
                 desc="#89090290"
                 highlight={true}
                 cssBarName="--minting--block--num"
-                blockNumber={presaleBlockNum}
+                blockNumber={getMintingBlock()}
               />
 
               <CubeComponent
