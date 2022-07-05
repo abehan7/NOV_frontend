@@ -2303,7 +2303,7 @@ export const config = {
   maxMintAmount: 1,
   presaleMaxMintAmount: 1,
   price: 0,
-  maxMintSupply: 10,
+  maxMintSupply: 5000,
   currentPhase: 1,
 };
 
