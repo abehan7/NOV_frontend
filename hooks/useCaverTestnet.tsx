@@ -1,6 +1,6 @@
 import Caver, { Contract } from "caver-js";
 import { ReactNode, useEffect, useState } from "react";
-import { NFT_CONTRACT_ADDRESS, NFT_CONTRACT_ABI } from "../caverConfig";
+import { testnetConfig } from "../caverConfig";
 import { IPhaseInfo, ITxInfo } from "../interfaces";
 import { phaseInfoObj } from "../object";
 import { getMerkleProof } from "../utils/merkleTree";
@@ -28,7 +28,7 @@ export const useCaver = () => {
     const tx = {
       type: "SMART_CONTRACT_EXECUTION",
       from: account,
-      to: NFT_CONTRACT_ADDRESS,
+      to: testnetConfig.NFT_CONTRACT_ADDRESS_TESTNET,
       value: 0,
       gas: "3000000",
       data: nftContract.methods.presaleMint(merkleProof).encodeABI(),
@@ -76,7 +76,7 @@ export const useCaver = () => {
     const tx = {
       type: "SMART_CONTRACT_EXECUTION",
       from: account,
-      to: NFT_CONTRACT_ADDRESS,
+      to: testnetConfig.NFT_CONTRACT_ADDRESS_TESTNET,
       value: 0,
       gas: "3000000",
       data: nftContract.methods.publicSaleMint().encodeABI(),
@@ -277,7 +277,10 @@ export const useCaver = () => {
     if (!caver) return;
 
     setNftContract(
-      caver.contract.create(NFT_CONTRACT_ABI, NFT_CONTRACT_ADDRESS)
+      caver.contract.create(
+        testnetConfig.NFT_CONTRACT_ABI_TESTNET,
+        testnetConfig.NFT_CONTRACT_ADDRESS_TESTNET
+      )
     );
   }, [caver]);
 

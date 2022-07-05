@@ -1152,27 +1152,9 @@ export const NFT_CONTRACT_ABI: AbiItem[] = [
 ];
 
 export const NFT_CONTRACT_ADDRESS_TESTNET =
-  "0xE9C933392066414Ab66acb0dd8DbA1fCeC04b6f3";
+  "0x2d340Fa5ECAdB76eab2cF8cb17c102Ba5680Ac76";
 
 export const NFT_CONTRACT_ABI_TESTNET: AbiItem[] = [
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "_mintAmount",
-        type: "uint256",
-      },
-      {
-        internalType: "address",
-        name: "_to",
-        type: "address",
-      },
-    ],
-    name: "airdrop",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
   {
     inputs: [],
     stateMutability: "nonpayable",
@@ -1187,24 +1169,6 @@ export const NFT_CONTRACT_ABI_TESTNET: AbiItem[] = [
     inputs: [],
     name: "ApprovalQueryForNonexistentToken",
     type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "to",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "tokenId",
-        type: "uint256",
-      },
-    ],
-    name: "approve",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
   },
   {
     inputs: [],
@@ -1367,280 +1331,6 @@ export const NFT_CONTRACT_ABI_TESTNET: AbiItem[] = [
     type: "event",
   },
   {
-    inputs: [
-      {
-        internalType: "bytes32[]",
-        name: "_proof",
-        type: "bytes32[]",
-      },
-    ],
-    name: "presaleMint",
-    outputs: [],
-    stateMutability: "payable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "publicSaleMint",
-    outputs: [],
-    stateMutability: "payable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "renounceOwnership",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "from",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "to",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "tokenId",
-        type: "uint256",
-      },
-    ],
-    name: "safeTransferFrom",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "from",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "to",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "tokenId",
-        type: "uint256",
-      },
-      {
-        internalType: "bytes",
-        name: "_data",
-        type: "bytes",
-      },
-    ],
-    name: "safeTransferFrom",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "operator",
-        type: "address",
-      },
-      {
-        internalType: "bool",
-        name: "approved",
-        type: "bool",
-      },
-    ],
-    name: "setApprovalForAll",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "_currentPhase",
-        type: "uint256",
-      },
-    ],
-    name: "setCurrentPhase",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "_maxMintAmountPerWallet",
-        type: "uint256",
-      },
-    ],
-    name: "setMaxPresaleMintAmountPerWallet",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "_maxMintAmountPerWallet",
-        type: "uint256",
-      },
-    ],
-    name: "setMaxPublicMintAmountPerWallet",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "_maxSupply",
-        type: "uint256",
-      },
-    ],
-    name: "setMaxSupply",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bytes32",
-        name: "_merkleroot",
-        type: "bytes32",
-      },
-    ],
-    name: "setMerkleRoot",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "string",
-        name: "_notRevealedURI",
-        type: "string",
-      },
-    ],
-    name: "setNotRevealedURI",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "_phase",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "_phaseMaxSupply",
-        type: "uint256",
-      },
-      {
-        internalType: "string",
-        name: "_tokenURI",
-        type: "string",
-      },
-      {
-        internalType: "uint256",
-        name: "_publicSalePriceForKlay",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "_presalePriceForKlay",
-        type: "uint256",
-      },
-    ],
-    name: "setPhaseInfo",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "_presaleBlockNum",
-        type: "uint256",
-      },
-    ],
-    name: "setPresaleBlockNum",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "_publicBlockNum",
-        type: "uint256",
-      },
-    ],
-    name: "setPublicBlockNum",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "_totalPhaseNumber",
-        type: "uint256",
-      },
-    ],
-    name: "setTotalPhaseNumber",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "togglePause",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "togglePresale",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "togglePublicSale",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "toggleReveal",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
     anonymous: false,
     inputs: [
       {
@@ -1664,49 +1354,6 @@ export const NFT_CONTRACT_ABI_TESTNET: AbiItem[] = [
     ],
     name: "Transfer",
     type: "event",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "from",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "to",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "tokenId",
-        type: "uint256",
-      },
-    ],
-    name: "transferFrom",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "newOwner",
-        type: "address",
-      },
-    ],
-    name: "transferOwnership",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "withdraw",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
   },
   {
     inputs: [
@@ -1798,6 +1445,42 @@ export const NFT_CONTRACT_ABI_TESTNET: AbiItem[] = [
   {
     inputs: [
       {
+        internalType: "uint256",
+        name: "_mintAmount",
+        type: "uint256",
+      },
+      {
+        internalType: "address",
+        name: "_to",
+        type: "address",
+      },
+    ],
+    name: "airdrop",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "to",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "tokenId",
+        type: "uint256",
+      },
+    ],
+    name: "approve",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "address",
         name: "owner",
         type: "address",
@@ -1878,6 +1561,11 @@ export const NFT_CONTRACT_ABI_TESTNET: AbiItem[] = [
         internalType: "bytes32[]",
         name: "_merkleProof",
         type: "bytes32[]",
+      },
+      {
+        internalType: "address",
+        name: "_wallet",
+        type: "address",
       },
     ],
     name: "getIsValidMerkleProof",
@@ -2180,6 +1868,19 @@ export const NFT_CONTRACT_ABI_TESTNET: AbiItem[] = [
     type: "function",
   },
   {
+    inputs: [
+      {
+        internalType: "bytes32[]",
+        name: "_proof",
+        type: "bytes32[]",
+      },
+    ],
+    name: "presaleMint",
+    outputs: [],
+    stateMutability: "payable",
+    type: "function",
+  },
+  {
     inputs: [],
     name: "publicBlockNum",
     outputs: [
@@ -2207,6 +1908,20 @@ export const NFT_CONTRACT_ABI_TESTNET: AbiItem[] = [
   },
   {
     inputs: [],
+    name: "publicSaleMint",
+    outputs: [],
+    stateMutability: "payable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "renounceOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
     name: "revealed",
     outputs: [
       {
@@ -2216,6 +1931,225 @@ export const NFT_CONTRACT_ABI_TESTNET: AbiItem[] = [
       },
     ],
     stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "from",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "to",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "tokenId",
+        type: "uint256",
+      },
+    ],
+    name: "safeTransferFrom",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "from",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "to",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "tokenId",
+        type: "uint256",
+      },
+      {
+        internalType: "bytes",
+        name: "_data",
+        type: "bytes",
+      },
+    ],
+    name: "safeTransferFrom",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "operator",
+        type: "address",
+      },
+      {
+        internalType: "bool",
+        name: "approved",
+        type: "bool",
+      },
+    ],
+    name: "setApprovalForAll",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_currentPhase",
+        type: "uint256",
+      },
+    ],
+    name: "setCurrentPhase",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_maxMintAmountPerWallet",
+        type: "uint256",
+      },
+    ],
+    name: "setMaxPresaleMintAmountPerWallet",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_maxMintAmountPerWallet",
+        type: "uint256",
+      },
+    ],
+    name: "setMaxPublicMintAmountPerWallet",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_maxSupply",
+        type: "uint256",
+      },
+    ],
+    name: "setMaxSupply",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "_merkleroot",
+        type: "bytes32",
+      },
+    ],
+    name: "setMerkleRoot",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "string",
+        name: "_notRevealedURI",
+        type: "string",
+      },
+    ],
+    name: "setNotRevealedURI",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_phase",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_phaseMaxSupply",
+        type: "uint256",
+      },
+      {
+        internalType: "string",
+        name: "_tokenURI",
+        type: "string",
+      },
+      {
+        internalType: "uint256",
+        name: "_publicSalePriceForKlay",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_presalePriceForKlay",
+        type: "uint256",
+      },
+    ],
+    name: "setPhaseInfo",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_presaleBlockNum",
+        type: "uint256",
+      },
+    ],
+    name: "setPresaleBlockNum",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_publicBlockNum",
+        type: "uint256",
+      },
+    ],
+    name: "setPublicBlockNum",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_totalPhaseNumber",
+        type: "uint256",
+      },
+    ],
+    name: "setTotalPhaseNumber",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
   {
@@ -2248,6 +2182,34 @@ export const NFT_CONTRACT_ABI_TESTNET: AbiItem[] = [
       },
     ],
     stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "togglePause",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "togglePresale",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "togglePublicSale",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "toggleReveal",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
   {
@@ -2293,6 +2255,49 @@ export const NFT_CONTRACT_ABI_TESTNET: AbiItem[] = [
       },
     ],
     stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "from",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "to",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "tokenId",
+        type: "uint256",
+      },
+    ],
+    name: "transferFrom",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "newOwner",
+        type: "address",
+      },
+    ],
+    name: "transferOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "withdraw",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
 ];
