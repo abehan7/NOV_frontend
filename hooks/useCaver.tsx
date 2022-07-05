@@ -48,7 +48,7 @@ export const useCaver = () => {
             target="_blank"
             rel="noreferrer"
           >
-            <p>✅ Check out your transaction on Etherscan:</p>
+            <p>✅ Check out your transaction on Klayscope:</p>
             <p>{`https://baobab.scope.klaytn.com/tx/${txInfo.transactionHash}`}</p>
           </a>
         ),
@@ -96,7 +96,7 @@ export const useCaver = () => {
             target="_blank"
             rel="noreferrer"
           >
-            <p>✅ Check out your transaction on Etherscan:</p>
+            <p>✅ Check out your transaction on Klayscope:</p>
             <p>{`https://baobab.scope.klaytn.com/tx/${txInfo.transactionHash}`}</p>
           </a>
         ),

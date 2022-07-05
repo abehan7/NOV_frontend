@@ -12,8 +12,10 @@ import useProgressBar from "../hooks/useProgressBar";
 import { media, theme } from "../styles/theme";
 import { PageSection, Wrapper } from "../components/common/styles/page";
 import NoticeBanner from "../components/layout/NoticeBanner";
-import { IPhaseInfo } from "../interfaces";
+import { IMintingTxInfo, IPhaseInfo } from "../interfaces";
 import { phaseInfoObj } from "../object";
+import { AnimatePresence } from "framer-motion";
+
 import Toast from "../components/common/Toast";
 // TODO: detect network
 // TODO: detect kaikas extension
@@ -63,6 +65,14 @@ const Home: NextPage = () => {
   const [publicClaimedByPhase, setPublicClaimedByPhase] = useState<number>(0);
   const [phaseInfo, setPhaseInfo] = useState<IPhaseInfo>(phaseInfoObj);
   const progressBarRef = useRef<HTMLDivElement | null>(null);
+
+  const [mintingTxInfo, setMintingTxInfo] = useState<IMintingTxInfo | null>(
+    null
+  );
+
+  const handleCloseModal = () => {
+    setMintingTxInfo(null);
+  };
   // publicSaleMint
   const onClickPresaleMint = async () => {
     // 여기에서 1차적으로 blocknumber 안됐는지 체킹하고 막기
@@ -74,6 +84,7 @@ const Home: NextPage = () => {
       setIsMinting(true);
       const { status, success } = await presaleMint(merkleProof);
       console.log(status, success);
+      setMintingTxInfo({ status, success });
       setTimeout(() => {
         setIsMinting(false);
       }, 1000);
@@ -100,6 +111,8 @@ const Home: NextPage = () => {
       setIsMinting(true);
       const { status, success } = await publicSaleMint();
       console.log(status, success);
+      setMintingTxInfo({ status, success });
+
       setIsMinting(false);
       // 트랜젝션 정보 가지고오기
       // 이거는 일단 임시방편
@@ -260,7 +273,11 @@ const Home: NextPage = () => {
   return (
     <SectionEl>
       {/* 여기서 트랜젝션 보여주기 */}
-      <Toast>go and check your transaction on klayscope</Toast>
+      <AnimatePresence>
+        {mintingTxInfo && (
+          <Toast handleClose={handleCloseModal}>{mintingTxInfo?.status}</Toast>
+        )}
+      </AnimatePresence>
       <WrapperEl>
         {/* left */}
         <Container className="item1">
@@ -558,7 +575,6 @@ const Sticker = styled.div<{ x: string; y: string; t: string; l: string }>`
   position: absolute;
   width: 5.8125rem;
   height: 5px;
-
   background: rgba(255, 255, 255, 0.8);
 
   ${({ x, y, t, l }) => css`

@@ -1,9 +1,9 @@
-import React from "react";
+import { ReactNode } from "react";
 
 export interface IIcon {
   w: number;
   h: number;
-  props: React.ReactNode;
+  props: ReactNode;
 }
 
 export interface IMintStatus {
@@ -78,4 +78,9 @@ export interface ITxInfo {
   type: string;
   typeInt: number;
   value: string;
+}
+
+export interface IMintingTxInfo {
+  status: ReactNode;
+  success: boolean;
 }
