@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import { useEffect, useRef, useState } from "react";
 import styled, { css } from "styled-components";
-import { testnetConfig } from "../caverConfig";
+import { config } from "../caverConfig";
 import AutoHeightImage from "../components/common/AutoHeightImage";
 import CubeComponent from "../components/mint/CubeComponent";
 import { setNumberDot } from "../utils/common";
@@ -101,7 +101,7 @@ const Testnet: NextPage = () => {
       if (!success) return;
       setTotalSupply(await getTotalSupply());
       setPresaleClaimedByPhase(
-        await getPresaleClaimedByPhase(testnetConfig.currentPhase, account)
+        await getPresaleClaimedByPhase(config.currentPhase, account)
       );
     } catch (error) {
       console.error(error);
@@ -127,7 +127,7 @@ const Testnet: NextPage = () => {
       if (!success) return;
       setTotalSupply(await getTotalSupply());
       setPublicClaimedByPhase(
-        await getPublicClaimedByPhase(testnetConfig.currentPhase, account)
+        await getPublicClaimedByPhase(config.currentPhase, account)
       );
     } catch (error) {
       console.error(error);
@@ -149,7 +149,7 @@ const Testnet: NextPage = () => {
       setPresaleBlockNum(await getPresaleBlockNum());
       setPublicBlockNum(await getPublicBlockNum());
       setMaxSupply(await getMaxSupply());
-      setPhaseInfo(await getPhaseInfo(testnetConfig.currentPhase));
+      setPhaseInfo(await getPhaseInfo(config.currentPhase));
       // setIsWhitelisted(await getIsValidMerkleProof(account));
     };
     if (!caver || !nftContract) return;
@@ -162,10 +162,10 @@ const Testnet: NextPage = () => {
       if (!caver || !nftContract || !account) return;
       setIsWhitelisted(await getIsValidMerkleProof(account));
       setPresaleClaimedByPhase(
-        await getPresaleClaimedByPhase(testnetConfig.currentPhase, account)
+        await getPresaleClaimedByPhase(config.currentPhase, account)
       );
       setPublicClaimedByPhase(
-        await getPublicClaimedByPhase(testnetConfig.currentPhase, account)
+        await getPublicClaimedByPhase(config.currentPhase, account)
       );
 
       setTimeout(() => {
@@ -179,8 +179,7 @@ const Testnet: NextPage = () => {
 
   useEffect(() => {
     totalSupply === 0 && setPercent(0);
-    totalSupply !== 0 &&
-      setPercent((totalSupply / testnetConfig.maxMintSupply) * 100);
+    totalSupply !== 0 && setPercent((totalSupply / config.maxMintSupply) * 100);
     // console.log(totalSupply);
   }, [totalSupply]);
 
@@ -238,7 +237,19 @@ const Testnet: NextPage = () => {
       return (
         <Button disabled={true}>
           {isPaused && "Paused"}
-          {!isPaused && presaleM && !presaleMintable && "whitelist minting"}
+
+          {!isPaused &&
+            presaleM &&
+            !presaleMintable &&
+            isWhitelisted &&
+            "whitelist minting"}
+
+          {!isPaused &&
+            presaleM &&
+            !presaleMintable &&
+            !isWhitelisted &&
+            "you're not whitelisted"}
+
           {!isPaused && publicM && !publicMintable && "public minting"}
 
           {/* {!isPaused && !presaleMintable && publicMintable && "public minting"} */}
@@ -371,7 +382,7 @@ const Testnet: NextPage = () => {
                   <span>Remaining NFTS</span>
                   <span>
                     <span className="color__primary">{totalSupply}</span> /{" "}
-                    {setNumberDot(testnetConfig.maxMintSupply)}
+                    {setNumberDot(config.maxMintSupply)}
                   </span>
                 </div>
                 <Bar

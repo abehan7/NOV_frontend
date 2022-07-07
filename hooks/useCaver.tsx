@@ -57,8 +57,9 @@ export const useCaver = () => {
       console.error(error);
       return {
         success: false,
-        status: "😞 민팅실패:" + error.message,
+        status: "😞 민팅실패",
       };
+      // status: "😞 민팅실패:" + error.message,
     }
   };
 
@@ -105,8 +106,9 @@ export const useCaver = () => {
       console.error(error);
       return {
         success: false,
-        status: "😞 민팅실패:" + error.message,
+        status: "😞 민팅실패",
       };
+      // status: "😞 민팅실패:" + error.message,
     }
   };
 
