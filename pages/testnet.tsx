@@ -207,7 +207,7 @@ const Testnet: NextPage = () => {
     const presaleMintable = presaleBlockNum <= currentBlock && presaleM;
     const publicMintable = publicBlockNum <= currentBlock && publicM;
 
-    const presaleClaimed = presaleClaimedByPhase > 0;
+    const presaleClaimed = presaleClaimedByPhase > 1;
     const publicClaimed = publicClaimedByPhase > 0;
     // publicClaimedByPhase
     const maxSupplyExceed = maxSupply - totalSupply <= 0;
@@ -274,13 +274,7 @@ const Testnet: NextPage = () => {
 
     // when user connected and is not minting and Mintable
     if (account && !isMinting && !isNotMintable && presaleMintable)
-      return isWhitelisted ? (
-        <Button onClick={onClickPresaleMint}>whitelist minting</Button>
-      ) : (
-        <Button onClick={() => {}} disabled={true}>
-          you&apos;re not whitelisted
-        </Button>
-      );
+      return <Button onClick={onClickPresaleMint}>whitelist minting</Button>;
 
     if (account && !isMinting && !isNotMintable && publicM)
       return <Button onClick={onClickPublicMint}>public minting</Button>;
