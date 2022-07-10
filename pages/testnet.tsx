@@ -42,7 +42,6 @@ const Testnet: NextPage = () => {
     getPresaleBlockNum,
     getPublicBlockNum,
     getMaxSupply,
-    getIsValidMerkleProof,
     getPresaleClaimedByPhase,
     getPublicClaimedByPhase,
     getPhaseInfo,
@@ -58,7 +57,6 @@ const Testnet: NextPage = () => {
   const [presaleBlockNum, setPresaleBlockNum] = useState<number>(0);
   const [publicBlockNum, setPublicBlockNum] = useState<number>(0);
   const [maxSupply, setMaxSupply] = useState<number>(0);
-  const [isWhitelisted, setIsWhitelisted] = useState<boolean>(false);
 
   const [isAccountLoading, setIsAccountLoading] = useState<boolean>(false);
   const [presaleClaimedByPhase, setPresaleClaimedByPhase] = useState<number>(0);
@@ -150,7 +148,6 @@ const Testnet: NextPage = () => {
       setPublicBlockNum(await getPublicBlockNum());
       setMaxSupply(await getMaxSupply());
       setPhaseInfo(await getPhaseInfo(config.currentPhase));
-      // setIsWhitelisted(await getIsValidMerkleProof(account));
     };
     if (!caver || !nftContract) return;
     init();
@@ -160,7 +157,6 @@ const Testnet: NextPage = () => {
     if (!caver || !nftContract || !account) return;
     const init = async () => {
       if (!caver || !nftContract || !account) return;
-      setIsWhitelisted(await getIsValidMerkleProof(account));
       setPresaleClaimedByPhase(
         await getPresaleClaimedByPhase(config.currentPhase, account)
       );
@@ -237,23 +233,9 @@ const Testnet: NextPage = () => {
       return (
         <Button disabled={true}>
           {isPaused && "Paused"}
-
-          {!isPaused &&
-            presaleM &&
-            !presaleMintable &&
-            isWhitelisted &&
-            "whitelist minting"}
-
-          {!isPaused &&
-            presaleM &&
-            !presaleMintable &&
-            !isWhitelisted &&
-            "you're not whitelisted"}
-
+          {!isPaused && presaleM && !presaleMintable && "whitelist minting"}
           {!isPaused && publicM && !publicMintable && "public minting"}
-
           {/* {!isPaused && !presaleMintable && publicMintable && "public minting"} */}
-
           {/* disabled */}
         </Button>
       );

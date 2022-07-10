@@ -156,21 +156,6 @@ export const useCaver = () => {
     }
   };
 
-  const getIsValidMerkleProof = async (wallet: string): Promise<boolean> => {
-    if (!caver || !nftContract) return false;
-    const proof = getMerkleProof(wallet);
-    try {
-      const response = await nftContract.methods
-        .getIsValidMerkleProof(proof, wallet)
-        .call();
-      console.log(response);
-      return response as boolean;
-    } catch (error) {
-      console.error(error);
-      return false;
-    }
-  };
-
   const getPublicBlockNum = async (): Promise<number> => {
     if (!caver || !nftContract) return 0;
     try {
@@ -297,7 +282,6 @@ export const useCaver = () => {
     getPresaleBlockNum,
     getPhaseInfo,
     getMaxSupply,
-    getIsValidMerkleProof,
     getPresaleClaimedByPhase,
     getPublicClaimedByPhase,
     publicSaleMint,
