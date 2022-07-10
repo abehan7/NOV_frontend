@@ -265,6 +265,7 @@ const Home: NextPage = () => {
       return <Button disabled={true}>on process</Button>;
   };
 
+  // build
   return (
     <SectionEl>
       {/* 여기서 트랜젝션 보여주기 */}
