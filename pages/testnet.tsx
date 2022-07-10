@@ -84,10 +84,10 @@ const Testnet: NextPage = () => {
     // 그리고 alert 보여주기
 
     if (!account) return;
-    const merkleProof = await getMerkleProof(account);
+
     try {
       setIsMinting(true);
-      const { status, success } = await presaleMint(merkleProof);
+      const { status, success } = await presaleMint();
       console.log(status, success);
       setMintingTxInfo({ status, success });
       setTimeout(() => {

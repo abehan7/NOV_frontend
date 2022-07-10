@@ -1,10 +1,8 @@
 import Caver, { Contract } from "caver-js";
 import { ReactNode, useEffect, useState } from "react";
-import { NFT_CONTRACT_ADDRESS, NFT_CONTRACT_ABI } from "../caverConfig";
+import { NFT_CONTRACT_ADDRESS, NFT_CONTRACT_ABI, config } from "../caverConfig";
 import { IPhaseInfo, ITxInfo } from "../interfaces";
 import { phaseInfoObj } from "../object";
-import { getMerkleProof } from "../utils/merkleTree";
-
 export const useCaver = () => {
   const [caver, setCaver] = useState<Caver | undefined>(undefined);
   const [nftContract, setNftContract] = useState<Contract | undefined>(
@@ -12,9 +10,10 @@ export const useCaver = () => {
   );
 
   //revert 넣어놓기
-  const presaleMint = async (
-    merkleProof: Array<string | number>
-  ): Promise<{ success: boolean; status: ReactNode }> => {
+  const presaleMint = async (): Promise<{
+    success: boolean;
+    status: ReactNode;
+  }> => {
     if (!caver || !nftContract) return { success: false, status: "Loading" };
     const account = window.klaytn.selectedAddress;
 
@@ -31,7 +30,7 @@ export const useCaver = () => {
       to: NFT_CONTRACT_ADDRESS,
       value: 0,
       gas: "3000000",
-      data: nftContract.methods.presaleMint(merkleProof).encodeABI(),
+      data: nftContract.methods.presaleMint().encodeABI(),
     };
 
     try {
@@ -44,12 +43,12 @@ export const useCaver = () => {
         success: true,
         status: (
           <a
-            href={`https://baobab.scope.klaytn.com/tx/${txInfo.transactionHash}`}
+            href={`${config.txURL}/${txInfo.transactionHash}`}
             target="_blank"
             rel="noreferrer"
           >
             <p>✅ Check out your transaction on Klayscope:</p>
-            <p>{`https://baobab.scope.klaytn.com/tx/${txInfo.transactionHash}`}</p>
+            <p>{`${config.txURL}/${txInfo.transactionHash}`}</p>
           </a>
         ),
       };
@@ -93,12 +92,12 @@ export const useCaver = () => {
         success: true,
         status: (
           <a
-            href={`https://baobab.scope.klaytn.com/tx/${txInfo.transactionHash}`}
+            href={`${config.txURL}/${txInfo.transactionHash}`}
             target="_blank"
             rel="noreferrer"
           >
             <p>✅ Check out your transaction on Klayscope:</p>
-            <p>{`https://baobab.scope.klaytn.com/tx/${txInfo.transactionHash}`}</p>
+            <p>{`${config.txURL}/${txInfo.transactionHash}`}</p>
           </a>
         ),
       };

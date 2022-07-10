@@ -42,7 +42,6 @@ const Home: NextPage = () => {
     getPresaleBlockNum,
     getPublicBlockNum,
     getMaxSupply,
-    getIsValidMerkleProof,
     getPresaleClaimedByPhase,
     getPublicClaimedByPhase,
     getPhaseInfo,
@@ -58,7 +57,6 @@ const Home: NextPage = () => {
   const [presaleBlockNum, setPresaleBlockNum] = useState<number>(0);
   const [publicBlockNum, setPublicBlockNum] = useState<number>(0);
   const [maxSupply, setMaxSupply] = useState<number>(0);
-  const [isWhitelisted, setIsWhitelisted] = useState<boolean>(false);
 
   const [isAccountLoading, setIsAccountLoading] = useState<boolean>(false);
   const [presaleClaimedByPhase, setPresaleClaimedByPhase] = useState<number>(0);
@@ -89,7 +87,7 @@ const Home: NextPage = () => {
     const merkleProof = await getMerkleProof(account);
     try {
       setIsMinting(true);
-      const { status, success } = await presaleMint(merkleProof);
+      const { status, success } = await presaleMint();
       console.log(status, success);
       setMintingTxInfo({ status, success });
       setTimeout(() => {
@@ -150,7 +148,6 @@ const Home: NextPage = () => {
       setPublicBlockNum(await getPublicBlockNum());
       setMaxSupply(await getMaxSupply());
       setPhaseInfo(await getPhaseInfo(config.currentPhase));
-      // setIsWhitelisted(await getIsValidMerkleProof(account));
     };
     if (!caver || !nftContract) return;
     init();
@@ -160,7 +157,6 @@ const Home: NextPage = () => {
     if (!caver || !nftContract || !account) return;
     const init = async () => {
       if (!caver || !nftContract || !account) return;
-      setIsWhitelisted(await getIsValidMerkleProof(account));
       setPresaleClaimedByPhase(
         await getPresaleClaimedByPhase(config.currentPhase, account)
       );
@@ -207,7 +203,7 @@ const Home: NextPage = () => {
     const presaleMintable = presaleBlockNum <= currentBlock && presaleM;
     const publicMintable = publicBlockNum <= currentBlock && publicM;
 
-    const presaleClaimed = presaleClaimedByPhase > 0;
+    const presaleClaimed = presaleClaimedByPhase > 1;
     const publicClaimed = publicClaimedByPhase > 0;
     // publicClaimedByPhase
     const maxSupplyExceed = maxSupply - totalSupply <= 0;
@@ -239,9 +235,7 @@ const Home: NextPage = () => {
           {isPaused && "Paused"}
           {!isPaused && presaleM && !presaleMintable && "whitelist minting"}
           {!isPaused && publicM && !publicMintable && "public minting"}
-
           {/* {!isPaused && !presaleMintable && publicMintable && "public minting"} */}
-
           {/* disabled */}
         </Button>
       );
@@ -262,13 +256,7 @@ const Home: NextPage = () => {
 
     // when user connected and is not minting and Mintable
     if (account && !isMinting && !isNotMintable && presaleMintable)
-      return isWhitelisted ? (
-        <Button onClick={onClickPresaleMint}>whitelist minting</Button>
-      ) : (
-        <Button onClick={() => {}} disabled={true}>
-          you&apos;re not whitelisted
-        </Button>
-      );
+      return <Button onClick={onClickPresaleMint}>whitelist minting</Button>;
 
     if (account && !isMinting && !isNotMintable && publicM)
       return <Button onClick={onClickPublicMint}>public minting</Button>;
