@@ -93,6 +93,7 @@ const Home: NextPage = () => {
       setTimeout(() => {
         setIsMinting(false);
       }, 1000);
+      // build
       // 트랜젝션 정보 가지고오기
       // 이거는 일단 임시방편
       // TODO: 웹소켓 달기
