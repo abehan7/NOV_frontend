@@ -316,6 +316,7 @@ const Home: NextPage = () => {
     if (account && !isMinting && !isNotMintable && publicM)
       return <Button onClick={handleSubmitCaptcha}>public minting</Button>;
     //when user is minting nft
+    // done
     if (account && isMinting)
       return <Button disabled={true}>on process</Button>;
   };
