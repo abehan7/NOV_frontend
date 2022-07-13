@@ -23,3 +23,8 @@ export const NETWORKS = {
   MAIN_NET: 8217,
   TEST_NET: 1001,
 };
+
+export const NETWORK_NAMES = {
+  poligon: "6LdBb-kgAAAAAILJ_Mwy9gFwI89T3z7IG5-r9mM6",
+  ethereum: "6LdBb-kgAAAAAMHiDAV3Sc7qP1hnDGMs4yCtDphA",
+};

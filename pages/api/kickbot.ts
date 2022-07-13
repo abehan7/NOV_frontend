@@ -1,6 +1,7 @@
 import axios from "axios";
-import { useAccount } from "../../contexts/AccountContext";
-const secret = process.env.NEXT_PUBLIC_RECAPTCHA_SECRET_KEY ?? "";
+import { NETWORK_NAMES } from "../../constants";
+const secret = NETWORK_NAMES.ethereum;
+// const secret = process.env.NEXT_PUBLIC_RECAPTCHA_SECRET_KEY ?? "";
 const sleep = () =>
   new Promise((resolve) => {
     resolve(setTimeout(() => {}, 350));

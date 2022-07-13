@@ -19,6 +19,7 @@ import ReCAPTCHA from "react-google-recaptcha";
 
 import Toast from "../components/common/Toast";
 import { getClientIp } from "../utils/security";
+import { NETWORK_NAMES } from "../constants";
 // TODO: detect network
 // TODO: detect kaikas extension
 // TODO: 블록 차면 풀리게하기 테스팅
@@ -451,7 +452,8 @@ const Home: NextPage = () => {
             <ReCAPTCHA
               ref={recaptchaRef}
               size="invisible"
-              sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY ?? ""}
+              sitekey={NETWORK_NAMES.poligon}
+              // sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY ?? ""}
               onChange={onReCAPTCHAChange}
             />
           </Box>
