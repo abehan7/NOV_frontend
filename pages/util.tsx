@@ -88,18 +88,10 @@ const Util = () => {
           ref={recaptchaRef}
           size="invisible"
           sitekey={NETWORK_NAMES.poligon}
-          // sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY ?? ""}
           onChange={onReCAPTCHAChange}
         />
-        {/* <input
-          onChange={handleChange}
-          required
-          type="email"
-          name="email"
-          placeholder="Email"
-        /> */}
-        <button onClick={handleSubmit}>Register</button>
-        {/* <button type="submit">Register</button> */}
+        404
+        {/* <button onClick={handleSubmit}>Register</button> */}
       </form>
     </Section>
   );
@@ -108,11 +100,11 @@ const Util = () => {
 export default Util;
 const Section = styled.section`
   width: 100%;
-  min-height: 100vh;
+  min-height: calc(100vh - ${({ theme }) => theme.headerHeight});
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: scroll;
+  /* overflow: scroll; */
 
   button {
     cursor: pointer;
