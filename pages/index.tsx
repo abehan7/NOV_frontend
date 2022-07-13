@@ -161,6 +161,7 @@ const Home: NextPage = () => {
       if (response.ok) {
         // 여기에 public sale을 넣기
         await onClickPublicMint();
+        // this is a test
         // If the response is ok than show the success alert
         // alert("Email registered successfully");
       } else {
