@@ -19,3 +19,14 @@ export const throttle = (callback: Function, delay: number) => {
 export const setNumberDot = (x: number) => {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
+
+export const getUniqueAddresses = (arr: string[]) => {
+  let uniqueAddresses: string[] = [];
+  arr.forEach((item: string) => {
+    //remove spaces
+    const processedItem = item.toLowerCase().replace(/\s/g, "");
+    if (uniqueAddresses.indexOf(processedItem) === -1)
+      uniqueAddresses.push(processedItem);
+  });
+  return uniqueAddresses;
+};

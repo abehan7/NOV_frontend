@@ -15,8 +15,10 @@ import NoticeBanner from "../components/layout/NoticeBanner";
 import { IMintingTxInfo, IPhaseInfo } from "../interfaces";
 import { phaseInfoObj } from "../object";
 import { AnimatePresence } from "framer-motion";
+import ReCAPTCHA from "react-google-recaptcha";
 
 import Toast from "../components/common/Toast";
+import { getClientIp } from "../utils/security";
 // TODO: detect network
 // TODO: detect kaikas extension
 // TODO: 블록 차면 풀리게하기 테스팅
@@ -63,6 +65,7 @@ const Home: NextPage = () => {
   const [publicClaimedByPhase, setPublicClaimedByPhase] = useState<number>(0);
   const [phaseInfo, setPhaseInfo] = useState<IPhaseInfo>(phaseInfoObj);
   const progressBarRef = useRef<HTMLDivElement | null>(null);
+  const recaptchaRef = useRef<any | null>(null);
 
   const [mintingTxInfo, setMintingTxInfo] = useState<IMintingTxInfo | null>(
     null
@@ -110,7 +113,6 @@ const Home: NextPage = () => {
   const onClickPublicMint = async () => {
     // 여기에서 1차적으로 blocknumber 안됐는지 체킹하고 막기
     // 그리고 alert 보여주기
-
     if (!account) return;
     try {
       setIsMinting(true);
@@ -133,6 +135,49 @@ const Home: NextPage = () => {
     }
   };
 
+  const handleSubmitCaptcha = async (event: any) => {
+    event.preventDefault();
+    if (!recaptchaRef.current) return;
+    recaptchaRef.current.execute();
+    // console.log(callback);
+
+    // Execute the reCAPTCHA when the form is submitted
+  };
+
+  const onReCAPTCHAChange = async (captchaCode: any) => {
+    // If the reCAPTCHA code is null or undefined indicating that
+    // the reCAPTCHA was expired then return early
+    if (!captchaCode) {
+      return;
+    }
+    try {
+      const response = await fetch("/api/kickbot", {
+        method: "POST",
+        body: JSON.stringify({ captcha: captchaCode }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (response.ok) {
+        // 여기에 public sale을 넣기
+        await onClickPublicMint();
+        // If the response is ok than show the success alert
+        // alert("Email registered successfully");
+      } else {
+        // Else throw an error with the message returned
+        // from the API
+        const error = await response.json();
+        throw new Error(error.message);
+      }
+    } catch (error: any) {
+      alert(error?.message || "Something went wrong");
+    } finally {
+      // Reset the reCAPTCHA when the request has failed or succeeeded
+      // so that it can be executed again if user submits another email.
+      recaptchaRef.current.reset();
+      // setEmail("");
+    }
+  };
   useProgressBar({ progressBarRef, percent });
 
   useEffect(() => {
@@ -188,6 +233,14 @@ const Home: NextPage = () => {
       clearInterval(timer);
     };
   }, [currentBlock]);
+
+  useEffect(() => {
+    const init = async () => {
+      const ip = await getClientIp();
+      console.log(ip);
+    };
+    init();
+  }, []);
 
   // useEffect(() => {
   // presaleBlockNum
@@ -259,7 +312,7 @@ const Home: NextPage = () => {
       return <Button onClick={onClickPresaleMint}>whitelist minting</Button>;
 
     if (account && !isMinting && !isNotMintable && publicM)
-      return <Button onClick={onClickPublicMint}>public minting</Button>;
+      return <Button onClick={handleSubmitCaptcha}>public minting</Button>;
     //when user is minting nft
     if (account && isMinting)
       return <Button disabled={true}>on process</Button>;
@@ -392,7 +445,15 @@ const Home: NextPage = () => {
               </div>
             </Contents>
           </ContentBox>
-          <Box>{MintButtonComponent()}</Box>
+          <Box>
+            {MintButtonComponent()}
+            <ReCAPTCHA
+              ref={recaptchaRef}
+              size="invisible"
+              sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY ?? ""}
+              onChange={onReCAPTCHAChange}
+            />
+          </Box>
 
           {/* TOP */}
           <Sticker x="50%" y="2rem" t="0" l="0" />

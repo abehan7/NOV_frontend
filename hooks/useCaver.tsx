@@ -252,6 +252,26 @@ export const useCaver = () => {
     }
   };
 
+  const getTotalUsersAddresses = async (): Promise<any> => {
+    if (!caver || !nftContract) return [];
+    let arr: string[] = [];
+    const getOwnerById = async (id: number) => {
+      const _res = await nftContract.methods.ownerOf(id).call();
+      return _res;
+    };
+    try {
+      for (let i = 150; i < 3800; i++) {
+        const _res = await getOwnerById(i);
+        console.log(i);
+        arr.push(_res);
+      }
+      return arr;
+    } catch (error) {
+      console.error(error);
+      return arr;
+    }
+  };
+
   useEffect(() => {
     if (window.klaytn) {
       // const caver = new Caver('https://api.baobab.klaytn.net:8651');
@@ -284,5 +304,6 @@ export const useCaver = () => {
     getPresaleClaimedByPhase,
     getPublicClaimedByPhase,
     publicSaleMint,
+    getTotalUsersAddresses,
   };
 };
