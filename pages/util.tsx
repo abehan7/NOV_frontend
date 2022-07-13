@@ -73,7 +73,7 @@ const Util = () => {
         <ReCAPTCHA
           ref={recaptchaRef}
           size="invisible"
-          sitekey={"6LdDuucgAAAAAJJfc9nWSkNp2B8cV5Gfdja3fFEl"}
+          sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY ?? ""}
           onChange={onReCAPTCHAChange}
         />
         {/* <input
